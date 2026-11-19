@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#4b1724">
 <title>Kendinizi Okulla Konumlandırın</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=IM+Fell+English:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root{--wine:#4b1724;--wine2:#6a2635;--gold:#b89455;--gold2:#e2c98e;--paper:#f4ead5;--ink:#382a25}
 *{box-sizing:border-box}
@@ -16,7 +16,11 @@ button,input,textarea{font:inherit}
 button{cursor:pointer}
 .screen{min-height:100vh;display:grid;place-items:center;padding:24px}
 .login-wrap{text-align:center;width:min(760px,100%);color:#f5e8d0}
-.eyebrow{font:italic 17px 'IM Fell English',serif;letter-spacing:3px;color:var(--gold2)}
+.eyebrow{
+ font:500 17px 'Playfair Display',serif;
+ letter-spacing:3px;
+ color:var(--gold2)
+}
 .main-title{font:600 clamp(34px,7vw,62px) 'Cormorant Garamond',serif;line-height:.98;margin:15px 0 10px;text-shadow:0 4px 20px #0008}
 .login-sub{color:#dfcdb5;font:italic 18px 'IM Fell English',serif;margin-bottom:35px}
 .roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;max-width:600px;margin:auto}
@@ -30,7 +34,10 @@ button{cursor:pointer}
 .login-note{font-size:11px;color:#c5ae9a;margin-top:30px}
 #app{display:none;min-height:100vh;padding:22px 16px 40px}
 .topbar{max-width:1180px;margin:0 auto 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;color:#f3e4ca}
-.brand{font:italic 22px 'IM Fell English',serif}
+.brand{
+ font:500 22px 'Playfair Display',serif;
+ letter-spacing:.5px;
+}
 .toolbar{display:flex;gap:8px;flex-wrap:wrap}
 .toolbtn{border:1px solid #b8945577;background:#31151f;color:#f4e6ce;border-radius:30px;padding:9px 13px;font-size:12px;box-shadow:0 4px 0 #170b10}
 .toolbtn:active{transform:translateY(3px)}
