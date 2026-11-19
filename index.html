@@ -1,0 +1,623 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kendinizi Okulla Konumlandırın</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+:root{
+ --wine:#641d2c;
+ --dark:#35131d;
+ --cream:#f5ead5;
+ --paper:#fff9ed;
+ --gold:#b99759;
+ --ink:#392b27;
+ --muted:#947b66;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#241319;
+ color:var(--ink);
+ font-family:'Cormorant Garamond',serif;
+}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{
+ outline:2px solid var(--gold);
+ outline-offset:3px;
+}
+
+/* KAPAK */
+#intro{
+ position:fixed;
+ inset:0;
+ background:radial-gradient(circle,#85404a,#28121a);
+ z-index:20;
+ display:grid;
+ place-items:center;
+ padding:20px;
+ transition:opacity .8s;
+}
+.book-cover{
+ width:min(85vw,390px);
+ min-height:510px;
+ max-height:85vh;
+ overflow:auto;
+ background:linear-gradient(100deg,#35121b,#762c3b 18%,#5b1e2c 80%,#30111a);
+ border:5px double #c6a66c;
+ box-shadow:18px 20px 45px #10090c;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ color:#f8e8c9;
+ padding:35px;
+ position:relative;
+ cursor:pointer;
+ transform:perspective(1000px) rotateY(-5deg);
+ transition:transform 1s;
+}
+.book-cover:before{
+ content:"";
+ position:absolute;
+ inset:12px;
+ border:1px solid #c6a66c;
+ pointer-events:none;
+}
+.book-cover h1{
+ font:600 34px 'Playfair Display';
+ line-height:1.4;
+ margin:30px 0;
+}
+.ornament{color:#d8b979;font-size:30px}
+.book-cover small{letter-spacing:4px;text-transform:uppercase}
+#coverPreview{
+ max-width:100%;
+ max-height:150px;
+ object-fit:contain;
+ margin-bottom:12px;
+}
+.open-hint{margin-top:35px;font-size:19px;color:#e7cda1}
+
+/* ANA YAPI */
+#app{
+ display:none;
+ min-height:100vh;
+ background:radial-gradient(circle at center,#f0dfc4,#c8ad8a);
+}
+.layout{
+ max-width:1300px;
+ margin:auto;
+ display:grid;
+ grid-template-columns:245px minmax(0,1fr);
+ min-height:100vh;
+}
+aside{
+ background:var(--dark);
+ color:var(--cream);
+ padding:28px 18px;
+ display:flex;
+ flex-direction:column;
+ gap:9px;
+}
+.brand{
+ font:italic 25px 'Playfair Display';
+ text-align:center;
+ color:#e5c58e;
+ margin:12px 0 25px;
+}
+nav{display:flex;flex-direction:column;gap:5px}
+nav button{
+ width:100%;
+ text-align:left;
+ padding:12px 14px;
+ background:transparent;
+ border:0;
+ border-bottom:1px solid #ffffff19;
+ color:#eadcc8;
+ font-size:19px;
+ transition:.2s;
+}
+nav button:hover,nav button.active{
+ background:#ffffff16;
+ color:#e6c58c;
+ padding-left:20px;
+}
+main{
+ padding:35px;
+ min-width:0;
+}
+.page{
+ display:none;
+ width:100%;
+ max-width:850px;
+ margin:0 auto 35px;
+ background:var(--paper);
+ padding:clamp(24px,5vw,55px);
+ box-shadow:0 12px 40px #39251b33;
+ position:relative;
+ min-height:450px;
+ height:auto;
+}
+.page:before{
+ content:"";
+ position:absolute;
+ inset:12px;
+ border:1px solid #b997593d;
+ pointer-events:none;
+}
+.page.active{
+ display:block;
+ animation:appear .4s;
+}
+@keyframes appear{
+ from{opacity:0;transform:translateY(8px)}
+ to{opacity:1;transform:none}
+}
+h2{
+ font:600 clamp(30px,5vw,43px) 'Playfair Display';
+ color:var(--wine);
+ margin:0 0 8px;
+}
+.subtitle{
+ font-style:italic;
+ color:#98734b;
+ font-size:20px;
+ margin-bottom:28px;
+}
+p{font-size:21px;line-height:1.65}
+.gold-line{
+ width:90px;
+ height:1px;
+ background:var(--gold);
+ margin:20px 0;
+}
+.btn{
+ background:var(--wine);
+ color:#fff1d7;
+ border:1px solid var(--gold);
+ padding:10px 18px;
+ font-size:18px;
+ margin:7px 4px 7px 0;
+ transition:.2s;
+}
+.btn:hover{background:#873849}
+textarea{
+ display:block;
+ width:100%;
+ min-height:120px;
+ background:#fffdf5;
+ border:1px solid #d5c3a5;
+ padding:13px;
+ font-size:19px;
+ color:var(--ink);
+ resize:vertical;
+ line-height:1.5;
+}
+input[type=file]{max-width:100%;margin:12px 0}
+.note{
+ background:#f3e6d0;
+ border-left:3px solid var(--gold);
+ padding:15px 20px;
+ margin:20px 0;
+}
+footer{
+ text-align:center;
+ color:#9a7b56;
+ margin-top:35px;
+ font-style:italic;
+ font-size:19px;
+}
+
+/* YOKLAMA */
+.attendance-intro{
+ text-align:center;
+ background:#f3e8d5;
+ border:1px solid #d3b98b;
+ padding:35px 20px;
+ margin:30px 0;
+}
+.attendance-intro h3{
+ font:italic 30px 'Playfair Display';
+ color:var(--wine);
+}
+.attendance-intro p{
+ max-width:500px;
+ margin:15px auto;
+}
+.attendance-intro .ornament{
+ color:var(--gold);
+ margin:15px;
+}
+#attendanceList{margin-top:25px}
+.entry{
+ background:#fffaf0;
+ border:1px solid #e3d5bd;
+ padding:18px;
+ margin:12px 0;
+}
+.entry strong{
+ color:var(--wine);
+ font-size:20px;
+ display:block;
+ margin-bottom:8px;
+}
+.entry textarea{
+ min-height:65px;
+ margin-top:8px;
+ background:transparent;
+}
+#attendanceList .entry:nth-child(even){background:#f8efdf}
+
+/* ANILAR */
+.photo-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+ gap:15px;
+ margin-top:25px;
+}
+.photo-item{
+ background:white;
+ padding:7px 7px 20px;
+ box-shadow:0 3px 12px #0002;
+}
+.photo-item img{
+ width:100%;
+ height:160px;
+ object-fit:cover;
+ display:block;
+}
+.photo-item button{
+ width:100%;
+ border:0;
+ background:var(--wine);
+ color:white;
+ padding:6px;
+ margin-top:7px;
+}
+
+/* MOBİL */
+@media(max-width:720px){
+ .layout{display:block}
+ aside{padding:12px;position:relative}
+ .brand{margin:5px 0 12px}
+ nav{
+  display:flex;
+  flex-direction:row;
+  overflow-x:auto;
+  gap:5px;
+  padding-bottom:7px;
+ }
+ nav button{
+  white-space:nowrap;
+  width:auto;
+  border:1px solid #ffffff25;
+  padding:9px 13px;
+ }
+ nav button:hover,nav button.active{padding:9px 13px}
+ main{padding:13px}
+ .page{
+  min-height:420px;
+  padding:28px 22px;
+  margin-bottom:15px;
+ }
+ .book-cover{min-height:460px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- KİTAP KAPAĞI -->
+<div id="intro">
+ <div class="book-cover" onclick="openBook()">
+  <img id="coverPreview" alt="">
+  <div class="ornament">✦ ❦ ✦</div>
+  <small>Bir ömürlük ders</small>
+  <h1>Kendinizi Okulla<br>Konumlandırın</h1>
+  <div class="ornament">❦</div>
+  <div class="open-hint">Kitabı açmak için dokun</div>
+ </div>
+</div>
+
+<div id="app">
+<div class="layout">
+
+<aside>
+ <div class="brand">Küçük Bir Hatıra Defteri</div>
+ <nav>
+  <button class="active" onclick="showPage('yoklama',this)">✦ Yoklama</button>
+  <button onclick="showPage('ilk',this)">İlk Ders</button>
+  <button onclick="showPage('ani',this)">Anı Defteri</button>
+  <button onclick="showPage('not',this)">Ders Notları</button>
+  <button onclick="showPage('sinav',this)">Sınav Sorusu</button>
+  <button onclick="showPage('mezuniyet',this)">Mezuniyet Yok</button>
+  <button onclick="showPage('son',this)">Son Ders</button>
+  <button onclick="showPage('ayar',this)">Kitap Ayarları</button>
+ </nav>
+</aside>
+
+<main>
+
+<!-- YOKLAMA -->
+<section class="page active" id="yoklama">
+ <h2>Yoklama</h2>
+ <div class="subtitle">Her gün yeniden, aynı kişiye...</div>
+ <p>Bu sınıfta yoklama her gün alınır. Çünkü senin olduğun hiçbir gün eksik değildir.</p>
+
+ <div class="attendance-intro">
+  <div class="ornament">❦</div>
+  <h3>Yoklama Defteri</h3>
+  <p>28 Kasım 2025'ten bugüne kadar geçen her günün küçük bir hatırası var.</p>
+  <p id="attendanceCount"></p>
+  <button class="btn" id="attendanceButton" onclick="toggleAttendance()">
+   Yoklama Defterini Aç
+  </button>
+  <div class="ornament">✦</div>
+ </div>
+
+ <div id="attendanceList" style="display:none"></div>
+</section>
+
+<!-- İLK DERS -->
+<section class="page" id="ilk">
+ <h2>İlk Ders</h2>
+ <div class="subtitle">Bazı dersler kitaplardan öğrenilmez.</div>
+ <p>Hayatın bana öğrettiği pek çok şey oldu. Ama bazılarını bir insanın varlığıyla öğrendim. Bu kitabın ilk dersi de tam olarak bununla ilgili.</p>
+ <div class="gold-line"></div>
+ <textarea id="firstText" placeholder="İlk dersin hikâyesini buraya yaz..."></textarea>
+ <button class="btn" onclick="saveText('firstText')">Kaydet</button>
+</section>
+
+<!-- ANI DEFTERİ -->
+<section class="page" id="ani">
+ <h2>Anı Defteri</h2>
+ <div class="subtitle">Biriktirdiğimiz güzel şeyler...</div>
+ <p>Bazı anlar fotoğraflara sığar, bazılarıysa insanın içinde kalır.</p>
+ <div class="gold-line"></div>
+ <input type="file" id="photoInput" accept="image/*" multiple>
+ <br>
+ <button class="btn" onclick="addPhotos()">Fotoğrafları ekle</button>
+ <div class="photo-grid" id="photoGrid"></div>
+</section>
+
+<!-- DERS NOTLARI -->
+<section class="page" id="not">
+ <h2>Ders Notları</h2>
+ <div class="subtitle">Unutulmaması gereken şeyler.</div>
+ <p>Bu sayfada aklımızda kalanları, öğrendiklerimizi ve söylemek istediklerimizi biriktirelim.</p>
+ <textarea id="notesText" placeholder="Bu sayfaya dilediğin notları yaz..."></textarea>
+ <button class="btn" onclick="saveText('notesText')">Notları kaydet</button>
+</section>
+
+<!-- SINAV -->
+<section class="page" id="sinav">
+ <h2>Sınav Sorusu</h2>
+ <div class="subtitle">Cevabı ezberlenemeyen tek soru.</div>
+ <div class="note">
+  <p>Hayat sana yeniden başlama şansı verseydi, yine aynı insanla aynı hikâyeye başlar mıydın?</p>
+ </div>
+ <textarea id="answerText" placeholder="Cevabını buraya yaz..."></textarea>
+ <button class="btn" onclick="saveText('answerText')">Cevabı kaydet</button>
+</section>
+
+<!-- MEZUNIYET -->
+<section class="page" id="mezuniyet">
+ <h2>Mezuniyet Yok</h2>
+ <div class="subtitle">Çünkü bu dersin sonu yok.</div>
+ <p>Her okulun bir mezuniyet günü vardır. Ama bazı şeyler öğrenildi diye bitmez. Bazı insanlar hayatımızda bir dönem değil, bütün bir hikâye olur.</p>
+ <textarea id="gradText" placeholder="Bu sayfaya kendi cümlelerini ekle..."></textarea>
+ <button class="btn" onclick="saveText('gradText')">Kaydet</button>
+</section>
+
+<!-- SON DERS -->
+<section class="page" id="son">
+ <h2>Son Ders</h2>
+ <div class="subtitle">Öğretmenler Günün kutlu olsun.</div>
+ <p>Sevgili öğretmenim,</p>
+ <textarea id="letterText" placeholder="Sana söylemek istediğim her şeyi buraya yazıyorum..."></textarea>
+ <button class="btn" onclick="saveText('letterText')">Mektubu kaydet</button>
+ <footer>Bu kitabın en güzel cümlesi, henüz yazılmamış olan.</footer>
+</section>
+
+<!-- AYARLAR -->
+<section class="page" id="ayar">
+ <h2>Kitap Ayarları</h2>
+ <div class="subtitle">Bu kitabın kapağını sen tasarla.</div>
+ <p>Kendi kapak görselini buradan yükleyebilirsin.</p>
+ <input type="file" id="coverInput" accept="image/*">
+ <br>
+ <button class="btn" onclick="uploadCover()">Kapağı değiştir</button>
+ <p><small>Yaptığın değişiklikler bu tarayıcıda saklanır. Başka cihazlarda otomatik görünmez.</small></p>
+</section>
+
+</main>
+</div>
+</div>
+
+<script>
+const START=new Date(2025,10,28);
+const today=new Date();
+today.setHours(0,0,0,0);
+
+/* KİTABI AÇ */
+function openBook(){
+ const intro=document.getElementById('intro');
+ intro.style.opacity='0';
+ setTimeout(()=>{
+  intro.style.display='none';
+  document.getElementById('app').style.display='block';
+ },800);
+}
+
+/* SAYFALAR */
+function showPage(id,button){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ button.classList.add('active');
+
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* METİNLERİ KAYDET */
+function saveText(id){
+ localStorage.setItem('book_'+id,document.getElementById(id).value);
+ alert('Sayfan kaydedildi.');
+}
+
+['firstText','notesText','answerText','gradText','letterText'].forEach(id=>{
+ document.getElementById(id).value=localStorage.getItem('book_'+id)||'';
+});
+
+/* YOKLAMA */
+function dateKey(d){
+ return d.getFullYear()+'-'+
+ String(d.getMonth()+1).padStart(2,'0')+'-'+
+ String(d.getDate()).padStart(2,'0');
+}
+
+function makeAttendance(){
+ const list=document.getElementById('attendanceList');
+ const count=Math.max(0,Math.floor((today-START)/86400000)+1);
+
+ document.getElementById('attendanceCount').textContent=
+ 'Bugün '+count+'. gün. Yoklama devam ediyor.';
+
+ let html='';
+
+ for(let i=count-1;i>=0;i--){
+  const d=new Date(START);
+  d.setDate(START.getDate()+i);
+
+  const key=dateKey(d);
+  const saved=localStorage.getItem('attendance_'+key)||'Bugün de seni seviyorum.';
+
+  html+=`
+   <div class="entry">
+    <strong>${d.toLocaleDateString('tr-TR',{
+     day:'numeric',month:'long',year:'numeric'
+    })}</strong>
+    <textarea data-day="${key}" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'">${escapeHTML(saved)}</textarea>
+    <button class="btn" onclick="saveAttendance('${key}')">Kaydet</button>
+   </div>`;
+ }
+
+ list.innerHTML=html;
+}
+
+function escapeHTML(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+  '&':'&amp;',
+  '<':'&lt;',
+  '>':'&gt;',
+  '"':'&quot;',
+  "'":'&#39;'
+ }[c]));
+}
+
+function saveAttendance(key){
+ const el=document.querySelector(`[data-day="${key}"]`);
+ localStorage.setItem('attendance_'+key,el.value);
+ alert('Yoklama notu kaydedildi.');
+}
+
+function toggleAttendance(){
+ const list=document.getElementById('attendanceList');
+ const button=document.getElementById('attendanceButton');
+ const opened=list.style.display==='block';
+
+ list.style.display=opened?'none':'block';
+ button.textContent=opened
+  ?'Yoklama Defterini Aç'
+  :'Yoklama Defterini Kapat';
+}
+
+/* KAPAK GÖRSELİ */
+function uploadCover(){
+ const file=document.getElementById('coverInput').files[0];
+ if(!file)return alert('Önce bir görsel seç.');
+
+ const reader=new FileReader();
+
+ reader.onload=()=>{
+  try{
+   localStorage.setItem('book_cover',reader.result);
+   document.getElementById('coverPreview').src=reader.result;
+   alert('Kitap kapağın değiştirildi.');
+  }catch(e){
+   alert('Görsel çok büyük. Daha küçük bir görsel seç.');
+  }
+ };
+
+ reader.readAsDataURL(file);
+}
+
+const savedCover=localStorage.getItem('book_cover');
+if(savedCover){
+ document.getElementById('coverPreview').src=savedCover;
+}
+
+/* FOTOĞRAFLAR */
+function addPhotos(){
+ const files=[...document.getElementById('photoInput').files];
+ if(!files.length)return alert('Önce fotoğraf seç.');
+
+ let photos=JSON.parse(localStorage.getItem('book_photos')||'[]');
+ let pending=files.length;
+
+ files.forEach(file=>{
+  const reader=new FileReader();
+
+  reader.onload=()=>{
+   photos.push(reader.result);
+   pending--;
+
+   if(pending===0){
+    try{
+     localStorage.setItem('book_photos',JSON.stringify(photos));
+     renderPhotos();
+     alert('Fotoğraflar eklendi.');
+    }catch(e){
+     alert('Fotoğraflar fazla büyük. Daha az veya küçük fotoğraf seç.');
+    }
+   }
+  };
+
+  reader.readAsDataURL(file);
+ });
+}
+
+function renderPhotos(){
+ const photos=JSON.parse(localStorage.getItem('book_photos')||'[]');
+
+ document.getElementById('photoGrid').innerHTML=
+ photos.map((src,i)=>`
+  <div class="photo-item">
+   <img src="${src}" alt="Anı ${i+1}">
+   <button onclick="deletePhoto(${i})">Fotoğrafı sil</button>
+  </div>
+ `).join('');
+}
+
+function deletePhoto(index){
+ let photos=JSON.parse(localStorage.getItem('book_photos')||'[]');
+ photos.splice(index,1);
+ localStorage.setItem('book_photos',JSON.stringify(photos));
+ renderPhotos();
+}
+
+/* BAŞLANGIÇ */
+makeAttendance();
+renderPhotos();
+</script>
+
+</body>
+</html>
