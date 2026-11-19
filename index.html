@@ -73,9 +73,80 @@ button{cursor:pointer}
 .navbtn{border:1px solid #b89455;background:linear-gradient(#70404a,#3e1a25);color:#fff0d5;padding:11px 18px;border-radius:7px;box-shadow:0 5px 0 #1d0c12,0 9px 16px #0005}
 .navbtn:active{transform:translateY(4px)}
 .nav-label{font:italic 15px 'IM Fell English',serif;color:#d7c2a4}
-.bookmark{position:absolute;z-index:20;top:95px;right:2px;width:65px;min-height:150px;cursor:grab;touch-action:none;filter:drop-shadow(3px 5px 4px #0006);user-select:none}
-.bookmark img{display:block;width:100%;height:auto;pointer-events:none}
-.bookmark-fallback{height:160px;background:linear-gradient(90deg,#9b2435,#d35a61,#7b172a);clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%)}
+.bookmark{
+ position:absolute;
+ z-index:20;
+ top:95px;
+ right:2px;
+ width:72px;
+ cursor:grab;
+ touch-action:none;
+ user-select:none;
+ filter:drop-shadow(3px 6px 5px #0008);
+}
+
+.bookmark:before{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:linear-gradient(
+  135deg,
+  #e5c98d,
+  #94703c,
+  #d9b878,
+  #8d6737
+ );
+ clip-path:polygon(
+  0 0,
+  100% 0,
+  100% 100%,
+  50% 88%,
+  0 100%
+ );
+}
+
+#bookmarkContent{
+ position:relative;
+ z-index:1;
+ margin:3px;
+ overflow:hidden;
+ clip-path:polygon(
+  0 0,
+  100% 0,
+  100% 100%,
+  50% 88%,
+  0 100%
+ );
+ background:#542331;
+}
+
+.bookmark img{
+ display:block;
+ width:100%;
+ height:auto;
+ pointer-events:none;
+}
+
+.bookmark-fallback{
+ height:300px;
+ background:
+  linear-gradient(90deg,#521725,#873748 48%,#521725);
+ clip-path:polygon(
+  0 0,
+  100% 0,
+  100% 100%,
+  50% 88%,
+  0 100%
+ );
+}
+
+.bookmark-tools{
+ position:absolute;
+ right:0;
+ top:-32px;
+ white-space:nowrap;
+ z-index:3;
+}
 .bookmark-tools{position:absolute;right:0;top:-32px;white-space:nowrap}
 .panel{max-width:850px;margin:15px auto 0;padding:15px 18px;border:1px solid #b8945577;border-radius:12px;background:#29141bcc;color:#f1e2ca}
 .panel h3{font:600 23px 'Cormorant Garamond',serif;margin:0 0 10px;color:#e4c991}
