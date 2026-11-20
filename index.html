@@ -651,7 +651,7 @@ alert('2 - Kitap verileri yükleniyor');
    .maybeSingle();
 
   if(error)throw error;
-
+alert('Kitap verisi sorgusu tamamlandı');
   if(row&&row.content){
    const c=row.content;
    pages=c.pages||pages;
