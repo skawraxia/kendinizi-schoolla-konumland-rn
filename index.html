@@ -133,18 +133,68 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
 <section id="login" class="screen">
- <div class="login-wrap">
-  <div class="eyebrow">BİR KİTAP, BİRİKTİRİLMİŞ BİR ÖMÜR</div>
-  <h1 class="main-title">Kendinizi Okulla<br>Konumlandırın</h1>
-  <div class="login-sub">Sayfalarımızın arasında kendinize bir yer seçin.</div>
-  <div class="roles">
-   <button class="role" onclick="enter('admin')"><span class="animal">🦎</span><strong>skawraxia</strong><small>Kitabın yazarı</small></button>
-   <button class="role" onclick="enter('reader')"><span class="animal">🐻</span><strong>skawrax</strong><small>Kitabın okuyucusu</small></button>
+  <div class="login-particles" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i>
   </div>
-  <div class="login-note">Bu küçük dünyanın kapısı iki kişiye açılıyor.</div>
- </div>
+
+  <div class="login-frame">
+    <span class="frame-corner top-left">❧</span>
+    <span class="frame-corner top-right">❧</span>
+    <span class="frame-corner bottom-left">❧</span>
+    <span class="frame-corner bottom-right">❧</span>
+
+    <div class="login-wrap">
+      <div class="ornament-line"><span>✦</span> ❧ ✦ ❧ <span>✦</span></div>
+
+      <div class="eyebrow">BİR KİTAP, BİRİKTİRİLMİŞ BİR ÖMÜR</div>
+
+      <h1 class="main-title">
+        Kendinizi Okulla<br>Konumlandırın
+      </h1>
+
+      <div class="login-sub">
+        Her hikâyenin içinde bir yer vardır.
+      </div>
+
+      <div class="identity-heading">BU HİKÂYEDEKİ YERİNİZİ SEÇİN</div>
+
+      <div class="roles">
+        <button class="role identity-card" onclick="chooseIdentity(this,'admin')">
+          <span class="identity-number">I</span>
+          <span class="seal-ring">
+            <span class="animal">🦎</span>
+          </span>
+          <strong>skawraxia</strong>
+          <small>KİTABIN YAZARI</small>
+          <span class="identity-description">Sayfaların ardındaki kişi</span>
+          <span class="identity-enter">KİTABIMA GİRİŞ YAP</span>
+        </button>
+
+        <button class="role identity-card" onclick="chooseIdentity(this,'reader')">
+          <span class="identity-number">II</span>
+          <span class="seal-ring">
+            <span class="animal">🐻</span>
+          </span>
+          <strong>skawrax</strong>
+          <small>KİTABIN OKUYUCUSU</small>
+          <span class="identity-description">Bu hikâyenin bir parçası</span>
+          <span class="identity-enter">KİTABIMA GİRİŞ YAP</span>
+        </button>
+      </div>
+
+      <div class="login-note">
+        <span>✧</span> Bu küçük dünyanın kapısı iki kişiye açılıyor. <span>✧</span>
+      </div>
+
+      <div class="ornament-line bottom-ornament">❧ ━━━━━ ✦ ━━━━━ ❧</div>
+    </div>
+  </div>
 </section>
+
 <div id="app">
  <header class="topbar">
   <div class="brand">Kendinizi Okulla Konumlandırın</div>
