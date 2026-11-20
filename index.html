@@ -639,10 +639,11 @@ async function claimRole(who){
  alert('Buton çalıştı: ' + who);
  try{
   const ok=await claimRole(who);
+  alert('1 - Yetki kontrolü tamamlandı');
   if(!ok)return;
 
   role=who;
-
+alert('2 - Kitap verileri yükleniyor');
   const {data:row,error}=await supabaseClient
    .from('book_data')
    .select('content')
