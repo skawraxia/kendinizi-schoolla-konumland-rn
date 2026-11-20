@@ -129,6 +129,338 @@ button,input,textarea{font:inherit}button{cursor:pointer}
  .decor-drawer{top:60px;right:10px;width:min(290px,calc(100% - 20px));max-height:65%}
  .decor-tools button{min-width:42px;height:42px}
 }
+ 
+/* ✦ ALTIN İŞLEMELİ GİRİŞ EKRANI ✦ */
+
+#login {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 45%, #713b3b55, transparent 55%),
+    radial-gradient(ellipse at 50% 100%, #a4773a20, transparent 65%);
+}
+
+#login::before {
+  content: "";
+  position: absolute;
+  inset: 19px;
+  border: 1px solid #c9a45d88;
+  outline: 1px solid #c9a45d35;
+  outline-offset: 7px;
+  pointer-events: none;
+  animation: frameGlow 5s ease-in-out infinite;
+}
+
+#login::after {
+  content: "✦";
+  position: absolute;
+  top: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #e0bd78;
+  font-size: 20px;
+  text-shadow: 0 0 18px #e8c77b;
+  animation: starGlow 3s ease-in-out infinite;
+}
+
+.login-frame {
+  position: relative;
+  z-index: 1;
+  width: min(920px, 94%);
+  padding: 65px 48px;
+  border: 1px solid #c7a15c88;
+  background: linear-gradient(135deg, #4b202b66, #1e101766, #512d2b55);
+  box-shadow:
+    inset 0 0 50px #d3ae6020,
+    0 0 45px #0006,
+    0 0 80px #b18a4820;
+  animation: frameAppear 1.2s ease both;
+}
+
+.login-frame::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid #c7a15c55;
+  pointer-events: none;
+}
+
+.frame-corner {
+  position: absolute;
+  z-index: 3;
+  color: #e4c17a;
+  font-size: 42px;
+  line-height: 1;
+  text-shadow: 0 0 12px #d9b56b88;
+}
+
+.top-left { top: 8px; left: 10px; }
+.top-right { top: 8px; right: 10px; transform: scaleX(-1); }
+.bottom-left { bottom: 8px; left: 10px; transform: scaleY(-1); }
+.bottom-right { bottom: 8px; right: 10px; transform: scale(-1); }
+
+.ornament-line {
+  color: #c8a15e;
+  font-size: 17px;
+  letter-spacing: 9px;
+  margin-bottom: 24px;
+  text-shadow: 0 0 12px #d9b56b77;
+}
+
+.ornament-line span {
+  color: #f1d69a;
+  font-size: 21px;
+}
+
+.bottom-ornament {
+  margin: 30px 0 0;
+  font-size: 13px;
+  letter-spacing: 4px;
+}
+
+.identity-heading {
+  color: #d6b878;
+  font-size: 10px;
+  letter-spacing: 4px;
+  margin: 0 0 22px;
+}
+
+.roles {
+  max-width: 650px;
+  gap: 28px;
+}
+
+.identity-card {
+  min-height: 290px;
+  overflow: hidden;
+  border: 1px solid #d5b77b;
+  border-radius: 3px;
+  background:
+    radial-gradient(circle at 50% 35%, #a4773b35, transparent 48%),
+    linear-gradient(145deg, #683541, #32141f 65%, #211016);
+  box-shadow:
+    inset 0 0 0 5px #c7a15c18,
+    inset 0 0 0 7px #c7a15c44,
+    0 10px 0 #211016,
+    0 20px 35px #0008;
+  gap: 8px;
+  transition: transform .5s, box-shadow .5s, border-color .5s;
+}
+
+.identity-card::before {
+  inset: 12px;
+  border: 1px solid #d6b87877;
+  border-radius: 0;
+}
+
+.identity-card::after {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  background: linear-gradient(
+    115deg,
+    transparent 43%,
+    #f5d99418 49%,
+    #fff0bd35 50%,
+    transparent 57%
+  );
+  transform: translateX(-70%);
+  transition: transform 1s;
+  pointer-events: none;
+}
+
+.identity-card:hover {
+  transform: translateY(-8px);
+  border-color: #f4d99a;
+  box-shadow:
+    inset 0 0 0 5px #d9b56b25,
+    inset 0 0 0 7px #e5c77b66,
+    0 10px 0 #211016,
+    0 20px 45px #d4ad5b30;
+}
+
+.identity-card:hover::after {
+  transform: translateX(70%);
+}
+
+.identity-number {
+  position: absolute;
+  top: 19px;
+  color: #d5b77b88;
+  font: italic 14px 'Cormorant Garamond', serif;
+  letter-spacing: 2px;
+}
+
+.seal-ring {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d8b66f;
+  border-radius: 50%;
+  margin-bottom: 5px;
+  box-shadow: 0 0 20px #d6b87822, inset 0 0 15px #d6b87822;
+}
+
+.seal-ring::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px dashed #e4c47b99;
+  border-radius: 50%;
+  animation: sealRotate 24s linear infinite;
+}
+
+.seal-ring::after {
+  content: "✦";
+  position: absolute;
+  top: -10px;
+  color: #f2d99c;
+  font-size: 15px;
+  text-shadow: 0 0 12px #e9c77c;
+}
+
+.animal {
+  font-size: 48px;
+  filter: drop-shadow(0 0 9px #d8b66f77);
+  transition: transform .5s;
+}
+
+.identity-card:hover .animal {
+  transform: scale(1.13) rotate(-5deg);
+}
+
+.identity-card strong {
+  font-size: 30px;
+  color: #f5e3bd;
+}
+
+.identity-card small {
+  color: #d7b878;
+  letter-spacing: 3px;
+}
+
+.identity-description {
+  color: #e0cbb0;
+  font: italic 15px 'Cormorant Garamond', serif;
+}
+
+.identity-enter {
+  color: #d9b875;
+  font-size: 9px;
+  letter-spacing: 2px;
+  margin-top: 9px;
+  opacity: .75;
+  transition: opacity .3s, letter-spacing .3s;
+}
+
+.identity-card:hover .identity-enter {
+  opacity: 1;
+  letter-spacing: 3px;
+}
+
+.login-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.login-particles i {
+  position: absolute;
+  left: calc(var(--x, 50) * 1%);
+  bottom: -15px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #f4d38d;
+  box-shadow: 0 0 12px 3px #d5ad5b77;
+  opacity: 0;
+  animation: goldDust var(--duration, 9s) linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.login-particles i:nth-child(1) { --x: 8; --duration: 10s; }
+.login-particles i:nth-child(2) { --x: 18; --duration: 13s; --delay: 2s; }
+.login-particles i:nth-child(3) { --x: 29; --duration: 11s; --delay: 4s; }
+.login-particles i:nth-child(4) { --x: 40; --duration: 14s; --delay: 1s; }
+.login-particles i:nth-child(5) { --x: 52; --duration: 10s; --delay: 5s; }
+.login-particles i:nth-child(6) { --x: 63; --duration: 12s; --delay: 3s; }
+.login-particles i:nth-child(7) { --x: 74; --duration: 15s; --delay: 2s; }
+.login-particles i:nth-child(8) { --x: 85; --duration: 11s; --delay: 6s; }
+.login-particles i:nth-child(9) { --x: 95; --duration: 13s; --delay: 1s; }
+.login-particles i:nth-child(10) { --x: 34; --duration: 16s; --delay: 7s; }
+.login-particles i:nth-child(11) { --x: 69; --duration: 14s; --delay: 8s; }
+.login-particles i:nth-child(12) { --x: 48; --duration: 12s; --delay: 9s; }
+
+@keyframes goldDust {
+  0% { transform: translateY(0) scale(.5); opacity: 0; }
+  15% { opacity: .8; }
+  85% { opacity: .6; }
+  100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+}
+
+@keyframes frameGlow {
+  0%, 100% { box-shadow: 0 0 8px #d5b77b22; }
+  50% { box-shadow: 0 0 25px #d5b77b55; }
+}
+
+@keyframes starGlow {
+  0%, 100% { opacity: .55; text-shadow: 0 0 7px #e8c77b; }
+  50% { opacity: 1; text-shadow: 0 0 24px #ffe5a1; }
+}
+
+@keyframes sealRotate {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes frameAppear {
+  from { opacity: 0; transform: translateY(18px) scale(.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.identity-entering .identity-card:not(.selected) {
+  opacity: .2;
+  transform: scale(.94);
+  filter: blur(2px);
+}
+
+.identity-card.selected {
+  z-index: 5;
+  border-color: #ffe6a5;
+  animation: sealUnlock .65s ease both;
+}
+
+@keyframes sealUnlock {
+  0% { transform: scale(1); box-shadow: 0 0 0 #e8c77b00; }
+  50% { transform: scale(1.08); box-shadow: 0 0 65px #e8c77b99; }
+  100% { transform: scale(1.03); box-shadow: 0 0 35px #e8c77b66; }
+}
+
+@media(max-width:650px) {
+  .login-frame { padding: 55px 18px; }
+  .roles { gap: 14px; }
+  .identity-card { min-height: 245px; padding: 14px 8px; }
+  .seal-ring { width: 76px; height: 76px; }
+  .animal { font-size: 39px; }
+  .identity-card strong { font-size: 22px; }
+  .identity-card small { font-size: 8px; letter-spacing: 1.5px; }
+  .identity-description { font-size: 12px; }
+  .identity-enter { font-size: 8px; letter-spacing: 1px; }
+  .frame-corner { font-size: 30px; }
+  .identity-heading { letter-spacing: 2px; }
+}
+
+@media(prefers-reduced-motion: reduce) {
+  #login *, #login::before, #login::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
