@@ -406,7 +406,26 @@ function renderDecorationUI(){
  if(role==='reader'&&selectedDecoration){const d=decorations.find(x=>x.id===selectedDecoration&&x.page===current);if(d){const t=document.createElement('div');t.className='decor-tools';t.style.left=Math.max(12,Math.min(88,d.x))+'%';t.style.top=Math.max(12,Math.min(88,d.y))+'%';t.innerHTML='<button title="Küçült" onclick="adjustDecoration(-8)">−</button><button title="Büyüt" onclick="adjustDecoration(8)">＋</button><button title="Döndür" onclick="rotateDecoration()">↻</button><button title="Sil" onclick="removeDecoration()">×</button>';layer.appendChild(t)}}
  if(role==='reader'){const groups=[...new Set(decorationCatalog.map(x=>x.category))];drawer.innerHTML=`<div class="decor-drawer-head"><span>Sayfa süsleri</span><button class="decor-close" onclick="toggleDecorDrawer()">×</button></div><p class="decor-hint">Bir süse dokun; sayfaya eklensin. Sonra tutup istediğin yere sürükle. Seçtiğin süsün altında boyut ve döndürme araçları çıkar.</p>`+groups.map(g=>`<div class="decor-category">${g}</div><div class="decor-items">${decorationCatalog.filter(x=>x.category===g).map(x=>`<button class="decor-choice" onclick="addDecoration('${x.id}')">${decorationSvg(x.id)}<span>${x.name}</span></button>`).join('')}</div>`).join('')}
 }
-function addDecoration(type){if(role!=='reader')return;const d={id:'dec-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),type,page:current,x:50,y:53,size:type.includes('bunch')||type.includes('sprig')?100:76,rotation:0};decorations.push(d);selectedDecoration=d.id;renderDecorationUI();queueDecorationSave()}
+ function addDecoration(type){
+  if(role!=='reader')return;
+
+  const d={
+    id:'dec-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),
+    type,
+    page:current,
+    x:50,
+    y:53,
+    size:type.includes('bunch')||type.includes('sprig')?100:76,
+    rotation:0
+  };
+
+  decorations.push(d);
+  selectedDecoration=d.id;
+  decorDrawerOpen=false;
+
+  renderDecorationUI();
+  queueDecorationSave();
+}
 function startDecorationDrag(e,id){if(role!=='reader'||(e.pointerType==='mouse'&&e.button!==0))return;e.preventDefault();e.stopPropagation();selectedDecoration=id;decorDrag={id,pointerId:e.pointerId,moved:false};try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}e.currentTarget.classList.add('selected')}
 document.addEventListener('pointermove',e=>{if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;const d=decorations.find(x=>x.id===decorDrag.id);if(!d)return;decorDrag.moved=true;const r=document.getElementById('page').getBoundingClientRect();d.x=Math.max(3,Math.min(97,(e.clientX-r.left)/r.width*100));d.y=Math.max(4,Math.min(96,(e.clientY-r.top)/r.height*100));const el=document.querySelector(`.decor-item[data-id="${d.id}"]`);if(el){el.style.left=d.x+'%';el.style.top=d.y+'%'}const t=document.querySelector('.decor-tools');if(t){t.style.left=Math.max(12,Math.min(88,d.x))+'%';t.style.top=Math.max(12,Math.min(88,d.y))+'%'}},{passive:false});
 document.addEventListener('pointerup',e=>{if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;const moved=decorDrag.moved;decorDrag=null;renderDecorationUI();if(moved)queueDecorationSave()});
