@@ -104,8 +104,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 .roles{gap:12px}.role{min-height:170px;padding:12px}.animal{font-size:46px}.role strong{font-size:23px}
 .navbtn{padding:9px 12px}.day-grid{gap:3px}.day{font-size:14px}
 }
-
-/* Sayfa süsleri */
+ /* Sayfa süsleri */
 .decor-trigger{position:absolute;z-index:14;top:22px;right:22px;width:42px;height:42px;border:1px solid #b89455;border-radius:50%;background:linear-gradient(145deg,#fff5df,#d9c39b);color:#6a3c35;font:26px 'Cormorant Garamond',serif;box-shadow:0 3px 9px #4b302544;display:grid;place-items:center;touch-action:manipulation}
 .decor-trigger:active{transform:scale(.94)}
 .decor-drawer{position:absolute;z-index:15;top:70px;right:18px;width:min(310px,calc(100% - 36px));max-height:min(66%,430px);overflow:auto;padding:13px;background:#f4ead8;border:1px solid #b89455;border-radius:12px;box-shadow:0 12px 30px #25101855;color:#4b2630}
@@ -117,11 +116,11 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 .decor-choice{min-height:76px;border:1px solid #d2bd98;border-radius:8px;background:linear-gradient(#fffaf0,#e9dcc5);color:#56313a;padding:6px 3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;touch-action:manipulation}
 .decor-choice svg{width:43px;height:43px;overflow:visible}
 .decor-choice:active{transform:scale(.96)}
-.decor-layer{position:absolute;inset:0;z-index:13;pointer-events:none;overflow:visible}
+.decor-layer{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden}
 .decor-item{position:absolute;display:grid;place-items:center;pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;filter:drop-shadow(1px 3px 3px #49352a44);transform-origin:center}
 .decor-item svg{width:100%;height:100%;display:block;overflow:visible;pointer-events:none}
 .decor-item.selected{outline:1px dashed #a57a43;outline-offset:4px}
-.decor-tools{position:absolute;z-index:30;display:flex;gap:5px;transform:translate(-50%,-115%);pointer-events:auto;white-space:nowrap;background:#f4ead8;padding:4px;border:1px solid #b89455;border-radius:24px;box-shadow:0 4px 12px #25101855}
+.decor-tools{position:absolute;z-index:18;display:flex;gap:5px;transform:translate(-50%,-115%);pointer-events:auto}
 .decor-tools button{min-width:38px;height:38px;border:1px solid #b89455;border-radius:50%;background:#4b1724;color:#fff0d7;font-size:17px;box-shadow:0 3px 8px #0003;touch-action:manipulation}
 .decor-tools button:active{transform:scale(.92)}
 @media(max-width:650px){
@@ -129,404 +128,23 @@ button,input,textarea{font:inherit}button{cursor:pointer}
  .decor-drawer{top:60px;right:10px;width:min(290px,calc(100% - 20px));max-height:65%}
  .decor-tools button{min-width:42px;height:42px}
 }
- 
-/* ✦ ALTIN İŞLEMELİ GİRİŞ EKRANI ✦ */
-
-#login {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background:
-    radial-gradient(ellipse at 50% 45%, #713b3b55, transparent 55%),
-    radial-gradient(ellipse at 50% 100%, #a4773a20, transparent 65%);
-}
-
-#login::before {
-  content: "";
-  position: absolute;
-  inset: 19px;
-  border: 1px solid #c9a45d88;
-  outline: 1px solid #c9a45d35;
-  outline-offset: 7px;
-  pointer-events: none;
-  animation: frameGlow 5s ease-in-out infinite;
-}
-
-#login::after {
-  content: "✦";
-  position: absolute;
-  top: 35px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #e0bd78;
-  font-size: 20px;
-  text-shadow: 0 0 18px #e8c77b;
-  animation: starGlow 3s ease-in-out infinite;
-}
-
-.login-frame {
-  position: relative;
-  z-index: 1;
-  width: min(920px, 94%);
-  padding: 65px 48px;
-  border: 1px solid #c7a15c88;
-  background: linear-gradient(135deg, #4b202b66, #1e101766, #512d2b55);
-  box-shadow:
-    inset 0 0 50px #d3ae6020,
-    0 0 45px #0006,
-    0 0 80px #b18a4820;
-  animation: frameAppear 1.2s ease both;
-}
-
-.login-frame::before {
-  content: "";
-  position: absolute;
-  inset: 9px;
-  border: 1px solid #c7a15c55;
-  pointer-events: none;
-}
-
-.frame-corner {
-  position: absolute;
-  z-index: 3;
-  color: #e4c17a;
-  font-size: 42px;
-  line-height: 1;
-  text-shadow: 0 0 12px #d9b56b88;
-}
-
-.top-left { top: 8px; left: 10px; }
-.top-right { top: 8px; right: 10px; transform: scaleX(-1); }
-.bottom-left { bottom: 8px; left: 10px; transform: scaleY(-1); }
-.bottom-right { bottom: 8px; right: 10px; transform: scale(-1); }
-
-.ornament-line {
-  color: #c8a15e;
-  font-size: 17px;
-  letter-spacing: 9px;
-  margin-bottom: 24px;
-  text-shadow: 0 0 12px #d9b56b77;
-}
-
-.ornament-line span {
-  color: #f1d69a;
-  font-size: 21px;
-}
-
-.bottom-ornament {
-  margin: 30px 0 0;
-  font-size: 13px;
-  letter-spacing: 4px;
-}
-
-.identity-heading {
-  color: #d6b878;
-  font-size: 10px;
-  letter-spacing: 4px;
-  margin: 0 0 22px;
-}
-
-.roles {
-  max-width: 650px;
-  gap: 28px;
-}
-
-.identity-card {
-  min-height: 290px;
-  overflow: hidden;
-  border: 1px solid #d5b77b;
-  border-radius: 3px;
-  background:
-    radial-gradient(circle at 50% 35%, #a4773b35, transparent 48%),
-    linear-gradient(145deg, #683541, #32141f 65%, #211016);
-  box-shadow:
-    inset 0 0 0 5px #c7a15c18,
-    inset 0 0 0 7px #c7a15c44,
-    0 10px 0 #211016,
-    0 20px 35px #0008;
-  gap: 8px;
-  transition: transform .5s, box-shadow .5s, border-color .5s;
-}
-
-.identity-card::before {
-  inset: 12px;
-  border: 1px solid #d6b87877;
-  border-radius: 0;
-}
-
-.identity-card::after {
-  content: "";
-  position: absolute;
-  inset: -60%;
-  background: linear-gradient(
-    115deg,
-    transparent 43%,
-    #f5d99418 49%,
-    #fff0bd35 50%,
-    transparent 57%
-  );
-  transform: translateX(-70%);
-  transition: transform 1s;
-  pointer-events: none;
-}
-
-.identity-card:hover {
-  transform: translateY(-8px);
-  border-color: #f4d99a;
-  box-shadow:
-    inset 0 0 0 5px #d9b56b25,
-    inset 0 0 0 7px #e5c77b66,
-    0 10px 0 #211016,
-    0 20px 45px #d4ad5b30;
-}
-
-.identity-card:hover::after {
-  transform: translateX(70%);
-}
-
-.identity-number {
-  position: absolute;
-  top: 19px;
-  color: #d5b77b88;
-  font: italic 14px 'Cormorant Garamond', serif;
-  letter-spacing: 2px;
-}
-
-.seal-ring {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  display: grid;
-  place-items: center;
-  border: 1px solid #d8b66f;
-  border-radius: 50%;
-  margin-bottom: 5px;
-  box-shadow: 0 0 20px #d6b87822, inset 0 0 15px #d6b87822;
-}
-
-.seal-ring::before {
-  content: "";
-  position: absolute;
-  inset: 6px;
-  border: 1px dashed #e4c47b99;
-  border-radius: 50%;
-  animation: sealRotate 24s linear infinite;
-}
-
-.seal-ring::after {
-  content: "✦";
-  position: absolute;
-  top: -10px;
-  color: #f2d99c;
-  font-size: 15px;
-  text-shadow: 0 0 12px #e9c77c;
-}
-
-.animal {
-  font-size: 48px;
-  filter: drop-shadow(0 0 9px #d8b66f77);
-  transition: transform .5s;
-}
-
-.identity-card:hover .animal {
-  transform: scale(1.13) rotate(-5deg);
-}
-
-.identity-card strong {
-  font-size: 30px;
-  color: #f5e3bd;
-}
-
-.identity-card small {
-  color: #d7b878;
-  letter-spacing: 3px;
-}
-
-.identity-description {
-  color: #e0cbb0;
-  font: italic 15px 'Cormorant Garamond', serif;
-}
-
-.identity-enter {
-  color: #d9b875;
-  font-size: 9px;
-  letter-spacing: 2px;
-  margin-top: 9px;
-  opacity: .75;
-  transition: opacity .3s, letter-spacing .3s;
-}
-
-.identity-card:hover .identity-enter {
-  opacity: 1;
-  letter-spacing: 3px;
-}
-
-.login-particles {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.login-particles i {
-  position: absolute;
-  left: calc(var(--x, 50) * 1%);
-  bottom: -15px;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #f4d38d;
-  box-shadow: 0 0 12px 3px #d5ad5b77;
-  opacity: 0;
-  animation: goldDust var(--duration, 9s) linear infinite;
-  animation-delay: var(--delay, 0s);
-}
-
-.login-particles i:nth-child(1) { --x: 8; --duration: 10s; }
-.login-particles i:nth-child(2) { --x: 18; --duration: 13s; --delay: 2s; }
-.login-particles i:nth-child(3) { --x: 29; --duration: 11s; --delay: 4s; }
-.login-particles i:nth-child(4) { --x: 40; --duration: 14s; --delay: 1s; }
-.login-particles i:nth-child(5) { --x: 52; --duration: 10s; --delay: 5s; }
-.login-particles i:nth-child(6) { --x: 63; --duration: 12s; --delay: 3s; }
-.login-particles i:nth-child(7) { --x: 74; --duration: 15s; --delay: 2s; }
-.login-particles i:nth-child(8) { --x: 85; --duration: 11s; --delay: 6s; }
-.login-particles i:nth-child(9) { --x: 95; --duration: 13s; --delay: 1s; }
-.login-particles i:nth-child(10) { --x: 34; --duration: 16s; --delay: 7s; }
-.login-particles i:nth-child(11) { --x: 69; --duration: 14s; --delay: 8s; }
-.login-particles i:nth-child(12) { --x: 48; --duration: 12s; --delay: 9s; }
-
-@keyframes goldDust {
-  0% { transform: translateY(0) scale(.5); opacity: 0; }
-  15% { opacity: .8; }
-  85% { opacity: .6; }
-  100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
-}
-
-@keyframes frameGlow {
-  0%, 100% { box-shadow: 0 0 8px #d5b77b22; }
-  50% { box-shadow: 0 0 25px #d5b77b55; }
-}
-
-@keyframes starGlow {
-  0%, 100% { opacity: .55; text-shadow: 0 0 7px #e8c77b; }
-  50% { opacity: 1; text-shadow: 0 0 24px #ffe5a1; }
-}
-
-@keyframes sealRotate {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes frameAppear {
-  from { opacity: 0; transform: translateY(18px) scale(.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.identity-entering .identity-card:not(.selected) {
-  opacity: .2;
-  transform: scale(.94);
-  filter: blur(2px);
-}
-
-.identity-card.selected {
-  z-index: 5;
-  border-color: #ffe6a5;
-  animation: sealUnlock .65s ease both;
-}
-
-@keyframes sealUnlock {
-  0% { transform: scale(1); box-shadow: 0 0 0 #e8c77b00; }
-  50% { transform: scale(1.08); box-shadow: 0 0 65px #e8c77b99; }
-  100% { transform: scale(1.03); box-shadow: 0 0 35px #e8c77b66; }
-}
-
-@media(max-width:650px) {
-  .login-frame { padding: 55px 18px; }
-  .roles { gap: 14px; }
-  .identity-card { min-height: 245px; padding: 14px 8px; }
-  .seal-ring { width: 76px; height: 76px; }
-  .animal { font-size: 39px; }
-  .identity-card strong { font-size: 22px; }
-  .identity-card small { font-size: 8px; letter-spacing: 1.5px; }
-  .identity-description { font-size: 12px; }
-  .identity-enter { font-size: 8px; letter-spacing: 1px; }
-  .frame-corner { font-size: 30px; }
-  .identity-heading { letter-spacing: 2px; }
-}
-
-@media(prefers-reduced-motion: reduce) {
-  #login *, #login::before, #login::after {
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
-  }
-}
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-
 <section id="login" class="screen">
-  <div class="login-particles" aria-hidden="true">
-    <i></i><i></i><i></i><i></i><i></i>
-    <i></i><i></i><i></i><i></i><i></i>
-    <i></i><i></i>
+ <div class="login-wrap">
+  <div class="eyebrow">BİR KİTAP, BİRİKTİRİLMİŞ BİR ÖMÜR</div>
+  <h1 class="main-title">Kendinizi Okulla<br>Konumlandırın</h1>
+  <div class="login-sub">Sayfalarımızın arasında kendinize bir yer seçin.</div>
+  <div class="roles">
+   <button class="role" onclick="enter('admin')"><span class="animal">🦎</span><strong>skawraxia</strong><small>Kitabın yazarı</small></button>
+   <button class="role" onclick="enter('reader')"><span class="animal">🐻</span><strong>skawrax</strong><small>Kitabın okuyucusu</small></button>
   </div>
-
-  <div class="login-frame">
-    <span class="frame-corner top-left">❧</span>
-    <span class="frame-corner top-right">❧</span>
-    <span class="frame-corner bottom-left">❧</span>
-    <span class="frame-corner bottom-right">❧</span>
-
-    <div class="login-wrap">
-      <div class="ornament-line"><span>✦</span> ❧ ✦ ❧ <span>✦</span></div>
-
-      <div class="eyebrow">BİR KİTAP, BİRİKTİRİLMİŞ BİR ÖMÜR</div>
-
-      <h1 class="main-title">
-        Kendinizi Okulla<br>Konumlandırın
-      </h1>
-
-      <div class="login-sub">
-        Her hikâyenin içinde bir yer vardır.
-      </div>
-
-      <div class="identity-heading">BU HİKÂYEDEKİ YERİNİZİ SEÇİN</div>
-
-      <div class="roles">
-        <button class="role identity-card" onclick="enter('admin')"
-          <span class="identity-number">I</span>
-          <span class="seal-ring">
-            <span class="animal">🦎</span>
-          </span>
-          <strong>skawraxia</strong>
-          <small>KİTABIN YAZARI</small>
-          <span class="identity-description">Sayfaların ardındaki kişi</span>
-          <span class="identity-enter">KİTABIMA GİRİŞ YAP</span>
-        </button>
-
-        <button class="role identity-card" onclick="enter('reader')"
-          <span class="identity-number">II</span>
-          <span class="seal-ring">
-            <span class="animal">🐻</span>
-          </span>
-          <strong>skawrax</strong>
-          <small>KİTABIN OKUYUCUSU</small>
-          <span class="identity-description">Bu hikâyenin bir parçası</span>
-          <span class="identity-enter">KİTABIMA GİRİŞ YAP</span>
-        </button>
-      </div>
-
-      <div class="login-note">
-        <span>✧</span> Bu küçük dünyanın kapısı iki kişiye açılıyor. <span>✧</span>
-      </div>
-
-      <div class="ornament-line bottom-ornament">❧ ━━━━━ ✦ ━━━━━ ❧</div>
-    </div>
-  </div>
+  <div class="login-note">Bu küçük dünyanın kapısı iki kişiye açılıyor.</div>
+ </div>
 </section>
-
 <div id="app">
  <header class="topbar">
   <div class="brand">Kendinizi Okulla Konumlandırın</div>
@@ -606,97 +224,21 @@ function getData(key){return new Promise(resolve=>{let r=db.transaction(STORE).o
 function putData(key,val){return new Promise(resolve=>{let t=db.transaction(STORE,'readwrite');t.objectStore(STORE).put(val,key);t.oncomplete=()=>resolve();t.onerror=()=>resolve()})}
 function toast(msg='Otomatik kaydedildi'){let t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
 async function ensureUser(){
-  const { data: sd, error: se } = await supabaseClient.auth.getSession();
-  if (se) throw se;
-
-  if (sd.session) {
-    currentUser = sd.session.user;
-    console.log("Mevcut kullanıcı:", currentUser.id);
-    return currentUser;
-  }
-
-  const { data, error } = await supabaseClient.auth.signInAnonymously();
-  if (error) throw error;
-
-  currentUser = data.user;
-  console.log("Yeni anonim kullanıcı:", currentUser.id);
-  return currentUser;
+ const {data:sd,error:se}=await supabaseClient.auth.getSession();if(se)throw se;
+ if(sd.session){currentUser=sd.session.user;return currentUser;}
+ const {data,error}=await supabaseClient.auth.signInAnonymously();if(error)throw error;currentUser=data.user;return currentUser;
 }
 async function claimRole(who){
  await ensureUser();
  if(who==='admin'){
   const code=prompt('Yönetici şifresini gir:');if(code===null)return false;
-  const {data,error}=await supabaseClient.rpc('claim_admin',{access_code:code});if(error)throw error;
-  if(data!==true){alert('Şifre yanlış. Tekrar deneyebilirsin.');return false;}
+  const {data,error}=await supabaseClient.rpc('claim_admin',{access_code:code});if(error)throw error;if(data===false){alert('Şifre yanlış. Tekrar deneyebilirsin.');return false;}
  }else{
   const {error}=await supabaseClient.rpc('register_reader');if(error)throw error;
  }
  const {data:member,error}=await supabaseClient.from('book_members').select('role').eq('user_id',currentUser.id).maybeSingle();
  if(error)throw error;if(!member||member.role!==who)throw new Error('Bu hesap için gerekli erişim bulunamadı.');
  return true;
-}
- async function enter(who){
- alert('Buton çalıştı: ' + who);
- try{
-  const ok=await claimRole(who);
-  alert('1 - Yetki kontrolü tamamlandı');
-  if(!ok)return;
-
-  role=who;
-alert('2 - Kitap verileri yükleniyor');
-  const {data:row,error}=await supabaseClient
-   .from('book_data')
-   .select('content')
-   .eq('id','main')
-   .maybeSingle();
-
-  if(error)throw error;
-alert('Kitap verisi sorgusu tamamlandı');
-  if(row&&row.content){
-   const c=row.content;
-   pages=c.pages||pages;
-   attendance=c.attendance||attendance;
-   photos=c.photos||[];
-   coverData=c.cover||'';
-   bookmarkData=c.bookmark||'';
-   bookmarkPos=c.bookmarkPos||bookmarkPos;
-  }
-
-  await migrateMedia();
-  await loadDecorations();
-
-  if(!row&&who==='admin')await cloudSave();
-
-  await putData('pages',pages);
-  await putData('attendance',attendance);
-  await putData('photos',photos);
-  await putData('cover',coverData);
-  await putData('bookmark',bookmarkData);
-  await putData('bookmarkPos',bookmarkPos);
-
-  await refreshMedia();
-
-  document.getElementById('login').style.display='none';
-  document.getElementById('app').style.display='block';
-
-  document.getElementById('bookmarkTools').classList.toggle('hidden',role!=='admin');
-  document.getElementById('adminPanel').classList.add('hidden');
-
-  panelOpen=false;
-  renderPage();
-
-  if(who==='reader'){
-   let w=document.createElement('div');
-   w.className='welcome';
-   w.innerHTML='<div>Hoş geldin sevgilimmmm!</div>';
-   document.body.appendChild(w);
-   setTimeout(()=>w.remove(),1900);
-  }
-
- }catch(e){
-  alert('Giriş yapılamadı: '+e.message);
-  console.error(e);
- }
 }
 async function init(){
  try{
@@ -708,96 +250,24 @@ async function init(){
   await refreshMedia();renderBookmark();
  }catch(e){toast('Başlangıç verileri yüklenemedi: '+e.message)}
 }
-
-async function cloudSave(){
- if(role!=='admin'||!currentUser)return;
- const content={pages,attendance,photos,cover:coverData,bookmark:bookmarkData,bookmarkPos};
- const {error}=await supabaseClient.from('book_data').upsert({id:'main',content,updated_at:new Date().toISOString(),updated_by:currentUser.id},{onConflict:'id'});
- if(error)throw error;
+async function enter(who){
+ try{
+  const ok=await claimRole(who);if(!ok)return;
+  role=who;
+  const {data:row,error}=await supabaseClient.from('book_data').select('content').eq('id','main').maybeSingle();if(error)throw error;
+  if(row&&row.content){const c=row.content;pages=c.pages||pages;attendance=c.attendance||attendance;photos=c.photos||[];coverData=c.cover||'';bookmarkData=c.bookmark||'';bookmarkPos=c.bookmarkPos||bookmarkPos;}
+  await loadDecorations();
+  if(!row&&who==='admin'){await cloudSave();}
+  await putData('pages',pages);await putData('attendance',attendance);await putData('photos',photos);await putData('cover',coverData);await putData('bookmark',bookmarkData);await putData('bookmarkPos',bookmarkPos);
+  await refreshMedia();
+  document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';
+  document.getElementById('bookmarkTools').classList.toggle('hidden',role!=='admin');document.getElementById('adminPanel').classList.add('hidden');panelOpen=false;renderPage();
+  if(who==='reader'){let w=document.createElement('div');w.className='welcome';w.innerHTML='<div>Hoş geldin sevgilimmmm!</div>';document.body.appendChild(w);setTimeout(()=>w.remove(),1900)}
+ }catch(e){alert('Giriş yapılamadı: '+e.message)}
 }
-function saveAll(){
- if(db){putData('pages',pages);putData('attendance',attendance);putData('photos',photos);putData('cover',coverData);putData('bookmark',bookmarkData);putData('bookmarkPos',bookmarkPos);}
- if(role==='admin'&&currentUser){clearTimeout(saveTimer);saveTimer=setTimeout(async()=>{try{await cloudSave();toast('Ortak kitaba kaydedildi')}catch(e){toast('Buluta kaydedilemedi: '+e.message)}},500)}else toast();
-}
-async function migrateMedia(){
- async function migrateOne(value,kind){
-  if(typeof value!=='string'||!value.startsWith('data:'))return value;
-  const response=await fetch(value),blob=await response.blob();
-  const file=new File([blob],kind+'.'+((blob.type.split('/')[1]||'jpg').split(';')[0]),{type:blob.type||'image/jpeg'});
-  return await uploadFile(file,kind);
- }
- if(coverData)coverData=await migrateOne(coverData,'cover');
- if(bookmarkData)bookmarkData=await migrateOne(bookmarkData,'bookmark');
- const converted=[];for(let i=0;i<photos.length;i++)converted.push(await migrateOne(photos[i],'photo'));
- photos=converted;
-}
-async function uploadFile(file,kind){
- if(!file)return null;if(!file.type.startsWith('image/'))throw new Error('Lütfen görsel dosyası seç.');
- const ext=(file.name.split('.').pop()||'jpg').replace(/[^a-z0-9]/gi,'').toLowerCase()||'jpg';
- const path=`${currentUser.id}/${kind}-${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
- const {error}=await supabaseClient.storage.from('book-files').upload(path,file,{upsert:false,contentType:file.type});if(error)throw error;return path;
-}
-async function signed(path){if(!path)return '';const {data,error}=await supabaseClient.storage.from('book-files').createSignedUrl(path,3600);if(error){console.warn(error);return ''}return data.signedUrl}
-async function refreshMedia(){coverDisplay=await signed(coverData);bookmarkDisplay=await signed(bookmarkData);photoDisplay=await Promise.all(photos.map(signed))}
-async function logout(){
-  try {
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) throw error;
-
-    currentUser = null;
-    role = 'reader';
-    decorDrawerOpen = false;
-    selectedDecoration = null;
-
-    document.getElementById('app').style.display = 'none';
-    document.getElementById('login').style.display = 'grid';
-  } catch (e) {
-    alert('Çıkış yapılamadı: ' + e.message);
-  }
-}
-function togglePanel(){if(role!=='admin'){toast('Düzenleme alanı yalnızca yazar görünümünde açık.');return}panelOpen=!panelOpen;document.getElementById('adminPanel').classList.toggle('hidden',!panelOpen);document.getElementById('bookmarkTools').classList.toggle('hidden',!panelOpen);syncEditor()}
-function toggleFullscreen(){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}
-function renderPage(){
- let p=pages[current],inner=document.getElementById('pageInner');
- document.getElementById('navLabel').textContent=(current+1)+' / '+pages.length+' · '+p.title;
- document.getElementById('attendanceEditor').classList.toggle('hidden',p.type!=='attendance');
- document.getElementById('pageEditor').classList.toggle('hidden',false);syncEditor();
- if(p.type==='cover'){
-  inner.innerHTML=`<div class="cover-page ${coverDisplay?'has-image':''}" style="${coverDisplay?`background-image:url('${coverDisplay}')`:''}"><div class="cover-copy"><div class="cover-small" contenteditable="${role==='admin'}" data-field="label">${esc(p.label)}</div><div class="cover-ornament">✦　❦　✦</div><h1 class="cover-title" contenteditable="${role==='admin'}" data-field="title">${esc(p.title)}</h1><div class="cover-sub" contenteditable="${role==='admin'}" data-field="body">${esc(p.body)}</div><div class="cover-ornament">— ❧ —</div></div>${role==='admin'?'<label class="file-label cover-upload">Kapak görselini değiştir<input type="file" accept="image/*" onchange="uploadCover(event)"></label>':''}</div>`;
- }else if(p.type==='attendance'){
-  inner.innerHTML=`<div class="page-kicker">GÜNLÜK KÜÇÜK BİR HATIRA</div><h1 class="page-title">${esc(p.title)}</h1><div id="calendarArea"></div><div class="page-footer"><span>Her tarihte başka bir cümle…</span><span class="page-num">${current+1}</span></div>`;renderCalendar();
- }else if(p.type==='gallery'){
-  inner.innerHTML=`<div class="page-kicker">BİRİKTİRDİĞİMİZ GÜZEL ŞEYLER</div><h1 class="page-title">${esc(p.title)}</h1><div class="page-body" style="text-align:center;min-height:auto">${esc(p.body)}</div>${role==='admin'?'<p style="text-align:center"><label class="file-label">Fotoğraf ekle<input type="file" accept="image/*" multiple onchange="uploadPhotos(event)"></label></p>':''}<div class="gallery" id="gallery"></div><div class="page-footer"><span>Hatıralar, sayfalardan taşar.</span><span class="page-num">${current+1}</span></div>`;renderGallery();
- }else{
-  inner.innerHTML=`<div class="page-kicker">KENDİ KİTABIMIZDAN BİR BÖLÜM</div><h1 class="page-title" ${role==='admin'?'contenteditable="true" data-field="title"':''}>${esc(p.title)}</h1><div class="page-body" ${role==='admin'?'contenteditable="true" data-field="body"':''}>${esc(p.body)}</div><div class="page-footer"><span>Sevgiyle yazılmıştır</span><span class="page-num">${current+1}</span></div>`;
- }
- inner.querySelectorAll('[contenteditable=true]').forEach(el=>el.addEventListener('input',()=>{pages[current][el.dataset.field]=el.innerText;saveAll()}));
- renderDecorationUI();
-}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function changePage(d){current=Math.max(0,Math.min(pages.length-1,current+d));renderPage();document.getElementById('page').animate([{transform:'rotateY('+(d>0?'-2':'2')+'deg)',opacity:.7},{transform:'rotateY(0)',opacity:1}],{duration:330,easing:'ease-out'})}
-function syncEditor(){let p=pages[current];document.getElementById('editTitle').value=p.title||'';document.getElementById('editBody').value=p.body||'';document.getElementById('attendanceDate').value=selectedDate;document.getElementById('attendanceText').value=attendance[selectedDate]||''}
-function saveCurrentPage(){pages[current].title=document.getElementById('editTitle').value;pages[current].body=document.getElementById('editBody').value;saveAll();renderPage()}
-function resetCurrentPage(){if(!confirm('Bu sayfanın başlangıç metnine dönmesini istiyor musun?'))return;pages[current]=JSON.parse(JSON.stringify(defaults[current]));saveAll();renderPage()}
-function renderCalendar(){
- let area=document.getElementById('calendarArea');if(!area)return;
- let months=[];for(let y=2025;y<2027;y++){let start=y===2025?11:1,limit=y===2025?12:11;for(let mo=start;mo<=limit;mo++)months.push(`${y}-${String(mo).padStart(2,'0')}`)}
- let monthNames=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
- if(!attendanceMonth){area.innerHTML='<div class="month-list">'+months.map(m=>`<button class="month-btn" onclick="toggleMonth('${m}')">${monthNames[+m.slice(5)-1]} ${m.slice(0,4)}</button>`).join('')+'</div>';return}
- let [y,mo]=attendanceMonth.split('-').map(Number),first=new Date(y,mo-1,1),days=new Date(y,mo,0).getDate(),offset=(first.getDay()+6)%7,min='2025-11-28',max='2026-11-19',cells=Array(offset).fill('<span></span>');
- for(let d=1;d<=days;d++){let key=`${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`,disabled=key<min||key>max;cells.push(disabled?'<span></span>':`<button class="day ${attendance[key]?'has-message':''} ${selectedDate===key?'selected':''}" onclick="selectDate('${key}')">${d}</button>`)}
- area.innerHTML=`<div class="calendar-head"><button class="small-btn" onclick="attendanceMonth='';renderCalendar()">← Aylar</button><strong style="font:600 21px 'Cormorant Garamond',serif">${monthNames[mo-1]} ${y}</strong><span></span></div><div class="day-grid">${['P','S','Ç','P','C','C','P'].map(x=>`<span style="text-align:center;color:#947b5d;font-size:12px">${x}</span>`).join('')}${cells.join('')}</div><div class="message-card" id="dayMessage">${esc(attendance[selectedDate]||'Bu gün için henüz bir not bırakılmamış.')}</div>`;
- syncEditor();
-}
-function toggleMonth(m){attendanceMonth=m;renderCalendar()}
-function selectDate(d){selectedDate=d;renderCalendar();syncEditor()}
-function saveAttendance(){let d=document.getElementById('attendanceDate').value;if(!d)return;selectedDate=d;let v=document.getElementById('attendanceText').value;if(v.trim())attendance[d]=v;else delete attendance[d];attendanceMonth=d.slice(0,7);saveAll();renderCalendar()}
-function deleteAttendance(){let d=document.getElementById('attendanceDate').value;delete attendance[d];selectedDate=d;saveAll();renderCalendar();syncEditor()}
-async function uploadCover(e){let f=e.target.files[0];if(!f)return;try{coverData=await uploadFile(f,'cover');await refreshMedia();saveAll();renderPage()}catch(err){alert('Kapak yüklenemedi: '+err.message)}e.target.value=''}
-async function uploadBookmark(e){let f=e.target.files[0];if(!f)return;try{bookmarkData=await uploadFile(f,'bookmark');await refreshMedia();saveAll();renderBookmark()}catch(err){alert('Ayraç yüklenemedi: '+err.message)}e.target.value=''}
-function renderBookmark(){let c=document.getElementById('bookmarkContent');if(bookmarkDisplay){c.className='';c.innerHTML=`<img src="${bookmarkDisplay}" alt="Yüklenen ayraç">`}else{c.className='bookmark-fallback';c.innerHTML=''}let b=document.getElementById('bookmark');if(bookmarkPos.x!==null){b.style.left=bookmarkPos.x+'px';b.style.top=bookmarkPos.y+'px';b.style.right='auto'}}
-async function uploadPhotos(e){let files=[...e.target.files];if(role!=='admin'){alert('Fotoğraf ekleme yetkisi yalnızca yazarda.');e.target.value='';return}try{for(const f of files)photos.push(await uploadFile(f,'photo'));await putData('photos',photos);await refreshMedia();clearTimeout(saveTimer);await cloudSave();toast('Fotoğraflar ortak kitaba kaydedildi');renderGallery()}catch(err){alert('Fotoğraf yüklenemedi veya ortak kitaba kaydedilemedi: '+err.message)}e.target.value=''}
-function renderGallery(){let g=document.getElementById('gallery');if(!g)return;g.innerHTML=photoDisplay.length?photoDisplay.map((src,i)=>`<div class="photo"><img src="${src}" alt="Anı fotoğrafı">${role==='admin'?`<button onclick="deletePhoto(${i})">×</button>`:''}</div>`).join(''):'<div class="empty">Bu sayfada henüz bir fotoğraf yok.</div>'}
+ html
+async function uploadPhotos(e){let files=[...e.target.files];try{for(const f of files)photos.push(await uploadFile(f,'photo'));await refreshMedia();saveAll();renderGallery()}catch(err){alert('Fotoğraf yüklenemedi: '+err.message)}e.target.value=''}
+function renderGallery(){let g=document.getElementById('gallery');if(!g)return;g.innerHTML=photoDisplay.length?photoDisplay.map((src,i)=><div class="photo"><img src="${src}" alt="Anı fotoğrafı">${role==='admin'?<button onclick="deletePhoto(${i})">×</button>:''}</div>).join(''):'<div class="empty">Bu sayfada henüz bir fotoğraf yok.</div>'}
 async function deletePhoto(i){const path=photos[i];photos.splice(i,1);photoDisplay.splice(i,1);if(path)await supabaseClient.storage.from('book-files').remove([path]);saveAll();renderGallery()}
 
 async function loadDecorations(){const {data,error}=await supabaseClient.from('book_decorations').select('content').eq('id','main').maybeSingle();if(error)throw error;decorations=Array.isArray(data?.content)?data.content:[]}
@@ -810,58 +280,35 @@ const decorationCatalog=[
 {id:'ribbon',name:'Kurdele',category:'Detaylar'},{id:'lace',name:'Dantel',category:'Detaylar'},{id:'pearls',name:'İnci dizisi',category:'Detaylar'},{id:'star',name:'Yıldız',category:'Detaylar'},
 {id:'label',name:'Vintage etiket',category:'Kâğıt parçaları'},{id:'stamp',name:'Pul',category:'Kâğıt parçaları'},{id:'tape',name:'Kâğıt bant',category:'Kâğıt parçaları'},{id:'seal',name:'Mühür',category:'Kâğıt parçaları'}];
 function decorationSvg(type){
- const petal=(n)=>Array.from({length:n},(_,i)=>`<ellipse cx="50" cy="28" rx="7" ry="19" transform="rotate(${i*360/n} 50 50)" fill="#fffdf6" stroke="#d6cbbb" stroke-width="1"/>`).join('');
- const daisy=`${petal(12)}<circle cx="50" cy="50" r="11" fill="#e2bd61"/><circle cx="50" cy="50" r="6" fill="#f5dc91"/>`;
- const rose=`<path d="M50 83Q12 66 25 35Q35 8 58 19Q88 25 76 57Q68 78 50 83Z" fill="#fffdf6" stroke="#d4c8b7" stroke-width="2"/><path d="M50 70Q25 60 38 37Q49 20 65 35Q78 52 58 65Q47 71 50 70Z" fill="#eee9df" stroke="#cfc2b1" stroke-width="2"/><path d="M48 55Q39 44 50 36Q63 31 65 45Q65 57 53 60Z" fill="#fff" stroke="#d1c5b4"/>`;
- let a='';
- if(type.startsWith('daisy'))a= type==='daisy'?daisy:type==='daisy-sprig'?`<path d="M50 95L50 20" stroke="#79845e" stroke-width="3"/>${daisy}<g transform="translate(-22 24) scale(.65)">${daisy}</g><path d="M50 70Q20 48 16 66Q35 83 50 70M50 52Q77 31 82 50Q65 65 50 52" fill="#89946e" stroke="#68734f"/>`:`<path d="M50 95L27 40M50 95L50 25M50 95L75 40" stroke="#79845e" stroke-width="3"/><g transform="translate(-23 -18) scale(.65)">${daisy}</g><g transform="translate(23 -15) scale(.65)">${daisy}</g>${daisy}`;
- else if(type.startsWith('rose'))a=type==='rose'?rose:type==='rose-bud'?`<path d="M50 94V38" stroke="#78845d" stroke-width="3"/><path d="M50 55Q20 44 29 28Q43 25 50 55M50 65Q80 51 69 35Q56 34 50 65" fill="#89936b"/><path d="M50 47Q27 31 43 12Q58 0 66 20Q70 38 50 47Z" fill="#fffdf6" stroke="#d5c9b7" stroke-width="2"/>`:`<path d="M18 90Q50 50 80 12" stroke="#78845d" stroke-width="3"/>${rose}<g transform="translate(-23 26) scale(.58)">${rose}</g><path d="M37 70Q12 51 12 69Q27 82 37 70M59 40Q82 22 85 40Q72 55 59 40" fill="#89936b"/>`;
- else if(type==='leaf'||type==='branch')a=`<path d="M15 88Q48 50 85 12M42 60L23 35M59 42L79 52" fill="none" stroke="#827455" stroke-width="3"/><path d="M23 35Q5 20 9 43Q18 51 23 35M79 52Q96 39 89 63Q80 68 79 52M42 60Q15 47 18 69Q32 77 42 60" fill="#9da07b" stroke="#727b59" stroke-width="1.5"/>`;
- else if(type==='ribbon')a=`<path d="M50 40Q16 4 12 32Q24 53 50 40Q76 53 88 32Q84 4 50 40Z" fill="#b85c68" stroke="#783743" stroke-width="2"/><path d="M43 43L27 91L49 73L53 44M57 43L78 90L57 74L50 44" fill="#d28a8a" stroke="#783743" stroke-width="2"/><circle cx="50" cy="40" r="8" fill="#e3c58d"/>`;
- else if(type==='lace')a=`<path d="M5 25Q15 8 25 25T45 25T65 25T95 25V75Q85 92 75 75T55 75T35 75T5 75Z" fill="#f8f0df" stroke="#c5b18e" stroke-width="2"/><path d="M5 50H95" stroke="#c5b18e" stroke-dasharray="3 4"/>`;
- else if(type==='pearls')a=`<path d="M10 75Q50 5 90 70" fill="none" stroke="#bba98d"/>`+Array.from({length:9},(_,i)=>`<circle cx="${12+i*9}" cy="${73-Math.sin(i/8*Math.PI)*42}" r="5" fill="#fff" stroke="#c9bda9"/>`).join('');
- else if(type==='star')a=`<path d="M50 5L61 37L95 38L68 58L78 92L50 72L22 92L32 58L5 38L39 37Z" fill="#e3c77f" stroke="#a17c45" stroke-width="2"/>`;
- else if(type==='label')a=`<path d="M12 17H73L89 33V83H12Z" fill="#efe1c5" stroke="#a8895e" stroke-width="2"/><path d="M73 17V33H89M24 47H76M24 59H68M24 71H58" fill="none" stroke="#a8895e" stroke-width="2"/>`;
- else if(type==='stamp')a=`<rect x="15" y="12" width="70" height="76" fill="#f4ead7" stroke="#a8895e" stroke-width="3" stroke-dasharray="4 3"/><rect x="25" y="22" width="50" height="56" fill="#e5d3b2"/><path d="M50 29L58 45L76 47L63 59L66 76L50 67L34 76L37 59L24 47L42 45Z" fill="#9a5360"/>`;
- else if(type==='tape')a=`<path d="M10 30L90 18L92 68L15 81Z" fill="#ddc9a8" stroke="#b49a73" stroke-width="2"/><path d="M18 42L87 31M20 57L89 46M22 70L90 59" stroke="#fff7e8" stroke-width="3"/>`;
- else if(type==='seal')a=`<path d="M50 8L61 20L78 18L81 36L94 48L82 62L80 80L61 79L50 94L38 80L20 82L18 64L6 50L18 36L20 18L39 20Z" fill="#8d3545" stroke="#64212e" stroke-width="2"/><path d="M50 30Q70 45 50 70Q30 45 50 30Z" fill="#e2c58a"/>`;
- return `<svg viewBox="0 0 100 100" aria-hidden="true">${a}</svg>`;
+const petal=(n)=>Array.from({length:n},(,i)=><ellipse cx="50" cy="28" rx="7" ry="19" transform="rotate(${i*360/n} 50 50)" fill="#fffdf6" stroke="#d6cbbb" stroke-width="1"/>).join('');
+const daisy=${petal(12)}<circle cx="50" cy="50" r="11" fill="#e2bd61"/><circle cx="50" cy="50" r="6" fill="#f5dc91"/>;
+const rose=<path d="M50 83Q12 66 25 35Q35 8 58 19Q88 25 76 57Q68 78 50 83Z" fill="#fffdf6" stroke="#d4c8b7" stroke-width="2"/><path d="M50 70Q25 60 38 37Q49 20 65 35Q78 52 58 65Q47 71 50 70Z" fill="#eee9df" stroke="#cfc2b1" stroke-width="2"/><path d="M48 55Q39 44 50 36Q63 31 65 45Q65 57 53 60Z" fill="#fff" stroke="#d1c5b4"/>;
+let a='';
+if(type.startsWith('daisy'))a= type==='daisy'?daisy:type==='daisy-sprig'?<path d="M50 95L50 20" stroke="#79845e" stroke-width="3"/>${daisy}<g transform="translate(-22 24) scale(.65)">${daisy}</g><path d="M50 70Q20 48 16 66Q35 83 50 70M50 52Q77 31 82 50Q65 65 50 52" fill="#89946e" stroke="#68734f"/>:<path d="M50 95L27 40M50 95L50 25M50 95L75 40" stroke="#79845e" stroke-width="3"/><g transform="translate(-23 -18) scale(.65)">${daisy}</g><g transform="translate(23 -15) scale(.65)">${daisy}</g>${daisy};
+else if(type.startsWith('rose'))a=type==='rose'?rose:type==='rose-bud'?<path d="M50 94V38" stroke="#78845d" stroke-width="3"/><path d="M50 55Q20 44 29 28Q43 25 50 55M50 65Q80 51 69 35Q56 34 50 65" fill="#89936b"/><path d="M50 47Q27 31 43 12Q58 0 66 20Q70 38 50 47Z" fill="#fffdf6" stroke="#d5c9b7" stroke-width="2"/>:<path d="M18 90Q50 50 80 12" stroke="#78845d" stroke-width="3"/>${rose}<g transform="translate(-23 26) scale(.58)">${rose}</g><path d="M37 70Q12 51 12 69Q27 82 37 70M59 40Q82 22 85 40Q72 55 59 40" fill="#89936b"/>;
+else if(type==='leaf'||type==='branch')a=<path d="M15 88Q48 50 85 12M42 60L23 35M59 42L79 52" fill="none" stroke="#827455" stroke-width="3"/><path d="M23 35Q5 20 9 43Q18 51 23 35M79 52Q96 39 89 63Q80 68 79 52M42 60Q15 47 18 69Q32 77 42 60" fill="#9da07b" stroke="#727b59" stroke-width="1.5"/>;
+else if(type==='ribbon')a=<path d="M50 40Q16 4 12 32Q24 53 50 40Q76 53 88 32Q84 4 50 40Z" fill="#b85c68" stroke="#783743" stroke-width="2"/><path d="M43 43L27 91L49 73L53 44M57 43L78 90L57 74L50 44" fill="#d28a8a" stroke="#783743" stroke-width="2"/><circle cx="50" cy="40" r="8" fill="#e3c58d"/>;
+else if(type==='lace')a=<path d="M5 25Q15 8 25 25T45 25T65 25T95 25V75Q85 92 75 75T55 75T35 75T5 75Z" fill="#f8f0df" stroke="#c5b18e" stroke-width="2"/><path d="M5 50H95" stroke="#c5b18e" stroke-dasharray="3 4"/>;
+else if(type==='pearls')a=<path d="M10 75Q50 5 90 70" fill="none" stroke="#bba98d"/>+Array.from({length:9},(,i)=><circle cx="${12+i*9}" cy="${73-Math.sin(i/8*Math.PI)*42}" r="5" fill="#fff" stroke="#c9bda9"/>).join('');
+else if(type==='star')a=<path d="M50 5L61 37L95 38L68 58L78 92L50 72L22 92L32 58L5 38L39 37Z" fill="#e3c77f" stroke="#a17c45" stroke-width="2"/>;
+else if(type==='label')a=<path d="M12 17H73L89 33V83H12Z" fill="#efe1c5" stroke="#a8895e" stroke-width="2"/><path d="M73 17V33H89M24 47H76M24 59H68M24 71H58" fill="none" stroke="#a8895e" stroke-width="2"/>;
+else if(type==='stamp')a=<rect x="15" y="12" width="70" height="76" fill="#f4ead7" stroke="#a8895e" stroke-width="3" stroke-dasharray="4 3"/><rect x="25" y="22" width="50" height="56" fill="#e5d3b2"/><path d="M50 29L58 45L76 47L63 59L66 76L50 67L34 76L37 59L24 47L42 45Z" fill="#9a5360"/>;
+else if(type==='tape')a=<path d="M10 30L90 18L92 68L15 81Z" fill="#ddc9a8" stroke="#b49a73" stroke-width="2"/><path d="M18 42L87 31M20 57L89 46M22 70L90 59" stroke="#fff7e8" stroke-width="3"/>;
+else if(type==='seal')a=<path d="M50 8L61 20L78 18L81 36L94 48L82 62L80 80L61 79L50 94L38 80L20 82L18 64L6 50L18 36L20 18L39 20Z" fill="#8d3545" stroke="#64212e" stroke-width="2"/><path d="M50 30Q70 45 50 70Q30 45 50 30Z" fill="#e2c58a"/>;
+return <svg viewBox="0 0 100 100" aria-hidden="true">${a}</svg>;
 }
 function toggleDecorDrawer(){if(role!=='reader')return;decorDrawerOpen=!decorDrawerOpen;renderDecorationUI()}
-function closeDecorDrawer(){if(!decorDrawerOpen)return;decorDrawerOpen=false;renderDecorationUI()}
 function renderDecorationUI(){
- const layer=document.getElementById('decorLayer'),trigger=document.getElementById('decorTrigger'),drawer=document.getElementById('decorDrawer');if(!layer||!trigger||!drawer)return;
- trigger.classList.toggle('hidden',role!=='reader');drawer.classList.toggle('hidden',role!=='reader'||!decorDrawerOpen);layer.innerHTML='';
- decorations.filter(d=>d.page===current).forEach(d=>{const el=document.createElement('div');el.className='decor-item'+(selectedDecoration===d.id&&role==='reader'?' selected':'');el.dataset.id=d.id;el.style.cssText=`left:${d.x}%;top:${d.y}%;width:${d.size}px;height:${d.size}px;transform:translate(-50%,-50%) rotate(${d.rotation||0}deg)`;el.innerHTML=decorationSvg(d.type);if(role==='reader'){el.addEventListener('pointerdown',e=>startDecorationDrag(e,d.id));el.addEventListener('click',e=>{e.stopPropagation();if(!decorDrag){selectedDecoration=d.id;renderDecorationUI()}})}else el.style.pointerEvents='none';layer.appendChild(el)});
- if(role==='reader'&&selectedDecoration){const d=decorations.find(x=>x.id===selectedDecoration&&x.page===current);if(d){const t=document.createElement('div');t.className='decor-tools';t.style.left=Math.max(12,Math.min(88,d.x))+'%';t.style.top=Math.max(12,Math.min(88,d.y))+'%';t.innerHTML='<button title="Küçült" onclick="adjustDecoration(-8)">−</button><button title="Büyüt" onclick="adjustDecoration(8)">＋</button><button title="Döndür" onclick="rotateDecoration()">↻</button><button title="Sil" onclick="removeDecoration()">×</button>';layer.appendChild(t)}}
- if(role==='reader'){const groups=[...new Set(decorationCatalog.map(x=>x.category))];drawer.innerHTML=`<div class="decor-drawer-head"><span>Sayfa süsleri</span><button class="decor-close" onclick="toggleDecorDrawer()">×</button></div><p class="decor-hint">Bir süse dokun; sayfaya eklensin. Sonra tutup istediğin yere sürükle. Seçtiğin süsün altında boyut ve döndürme araçları çıkar.</p>`+groups.map(g=>`<div class="decor-category">${g}</div><div class="decor-items">${decorationCatalog.filter(x=>x.category===g).map(x=>`<button class="decor-choice" onclick="addDecoration('${x.id}')">${decorationSvg(x.id)}<span>${x.name}</span></button>`).join('')}</div>`).join('')}
+const layer=document.getElementById('decorLayer'),trigger=document.getElementById('decorTrigger'),drawer=document.getElementById('decorDrawer');if(!layer||!trigger||!drawer)return;
+trigger.classList.toggle('hidden',role!=='reader');drawer.classList.toggle('hidden',role!=='reader'		!decorDrawerOpen);layer.innerHTML='';
+
+if(role==='reader'&&selectedDecoration){const d=decorations.find(x=>x.id===selectedDecoration&&x.page===current);if(d){const t=document.createElement('div');t.className='decor-tools';t.style.left=d.x+'%';t.style.top=d.y+'%';t.innerHTML='<button onclick="adjustDecoration(-8)">−</button><button onclick="adjustDecoration(8)">＋</button><button onclick="rotateDecoration()">↻</button><button onclick="removeDecoration()">×</button>';layer.appendChild(t)}}
+if(role==='reader'){const groups=[...new Set(decorationCatalog.map(x=>x.category))];drawer.innerHTML=<div class="decor-drawer-head"><span>Sayfa süsleri</span><button class="decor-close" onclick="toggleDecorDrawer()">×</button></div><p class="decor-hint">Bir süse dokun; sayfaya eklensin. Sonra tutup istediğin yere sürükle.</p>+groups.map(g=><div class="decor-category">${g}</div><div class="decor-items">${decorationCatalog.filter(x=>x.category===g).map(x=><button class="decor-choice" onclick="addDecoration('${x.id}')">${decorationSvg(x.id)}<span>${x.name}</span></button>).join('')}</div>).join('')}
 }
- function addDecoration(type){
-  if(role!=='reader')return;
-
-  const d={
-    id:'dec-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),
-    type,
-    page:current,
-    x:50,
-    y:53,
-    size:type.includes('bunch')||type.includes('sprig')?100:76,
-    rotation:0
-  };
-
-  decorations.push(d);
-  selectedDecoration=d.id;
-  decorDrawerOpen=false;
-
-  renderDecorationUI();
-  queueDecorationSave();
-}
-function startDecorationDrag(e,id){if(role!=='reader'||(e.pointerType==='mouse'&&e.button!==0))return;e.preventDefault();e.stopPropagation();selectedDecoration=id;decorDrag={id,pointerId:e.pointerId,moved:false};try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}e.currentTarget.classList.add('selected')}
-document.addEventListener('pointermove',e=>{if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;const d=decorations.find(x=>x.id===decorDrag.id);if(!d)return;decorDrag.moved=true;const r=document.getElementById('page').getBoundingClientRect();d.x=Math.max(3,Math.min(97,(e.clientX-r.left)/r.width*100));d.y=Math.max(4,Math.min(96,(e.clientY-r.top)/r.height*100));const el=document.querySelector(`.decor-item[data-id="${d.id}"]`);if(el){el.style.left=d.x+'%';el.style.top=d.y+'%'}const t=document.querySelector('.decor-tools');if(t){t.style.left=Math.max(12,Math.min(88,d.x))+'%';t.style.top=Math.max(12,Math.min(88,d.y))+'%'}},{passive:false});
-document.addEventListener('pointerup',e=>{if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;const moved=decorDrag.moved;decorDrag=null;renderDecorationUI();if(moved)queueDecorationSave()});
-// Menü dışına tıklanınca kapat; sayfanın boş alanına tıklanınca seçimi kaldır.
-document.addEventListener('click',e=>{const drawer=document.getElementById('decorDrawer'),trigger=document.getElementById('decorTrigger'),layer=document.getElementById('decorLayer');if(decorDrawerOpen&&drawer&&!drawer.contains(e.target)&&trigger&&!trigger.contains(e.target))closeDecorDrawer();if(role==='reader'&&layer&&e.target===layer){selectedDecoration=null;renderDecorationUI()}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&decorDrawerOpen)closeDecorDrawer()});
+function addDecoration(type){if(role!=='reader')return;const d={id:'dec-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),type,page:current,x:50,y:53,size:type.includes('bunch')||type.includes('sprig')?100:76,rotation:0};decorations.push(d);selectedDecoration=d.id;renderDecorationUI();queueDecorationSave()}
+function startDecorationDrag(e,id){if(role!=='reader'||e.button!==0)return;e.preventDefault();e.stopPropagation();selectedDecoration=id;decorDrag={id,pointerId:e.pointerId};e.currentTarget.setPointerCapture?.(e.pointerId);renderDecorationUI()}
+document.addEventListener('pointermove',e=>{if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;const d=decorations.find(x=>x.id===decorDrag.id);if(!d)return;const r=document.getElementById('page').getBoundingClientRect();d.x=Math.max(3,Math.min(97,(e.clientX-r.left)/r.width100));d.y=Math.max(4,Math.min(96,(e.clientY-r.top)/r.height100));const el=document.querySelector(.decor-item[data-id="${d.id}"]);if(el){el.style.left=d.x+'%';el.style.top=d.y+'%'}const t=document.querySelector('.decor-tools');if(t){t.style.left=d.x+'%';t.style.top=d.y+'%'}},{passive:false});
+document.addEventListener('pointerup',e=>{if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;decorDrag=null;renderDecorationUI();queueDecorationSave()});
 function adjustDecoration(n){const d=decorations.find(x=>x.id===selectedDecoration);if(!d||role!=='reader')return;d.size=Math.max(28,Math.min(190,d.size+n));renderDecorationUI();queueDecorationSave()}
 function rotateDecoration(){const d=decorations.find(x=>x.id===selectedDecoration);if(!d||role!=='reader')return;d.rotation=((d.rotation||0)+15)%360;renderDecorationUI();queueDecorationSave()}
 function removeDecoration(){if(role!=='reader')return;decorations=decorations.filter(d=>d.id!==selectedDecoration);selectedDecoration=null;renderDecorationUI();queueDecorationSave()}
@@ -880,5 +327,6 @@ document.addEventListener('mouseup',e=>{if(mouseX===null)return;let dx=e.clientX
 document.getElementById('attendanceDate').addEventListener('change',e=>{selectedDate=e.target.value;document.getElementById('attendanceText').value=attendance[selectedDate]||''});
 init();
 </script>
+
 </body>
 </html>
