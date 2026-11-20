@@ -104,10 +104,11 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 .roles{gap:12px}.role{min-height:170px;padding:12px}.animal{font-size:46px}.role strong{font-size:23px}
 .navbtn{padding:9px 12px}.day-grid{gap:3px}.day{font-size:14px}
 }
- /* Sayfa süsleri */
+
+/* Sayfa süsleri */
 .decor-trigger{position:absolute;z-index:14;top:22px;right:22px;width:42px;height:42px;border:1px solid #b89455;border-radius:50%;background:linear-gradient(145deg,#fff5df,#d9c39b);color:#6a3c35;font:26px 'Cormorant Garamond',serif;box-shadow:0 3px 9px #4b302544;display:grid;place-items:center;touch-action:manipulation}
 .decor-trigger:active{transform:scale(.94)}
-.decor-drawer{position:absolute;z-index:15;top:70px;right:18px;width:min(310px,calc(100% - 36px));max-height:min(66%,430px);overflow:auto;padding:13px;background:#f4ead8;border:1px solid #b89455;border-radius:12px;box-shadow:0 12px 30px #25101855;color:#4b2630}
+ .decor-drawer{position:absolute;z-index:15;top:70px;right:18px;width:min(310px,calc(100% - 36px));max-height:min(66%,430px);overflow:auto;padding:13px;background:#f4ead8;border:1px solid #b89455;border-radius:12px;box-shadow:0 12px 30px #25101855;color:#4b2630}
 .decor-drawer-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;font:600 20px 'Cormorant Garamond',serif}
 .decor-close{border:0;background:#5a2634;color:#fff0d7;border-radius:50%;width:32px;height:32px;font-size:20px}
 .decor-hint{font:italic 13px 'Cormorant Garamond',serif;color:#8b7057;margin:0 0 10px}
@@ -128,6 +129,17 @@ button,input,textarea{font:inherit}button{cursor:pointer}
  .decor-drawer{top:60px;right:10px;width:min(290px,calc(100% - 20px));max-height:65%}
  .decor-tools button{min-width:42px;height:42px}
 }
+
+/* GERCEK 3D SAYFA CEVIRME ANIMASYONU */
+.page-turn-sheet{position:absolute;inset:0;z-index:8;pointer-events:none;transform-style:preserve-3d;background:repeating-linear-gradient(90deg,#e8dcc4 0,#f6ecd8 3px,#f2e7d2 7px);border-radius:2px 12px 12px 2px;box-shadow:inset 12px 0 18px #80664b25,inset 0 0 0 1px #c5ad87,8px 3px 0 #d5c4a6,12px 5px 0 #bba98e,16px 7px 0 #e6d8bd,22px 10px 18px #10070a55;overflow:hidden;backface-visibility:hidden}
+.page-turn-sheet.forward{transform-origin:left center;animation:turn-forward .72s cubic-bezier(.2,.65,.25,1) forwards}
+.page-turn-sheet.backward{transform-origin:right center;animation:turn-back .72s cubic-bezier(.2,.65,.25,1) forwards}
+.page-turn-sheet .page-inner{position:absolute;inset:0;padding:clamp(22px,4vw,48px);min-height:100%;box-sizing:border-box}
+.page-turn-sheet .cover-page{margin:-48px;min-height:624px}
+.page-turn-sheet .corner{z-index:2}
+@keyframes turn-forward{0%{transform:rotateY(0);filter:brightness(1);box-shadow:0 0 0 #0000}35%{filter:brightness(.88);box-shadow:-22px 0 28px #0005}100%{transform:rotateY(-180deg);filter:brightness(.72);box-shadow:-18px 0 25px #0003}}
+@keyframes turn-back{0%{transform:rotateY(0);filter:brightness(1)}35%{filter:brightness(.88);box-shadow:22px 0 28px #0005}100%{transform:rotateY(180deg);filter:brightness(.72);box-shadow:18px 0 25px #0003}}
+@media(prefers-reduced-motion:reduce){.page-turn-sheet.forward,.page-turn-sheet.backward{animation-duration:.15s}}
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -205,7 +217,7 @@ const SUPABASE_KEY='sb_publishable_tVzIL_hCccsr04PFEGBpug_nxUvAa_H';
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const DB_NAME='kitaplik_ogretmenler_gunu_v1',STORE='content';
 let db,role='reader',current=0,panelOpen=false,attendanceMonth='2025-11',selectedDate='2025-11-28';
-let currentUser=null,cloudReady=false,saveTimer=null;
+ let currentUser=null,cloudReady=false,saveTimer=null;
 let decorations=[],decorDrawerOpen=false,selectedDecoration=null,decorSaveTimer=null,decorDrag=null;
 const defaults=[
  {type:'cover',title:'Kendinizi Okulla Konumlandırın',body:'Bazı insanlar bir konuyu öğretir; bazılarıysa insanın hayatında yepyeni bir sayfa açar.',label:'BİR ÖĞRETMENE, BİRİKTİRİLEN BÜTÜN CÜMLELERE'},
@@ -265,9 +277,91 @@ async function enter(who){
   if(who==='reader'){let w=document.createElement('div');w.className='welcome';w.innerHTML='<div>Hoş geldin sevgilimmmm!</div>';document.body.appendChild(w);setTimeout(()=>w.remove(),1900)}
  }catch(e){alert('Giriş yapılamadı: '+e.message)}
 }
- html
+async function cloudSave(){
+ if(role!=='admin'||!currentUser)return;
+ const content={pages,attendance,photos,cover:coverData,bookmark:bookmarkData,bookmarkPos};
+ const {error}=await supabaseClient.from('book_data').upsert({id:'main',content,updated_at:new Date().toISOString(),updated_by:currentUser.id},{onConflict:'id'});
+ if(error)throw error;
+}
+function saveAll(){
+ if(db){putData('pages',pages);putData('attendance',attendance);putData('photos',photos);putData('cover',coverData);putData('bookmark',bookmarkData);putData('bookmarkPos',bookmarkPos);}
+ if(role==='admin'&&currentUser){clearTimeout(saveTimer);saveTimer=setTimeout(async()=>{try{await cloudSave();toast('Ortak kitaba kaydedildi')}catch(e){toast('Buluta kaydedilemedi: '+e.message)}},500)}else toast();
+}
+async function migrateMedia(){
+ async function migrateOne(value,kind){
+  if(typeof value!=='string'||!value.startsWith('data:'))return value;
+  const response=await fetch(value),blob=await response.blob();
+  const file=new File([blob],kind+'.'+((blob.type.split('/')[1]||'jpg').split(';')[0]),{type:blob.type||'image/jpeg'});
+  return await uploadFile(file,kind);
+ }
+ if(coverData)coverData=await migrateOne(coverData,'cover');
+ if(bookmarkData)bookmarkData=await migrateOne(bookmarkData,'bookmark');
+ const converted=[];for(let i=0;i<photos.length;i++)converted.push(await migrateOne(photos[i],'photo'));
+ photos=converted;
+}
+async function uploadFile(file,kind){
+ if(!file)return null;if(!file.type.startsWith('image/'))throw new Error('Lütfen görsel dosyası seç.');
+ const ext=(file.name.split('.').pop()||'jpg').replace(/[^a-z0-9]/gi,'').toLowerCase()||'jpg';
+ const path=`${currentUser.id}/${kind}-${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+ const {error}=await supabaseClient.storage.from('book-files').upload(path,file,{upsert:false,contentType:file.type});if(error)throw error;return path;
+}
+async function signed(path){if(!path)return '';if(typeof path==='string'&&path.startsWith('data:'))return path;const {data,error}=await supabaseClient.storage.from('book-files').createSignedUrl(path,3600);if(error){console.warn(error);return ''}return data.signedUrl}
+async function refreshMedia(){coverDisplay=await signed(coverData);bookmarkDisplay=await signed(bookmarkData);photoDisplay=await Promise.all(photos.map(signed))}
+function logout(){document.getElementById('app').style.display='none';document.getElementById('login').style.display='grid';role='reader';decorDrawerOpen=false;selectedDecoration=null}
+function togglePanel(){if(role!=='admin'){toast('Düzenleme alanı yalnızca yazar görünümünde açık.');return}panelOpen=!panelOpen;document.getElementById('adminPanel').classList.toggle('hidden',!panelOpen);document.getElementById('bookmarkTools').classList.toggle('hidden',!panelOpen);syncEditor()}
+function toggleFullscreen(){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}
+function renderPage(){
+ let p=pages[current],inner=document.getElementById('pageInner');
+ document.getElementById('navLabel').textContent=(current+1)+' / '+pages.length+' · '+p.title;
+ document.getElementById('attendanceEditor').classList.toggle('hidden',p.type!=='attendance');
+ document.getElementById('pageEditor').classList.toggle('hidden',false);syncEditor();
+ if(p.type==='cover'){
+  inner.innerHTML=`<div class="cover-page ${coverDisplay?'has-image':''}" style="${coverDisplay?`background-image:url('${coverDisplay}')`:''}"><div class="cover-copy"><div class="cover-small" contenteditable="${role==='admin'}" data-field="label">${esc(p.label)}</div><div class="cover-ornament">✦　❦　✦</div><h1 class="cover-title" contenteditable="${role==='admin'}" data-field="title">${esc(p.title)}</h1><div class="cover-sub" contenteditable="${role==='admin'}" data-field="body">${esc(p.body)}</div><div class="cover-ornament">— ❧ —</div></div>${role==='admin'?'<label class="file-label cover-upload">Kapak görselini değiştir<input type="file" accept="image/*" onchange="uploadCover(event)"></label>':''}</div>`;
+ }else if(p.type==='attendance'){
+  inner.innerHTML=`<div class="page-kicker">GÜNLÜK KÜÇÜK BİR HATIRA</div><h1 class="page-title">${esc(p.title)}</h1><div id="calendarArea"></div><div class="page-footer"><span>Her tarihte başka bir cümle…</span><span class="page-num">${current+1}</span></div>`;renderCalendar();
+ }else if(p.type==='gallery'){
+  inner.innerHTML=`<div class="page-kicker">BİRİKTİRDİĞİMİZ GÜZEL ŞEYLER</div><h1 class="page-title">${esc(p.title)}</h1><div class="page-body" style="text-align:center;min-height:auto">${esc(p.body)}</div>${role==='admin'?'<p style="text-align:center"><label class="file-label">Fotoğraf ekle<input type="file" accept="image/*" multiple onchange="uploadPhotos(event)"></label></p>':''}<div class="gallery" id="gallery"></div><div class="page-footer"><span>Hatıralar, sayfalardan taşar.</span><span class="page-num">${current+1}</span></div>`;renderGallery();
+ }else{
+  inner.innerHTML=`<div class="page-kicker">KENDİ KİTABIMIZDAN BİR BÖLÜM</div><h1 class="page-title" ${role==='admin'?'contenteditable="true" data-field="title"':''}>${esc(p.title)}</h1><div class="page-body" ${role==='admin'?'contenteditable="true" data-field="body"':''}>${esc(p.body)}</div><div class="page-footer"><span>Sevgiyle yazılmıştır</span><span class="page-num">${current+1}</span></div>`;
+ }
+ inner.querySelectorAll('[contenteditable=true]').forEach(el=>el.addEventListener('input',()=>{pages[current][el.dataset.field]=el.innerText;saveAll()}));
+  renderDecorationUI();
+}
+ function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+let pageTurning=false;
+function changePage(d){
+ if(pageTurning||!d)return;
+ const next=Math.max(0,Math.min(pages.length-1,current+d));if(next===current)return;
+ const page=document.getElementById('page');const oldInner=document.getElementById('pageInner');
+ const sheet=document.createElement('div');sheet.className='page-turn-sheet '+(d>0?'forward':'backward');
+ const innerClone=oldInner.cloneNode(true);innerClone.removeAttribute('id');innerClone.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
+ sheet.appendChild(innerClone);page.querySelectorAll('.corner').forEach(c=>sheet.appendChild(c.cloneNode(true)));
+ page.appendChild(sheet);pageTurning=true;current=next;renderPage();
+ sheet.addEventListener('animationend',()=>{sheet.remove();pageTurning=false},{once:true});
+ setTimeout(()=>{if(sheet.isConnected){sheet.remove();pageTurning=false}},850);
+}
+function syncEditor(){let p=pages[current];document.getElementById('editTitle').value=p.title||'';document.getElementById('editBody').value=p.body||'';document.getElementById('attendanceDate').value=selectedDate;document.getElementById('attendanceText').value=attendance[selectedDate]||''}
+function saveCurrentPage(){pages[current].title=document.getElementById('editTitle').value;pages[current].body=document.getElementById('editBody').value;saveAll();renderPage()}
+function resetCurrentPage(){if(!confirm('Bu sayfanın başlangıç metnine dönmesini istiyor musun?'))return;pages[current]=JSON.parse(JSON.stringify(defaults[current]));saveAll();renderPage()}
+function renderCalendar(){
+ let area=document.getElementById('calendarArea');if(!area)return;
+ let months=[];for(let y=2025;y<2027;y++){let start=y===2025?11:1,limit=y===2025?12:11;for(let mo=start;mo<=limit;mo++)months.push(`${y}-${String(mo).padStart(2,'0')}`)}
+ let monthNames=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+ if(!attendanceMonth){area.innerHTML='<div class="month-list">'+months.map(m=>`<button class="month-btn" onclick="toggleMonth('${m}')">${monthNames[+m.slice(5)-1]} ${m.slice(0,4)}</button>`).join('')+'</div>';return}
+ let [y,mo]=attendanceMonth.split('-').map(Number),first=new Date(y,mo-1,1),days=new Date(y,mo,0).getDate(),offset=(first.getDay()+6)%7,min='2025-11-28',max='2026-11-19',cells=Array(offset).fill('<span></span>');
+ for(let d=1;d<=days;d++){let key=`${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`,disabled=key<min||key>max;cells.push(disabled?'<span></span>':`<button class="day ${attendance[key]?'has-message':''} ${selectedDate===key?'selected':''}" onclick="selectDate('${key}')">${d}</button>`)}
+ area.innerHTML=`<div class="calendar-head"><button class="small-btn" onclick="attendanceMonth='';renderCalendar()">← Aylar</button><strong style="font:600 21px 'Cormorant Garamond',serif">${monthNames[mo-1]} ${y}</strong><span></span></div><div class="day-grid">${['P','S','Ç','P','C','C','P'].map(x=>`<span style="text-align:center;color:#947b5d;font-size:12px">${x}</span>`).join('')}${cells.join('')}</div><div class="message-card" id="dayMessage">${esc(attendance[selectedDate]||'Bu gün için henüz bir not bırakılmamış.')}</div>`;
+ syncEditor();
+}
+function toggleMonth(m){attendanceMonth=m;renderCalendar()}
+function selectDate(d){selectedDate=d;renderCalendar();syncEditor()}
+function saveAttendance(){let d=document.getElementById('attendanceDate').value;if(!d)return;selectedDate=d;let v=document.getElementById('attendanceText').value;if(v.trim())attendance[d]=v;else delete attendance[d];attendanceMonth=d.slice(0,7);saveAll();renderCalendar()}
+function deleteAttendance(){let d=document.getElementById('attendanceDate').value;delete attendance[d];selectedDate=d;saveAll();renderCalendar();syncEditor()}
+async function uploadCover(e){let f=e.target.files[0];if(!f)return;try{coverData=await uploadFile(f,'cover');await refreshMedia();saveAll();renderPage()}catch(err){alert('Kapak yüklenemedi: '+err.message)}e.target.value=''}
+async function uploadBookmark(e){let f=e.target.files[0];if(!f)return;try{bookmarkData=await uploadFile(f,'bookmark');await refreshMedia();saveAll();renderBookmark()}catch(err){alert('Ayraç yüklenemedi: '+err.message)}e.target.value=''}
+function renderBookmark(){let c=document.getElementById('bookmarkContent');if(bookmarkDisplay){c.className='';c.innerHTML=`<img src="${bookmarkDisplay}" alt="Yüklenen ayraç">`}else{c.className='bookmark-fallback';c.innerHTML=''}let b=document.getElementById('bookmark');if(bookmarkPos.x!==null){b.style.left=bookmarkPos.x+'px';b.style.top=bookmarkPos.y+'px';b.style.right='auto'}}
 async function uploadPhotos(e){let files=[...e.target.files];try{for(const f of files)photos.push(await uploadFile(f,'photo'));await refreshMedia();saveAll();renderGallery()}catch(err){alert('Fotoğraf yüklenemedi: '+err.message)}e.target.value=''}
-function renderGallery(){let g=document.getElementById('gallery');if(!g)return;g.innerHTML=photoDisplay.length?photoDisplay.map((src,i)=><div class="photo"><img src="${src}" alt="Anı fotoğrafı">${role==='admin'?<button onclick="deletePhoto(${i})">×</button>:''}</div>).join(''):'<div class="empty">Bu sayfada henüz bir fotoğraf yok.</div>'}
+function renderGallery(){let g=document.getElementById('gallery');if(!g)return;g.innerHTML=photoDisplay.length?photoDisplay.map((src,i)=>`<div class="photo"><img src="${src}" alt="Anı fotoğrafı">${role==='admin'?`<button onclick="deletePhoto(${i})">×</button>`:''}</div>`).join(''):'<div class="empty">Bu sayfada henüz bir fotoğraf yok.</div>'}
 async function deletePhoto(i){const path=photos[i];photos.splice(i,1);photoDisplay.splice(i,1);if(path)await supabaseClient.storage.from('book-files').remove([path]);saveAll();renderGallery()}
 
 async function loadDecorations(){const {data,error}=await supabaseClient.from('book_decorations').select('content').eq('id','main').maybeSingle();if(error)throw error;decorations=Array.isArray(data?.content)?data.content:[]}
@@ -280,34 +374,34 @@ const decorationCatalog=[
 {id:'ribbon',name:'Kurdele',category:'Detaylar'},{id:'lace',name:'Dantel',category:'Detaylar'},{id:'pearls',name:'İnci dizisi',category:'Detaylar'},{id:'star',name:'Yıldız',category:'Detaylar'},
 {id:'label',name:'Vintage etiket',category:'Kâğıt parçaları'},{id:'stamp',name:'Pul',category:'Kâğıt parçaları'},{id:'tape',name:'Kâğıt bant',category:'Kâğıt parçaları'},{id:'seal',name:'Mühür',category:'Kâğıt parçaları'}];
 function decorationSvg(type){
-const petal=(n)=>Array.from({length:n},(,i)=><ellipse cx="50" cy="28" rx="7" ry="19" transform="rotate(${i*360/n} 50 50)" fill="#fffdf6" stroke="#d6cbbb" stroke-width="1"/>).join('');
-const daisy=${petal(12)}<circle cx="50" cy="50" r="11" fill="#e2bd61"/><circle cx="50" cy="50" r="6" fill="#f5dc91"/>;
-const rose=<path d="M50 83Q12 66 25 35Q35 8 58 19Q88 25 76 57Q68 78 50 83Z" fill="#fffdf6" stroke="#d4c8b7" stroke-width="2"/><path d="M50 70Q25 60 38 37Q49 20 65 35Q78 52 58 65Q47 71 50 70Z" fill="#eee9df" stroke="#cfc2b1" stroke-width="2"/><path d="M48 55Q39 44 50 36Q63 31 65 45Q65 57 53 60Z" fill="#fff" stroke="#d1c5b4"/>;
-let a='';
-if(type.startsWith('daisy'))a= type==='daisy'?daisy:type==='daisy-sprig'?<path d="M50 95L50 20" stroke="#79845e" stroke-width="3"/>${daisy}<g transform="translate(-22 24) scale(.65)">${daisy}</g><path d="M50 70Q20 48 16 66Q35 83 50 70M50 52Q77 31 82 50Q65 65 50 52" fill="#89946e" stroke="#68734f"/>:<path d="M50 95L27 40M50 95L50 25M50 95L75 40" stroke="#79845e" stroke-width="3"/><g transform="translate(-23 -18) scale(.65)">${daisy}</g><g transform="translate(23 -15) scale(.65)">${daisy}</g>${daisy};
-else if(type.startsWith('rose'))a=type==='rose'?rose:type==='rose-bud'?<path d="M50 94V38" stroke="#78845d" stroke-width="3"/><path d="M50 55Q20 44 29 28Q43 25 50 55M50 65Q80 51 69 35Q56 34 50 65" fill="#89936b"/><path d="M50 47Q27 31 43 12Q58 0 66 20Q70 38 50 47Z" fill="#fffdf6" stroke="#d5c9b7" stroke-width="2"/>:<path d="M18 90Q50 50 80 12" stroke="#78845d" stroke-width="3"/>${rose}<g transform="translate(-23 26) scale(.58)">${rose}</g><path d="M37 70Q12 51 12 69Q27 82 37 70M59 40Q82 22 85 40Q72 55 59 40" fill="#89936b"/>;
-else if(type==='leaf'||type==='branch')a=<path d="M15 88Q48 50 85 12M42 60L23 35M59 42L79 52" fill="none" stroke="#827455" stroke-width="3"/><path d="M23 35Q5 20 9 43Q18 51 23 35M79 52Q96 39 89 63Q80 68 79 52M42 60Q15 47 18 69Q32 77 42 60" fill="#9da07b" stroke="#727b59" stroke-width="1.5"/>;
-else if(type==='ribbon')a=<path d="M50 40Q16 4 12 32Q24 53 50 40Q76 53 88 32Q84 4 50 40Z" fill="#b85c68" stroke="#783743" stroke-width="2"/><path d="M43 43L27 91L49 73L53 44M57 43L78 90L57 74L50 44" fill="#d28a8a" stroke="#783743" stroke-width="2"/><circle cx="50" cy="40" r="8" fill="#e3c58d"/>;
-else if(type==='lace')a=<path d="M5 25Q15 8 25 25T45 25T65 25T95 25V75Q85 92 75 75T55 75T35 75T5 75Z" fill="#f8f0df" stroke="#c5b18e" stroke-width="2"/><path d="M5 50H95" stroke="#c5b18e" stroke-dasharray="3 4"/>;
-else if(type==='pearls')a=<path d="M10 75Q50 5 90 70" fill="none" stroke="#bba98d"/>+Array.from({length:9},(,i)=><circle cx="${12+i*9}" cy="${73-Math.sin(i/8*Math.PI)*42}" r="5" fill="#fff" stroke="#c9bda9"/>).join('');
-else if(type==='star')a=<path d="M50 5L61 37L95 38L68 58L78 92L50 72L22 92L32 58L5 38L39 37Z" fill="#e3c77f" stroke="#a17c45" stroke-width="2"/>;
-else if(type==='label')a=<path d="M12 17H73L89 33V83H12Z" fill="#efe1c5" stroke="#a8895e" stroke-width="2"/><path d="M73 17V33H89M24 47H76M24 59H68M24 71H58" fill="none" stroke="#a8895e" stroke-width="2"/>;
-else if(type==='stamp')a=<rect x="15" y="12" width="70" height="76" fill="#f4ead7" stroke="#a8895e" stroke-width="3" stroke-dasharray="4 3"/><rect x="25" y="22" width="50" height="56" fill="#e5d3b2"/><path d="M50 29L58 45L76 47L63 59L66 76L50 67L34 76L37 59L24 47L42 45Z" fill="#9a5360"/>;
-else if(type==='tape')a=<path d="M10 30L90 18L92 68L15 81Z" fill="#ddc9a8" stroke="#b49a73" stroke-width="2"/><path d="M18 42L87 31M20 57L89 46M22 70L90 59" stroke="#fff7e8" stroke-width="3"/>;
-else if(type==='seal')a=<path d="M50 8L61 20L78 18L81 36L94 48L82 62L80 80L61 79L50 94L38 80L20 82L18 64L6 50L18 36L20 18L39 20Z" fill="#8d3545" stroke="#64212e" stroke-width="2"/><path d="M50 30Q70 45 50 70Q30 45 50 30Z" fill="#e2c58a"/>;
-return <svg viewBox="0 0 100 100" aria-hidden="true">${a}</svg>;
+ const petal=(n)=>Array.from({length:n},(_,i)=>`<ellipse cx="50" cy="28" rx="7" ry="19" transform="rotate(${i*360/n} 50 50)" fill="#fffdf6" stroke="#d6cbbb" stroke-width="1"/>`).join('');
+ const daisy=`${petal(12)}<circle cx="50" cy="50" r="11" fill="#e2bd61"/><circle cx="50" cy="50" r="6" fill="#f5dc91"/>`;
+ const rose=`<path d="M50 83Q12 66 25 35Q35 8 58 19Q88 25 76 57Q68 78 50 83Z" fill="#fffdf6" stroke="#d4c8b7" stroke-width="2"/><path d="M50 70Q25 60 38 37Q49 20 65 35Q78 52 58 65Q47 71 50 70Z" fill="#eee9df" stroke="#cfc2b1" stroke-width="2"/><path d="M48 55Q39 44 50 36Q63 31 65 45Q70 57 53 60Z" fill="#fff" stroke="#d1c5b4"/>`;
+ let a='';
+ if(type.startsWith('daisy'))a= type==='daisy'?daisy:type==='daisy-sprig'?`<path d="M50 95L50 20" stroke="#79845e" stroke-width="3"/>${daisy}<g transform="translate(-22 24) scale(.65)">${daisy}</g><path d="M50 70Q20 48 16 66Q35 83 50 70M50 52Q77 31 82 50Q65 65 50 52" fill="#89946e" stroke="#68734f"/>`:`<path d="M50 95L27 40M50 95L50 25M50 95L75 40" stroke="#79845e" stroke-width="3"/><g transform="translate(-23 -18) scale(.65)">${daisy}</g><g transform="translate(23 -15) scale(.65)">${daisy}</g>${daisy}`;
+ else if(type.startsWith('rose'))a=type==='rose'?rose:type==='rose-bud'?`<path d="M50 94V38" stroke="#78845d" stroke-width="3"/><path d="M50 55Q20 44 29 28Q43 25 50 55M50 65Q80 51 69 35Q56 34 50 65" fill="#89936b"/><path d="M50 47Q27 31 43 12Q58 0 66 20Q70 38 50 47Z" fill="#fffdf6" stroke="#d5c9b7" stroke-width="2"/>`:`<path d="M18 90Q50 50 80 12" stroke="#78845d" stroke-width="3"/>${rose}<g transform="translate(-23 26) scale(.58)">${rose}</g><path d="M37 70Q12 51 12 69Q27 82 37 70M59 40Q82 22 85 40Q72 55 59 40" fill="#89936b"/>`;
+ else if(type==='leaf'||type==='branch')a=`<path d="M15 88Q48 50 85 12M42 60L23 35M59 42L79 52" fill="none" stroke="#827455" stroke-width="3"/><path d="M23 35Q5 20 9 43Q18 51 23 35M79 52Q96 39 89 63Q80 68 79 52M42 60Q15 47 18 69Q32 77 42 60" fill="#9da07b" stroke="#727b59" stroke-width="1.5"/>`;
+ else if(type==='ribbon')a=`<path d="M50 40Q16 4 12 32Q24 53 50 40Q76 53 88 32Q84 4 50 40Z" fill="#b85c68" stroke="#783743" stroke-width="2"/><path d="M43 43L27 91L49 73L53 44M57 43L78 90L57 74L50 44" fill="#d28a8a" stroke="#783743" stroke-width="2"/><circle cx="50" cy="40" r="8" fill="#e3c58d"/>`;
+ else if(type==='lace')a=`<path d="M5 25Q15 8 25 25T45 25T65 25T95 25V75Q85 92 75 75T55 75T35 75T5 75Z" fill="#f8f0df" stroke="#c5b18e" stroke-width="2"/><path d="M5 50H95" stroke="#c5b18e" stroke-dasharray="3 4"/>`;
+ else if(type==='pearls')a=`<path d="M10 75Q50 5 90 70" fill="none" stroke="#bba98d"/>`+Array.from({length:9},(_,i)=>`<circle cx="${12+i*9}" cy="${73-Math.sin(i/8*Math.PI)*42}" r="5" fill="#fff" stroke="#c9bda9"/>`).join('');
+ else if(type==='star')a=`<path d="M50 5L61 37L95 38L68 58L78 92L50 72L22 92L32 58L5 38L39 37Z" fill="#e3c77f" stroke="#a17c45" stroke-width="2"/>`;
+ else if(type==='label')a=`<path d="M12 17H73L89 33V83H12Z" fill="#efe1c5" stroke="#a8895e" stroke-width="2"/><path d="M73 17V33H89M24 47H76M24 59H68M24 71H58" fill="none" stroke="#a8895e" stroke-width="2"/>`;
+ else if(type==='stamp')a=`<rect x="15" y="12" width="70" height="76" fill="#f4ead7" stroke="#a8895e" stroke-width="3" stroke-dasharray="4 3"/><rect x="25" y="22" width="50" height="56" fill="#e5d3b2"/><path d="M50 29L58 45L76 47L63 59L66 76L50 67L34 76L37 59L24 47L42 45Z" fill="#9a5360"/>`;
+ else if(type==='tape')a=`<path d="M10 30L90 18L92 68L15 81Z" fill="#ddc9a8" stroke="#b49a73" stroke-width="2"/><path d="M18 42L87 31M20 57L89 46M22 70L90 59" stroke="#fff7e8" stroke-width="3"/>`;
+ else if(type==='seal')a=`<path d="M50 8L61 20L78 18L81 36L94 48L82 62L80 80L61 79L50 94L38 80L20 82L18 64L6 50L18 36L20 18L39 20Z" fill="#8d3545" stroke="#64212e" stroke-width="2"/><path d="M50 30Q70 45 50 70Q30 45 50 30Z" fill="#e2c58a"/>`;
+ return `<svg viewBox="0 0 100 100" aria-hidden="true">${a}</svg>`;
 }
 function toggleDecorDrawer(){if(role!=='reader')return;decorDrawerOpen=!decorDrawerOpen;renderDecorationUI()}
 function renderDecorationUI(){
-const layer=document.getElementById('decorLayer'),trigger=document.getElementById('decorTrigger'),drawer=document.getElementById('decorDrawer');if(!layer||!trigger||!drawer)return;
-trigger.classList.toggle('hidden',role!=='reader');drawer.classList.toggle('hidden',role!=='reader'		!decorDrawerOpen);layer.innerHTML='';
-
-if(role==='reader'&&selectedDecoration){const d=decorations.find(x=>x.id===selectedDecoration&&x.page===current);if(d){const t=document.createElement('div');t.className='decor-tools';t.style.left=d.x+'%';t.style.top=d.y+'%';t.innerHTML='<button onclick="adjustDecoration(-8)">−</button><button onclick="adjustDecoration(8)">＋</button><button onclick="rotateDecoration()">↻</button><button onclick="removeDecoration()">×</button>';layer.appendChild(t)}}
-if(role==='reader'){const groups=[...new Set(decorationCatalog.map(x=>x.category))];drawer.innerHTML=<div class="decor-drawer-head"><span>Sayfa süsleri</span><button class="decor-close" onclick="toggleDecorDrawer()">×</button></div><p class="decor-hint">Bir süse dokun; sayfaya eklensin. Sonra tutup istediğin yere sürükle.</p>+groups.map(g=><div class="decor-category">${g}</div><div class="decor-items">${decorationCatalog.filter(x=>x.category===g).map(x=><button class="decor-choice" onclick="addDecoration('${x.id}')">${decorationSvg(x.id)}<span>${x.name}</span></button>).join('')}</div>).join('')}
+ const layer=document.getElementById('decorLayer'),trigger=document.getElementById('decorTrigger'),drawer=document.getElementById('decorDrawer');if(!layer||!trigger||!drawer)return;
+ trigger.classList.toggle('hidden',role!=='reader');drawer.classList.toggle('hidden',role!=='reader'||!decorDrawerOpen);layer.innerHTML='';
+ decorations.filter(d=>d.page===current).forEach(d=>{const el=document.createElement('div');el.className='decor-item'+(selectedDecoration===d.id&&role==='reader'?' selected':'');el.dataset.id=d.id;el.style.cssText=`left:${d.x}%;top:${d.y}%;width:${d.size}px;height:${d.size}px;transform:translate(-50%,-50%) rotate(${d.rotation||0}deg)`;el.innerHTML=decorationSvg(d.type);if(role==='reader'){el.addEventListener('pointerdown',e=>startDecorationDrag(e,d.id));el.addEventListener('click',e=>{e.stopPropagation();selectedDecoration=d.id;renderDecorationUI()})}else el.style.pointerEvents='none';layer.appendChild(el)});
+ if(role==='reader'&&selectedDecoration){const d=decorations.find(x=>x.id===selectedDecoration&&x.page===current);if(d){const t=document.createElement('div');t.className='decor-tools';t.style.left=d.x+'%';t.style.top=d.y+'%';t.innerHTML='<button onclick="adjustDecoration(-8)">−</button><button onclick="adjustDecoration(8)">＋</button><button onclick="rotateDecoration()">↻</button><button onclick="removeDecoration()">×</button>';layer.appendChild(t)}}
+ if(role==='reader'){const groups=[...new Set(decorationCatalog.map(x=>x.category))];drawer.innerHTML=`<div class="decor-drawer-head"><span>Sayfa süsleri</span><button class="decor-close" onclick="toggleDecorDrawer()">×</button></div><p class="decor-hint">Bir süse dokun; sayfaya eklensin. Sonra tutup istediğin yere sürükle.</p>`+groups.map(g=>`<div class="decor-category">${g}</div><div class="decor-items">${decorationCatalog.filter(x=>x.category===g).map(x=>`<button class="decor-choice" onclick="addDecoration('${x.id}')">${decorationSvg(x.id)}<span>${x.name}</span></button>`).join('')}</div>`).join('')}
 }
 function addDecoration(type){if(role!=='reader')return;const d={id:'dec-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),type,page:current,x:50,y:53,size:type.includes('bunch')||type.includes('sprig')?100:76,rotation:0};decorations.push(d);selectedDecoration=d.id;renderDecorationUI();queueDecorationSave()}
 function startDecorationDrag(e,id){if(role!=='reader'||e.button!==0)return;e.preventDefault();e.stopPropagation();selectedDecoration=id;decorDrag={id,pointerId:e.pointerId};e.currentTarget.setPointerCapture?.(e.pointerId);renderDecorationUI()}
-document.addEventListener('pointermove',e=>{if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;const d=decorations.find(x=>x.id===decorDrag.id);if(!d)return;const r=document.getElementById('page').getBoundingClientRect();d.x=Math.max(3,Math.min(97,(e.clientX-r.left)/r.width100));d.y=Math.max(4,Math.min(96,(e.clientY-r.top)/r.height100));const el=document.querySelector(.decor-item[data-id="${d.id}"]);if(el){el.style.left=d.x+'%';el.style.top=d.y+'%'}const t=document.querySelector('.decor-tools');if(t){t.style.left=d.x+'%';t.style.top=d.y+'%'}},{passive:false});
+document.addEventListener('pointermove',e=>{if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;const d=decorations.find(x=>x.id===decorDrag.id);if(!d)return;const r=document.getElementById('page').getBoundingClientRect();d.x=Math.max(3,Math.min(97,(e.clientX-r.left)/r.width*100));d.y=Math.max(4,Math.min(96,(e.clientY-r.top)/r.height*100));const el=document.querySelector(`.decor-item[data-id="${d.id}"]`);if(el){el.style.left=d.x+'%';el.style.top=d.y+'%'}const t=document.querySelector('.decor-tools');if(t){t.style.left=d.x+'%';t.style.top=d.y+'%'}},{passive:false});
 document.addEventListener('pointerup',e=>{if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;decorDrag=null;renderDecorationUI();queueDecorationSave()});
 function adjustDecoration(n){const d=decorations.find(x=>x.id===selectedDecoration);if(!d||role!=='reader')return;d.size=Math.max(28,Math.min(190,d.size+n));renderDecorationUI();queueDecorationSave()}
 function rotateDecoration(){const d=decorations.find(x=>x.id===selectedDecoration);if(!d||role!=='reader')return;d.rotation=((d.rotation||0)+15)%360;renderDecorationUI();queueDecorationSave()}
@@ -327,6 +421,5 @@ document.addEventListener('mouseup',e=>{if(mouseX===null)return;let dx=e.clientX
 document.getElementById('attendanceDate').addEventListener('change',e=>{selectedDate=e.target.value;document.getElementById('attendanceText').value=attendance[selectedDate]||''});
 init();
 </script>
-
 </body>
 </html>
