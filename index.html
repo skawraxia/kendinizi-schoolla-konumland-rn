@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -8,38 +7,26 @@
 <title>Kendinizi Okulla Konumlandırın</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=IM+Fell+English:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap');
-
 :root{--wine:#4b1724;--wine2:#6a2635;--gold:#b89455;--gold2:#e2c98e;--paper:#f4ead5;--ink:#382a25}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;color:var(--ink);font-family:Manrope,sans-serif;background:radial-gradient(ellipse at 20% 10%,#84604e 0,#3b2225 45%,#1d1518 100%);overflow-x:hidden}
-button,input,textarea{font:inherit}
-button{cursor:pointer}
+button,input,textarea{font:inherit}button{cursor:pointer}
 .screen{min-height:100vh;display:grid;place-items:center;padding:24px}
 .login-wrap{text-align:center;width:min(760px,100%);color:#f5e8d0}
-.eyebrow{
- font:italic 17px 'Cormorant Garamond',serif;
- letter-spacing:2px;
- color:var(--gold2);
-}
+.eyebrow{font:italic 17px 'Cormorant Garamond',serif;letter-spacing:2px;color:var(--gold2)}
 .main-title{font:600 clamp(34px,7vw,62px) 'Cormorant Garamond',serif;line-height:.98;margin:15px 0 10px;text-shadow:0 4px 20px #0008}
 .login-sub{color:#dfcdb5;font:italic 18px 'IM Fell English',serif;margin-bottom:35px}
 .roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;max-width:600px;margin:auto}
 .role{min-height:205px;border:1px solid #d5b77b;border-radius:17px;color:#f8edda;background:linear-gradient(145deg,#78404a,#431b27 58%,#2b1119);box-shadow:inset 0 2px 1px #fff4,inset 0 -7px 13px #16070b88,0 13px 0 #241016,0 22px 35px #0008;position:relative;transition:.18s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:20px}
 .role:before{content:"";position:absolute;inset:7px;border:1px solid #cba76b77;border-radius:11px;pointer-events:none}
-.role:hover{transform:translateY(-4px)}
-.role:active{transform:translateY(7px);box-shadow:inset 0 3px 10px #16070b88,0 5px 0 #241016}
+.role:hover{transform:translateY(-4px)}.role:active{transform:translateY(7px);box-shadow:inset 0 3px 10px #16070b88,0 5px 0 #241016}
 .animal{font-size:58px;filter:drop-shadow(0 5px 4px #0008)}
 .role strong{font:600 28px 'Cormorant Garamond',serif;letter-spacing:1px}
 .role small{color:#dfc89f;letter-spacing:2px;font-size:10px;text-transform:uppercase}
 .login-note{font-size:11px;color:#c5ae9a;margin-top:30px}
 #app{display:none;min-height:100vh;padding:22px 16px 40px}
 .topbar{max-width:1180px;margin:0 auto 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;color:#f3e4ca}
-.brand{
- font:500 27px 'Bodoni Moda',serif;
- letter-spacing:1.2px;
- color:#f1dfbd;
- text-shadow:0 2px 8px #0008;
-}
+.brand{font:500 27px 'Bodoni Moda',serif;letter-spacing:1.2px;color:#f1dfbd;text-shadow:0 2px 8px #0008}
 .toolbar{display:flex;gap:8px;flex-wrap:wrap}
 .toolbtn{border:1px solid #b8945577;background:#31151f;color:#f4e6ce;border-radius:30px;padding:9px 13px;font-size:12px;box-shadow:0 4px 0 #170b10}
 .toolbtn:active{transform:translateY(3px)}
@@ -75,81 +62,12 @@ button{cursor:pointer}
 .navbtn{border:1px solid #b89455;background:linear-gradient(#70404a,#3e1a25);color:#fff0d5;padding:11px 18px;border-radius:7px;box-shadow:0 5px 0 #1d0c12,0 9px 16px #0005}
 .navbtn:active{transform:translateY(4px)}
 .nav-label{font:italic 15px 'IM Fell English',serif;color:#d7c2a4}
-.bookmark{
- position:absolute;
- z-index:20;
- top:95px;
- right:2px;
- width:72px;
- cursor:grab;
- touch-action:none;
- user-select:none;
- filter:drop-shadow(3px 6px 5px #0008);
-}
-
-.bookmark:before{
- content:"";
- position:absolute;
- inset:0;
- background:linear-gradient(
-  135deg,
-  #e5c98d,
-  #94703c,
-  #d9b878,
-  #8d6737
- );
- clip-path:polygon(
-  0 0,
-  100% 0,
-  100% 100%,
-  50% 88%,
-  0 100%
- );
-}
-
-#bookmarkContent{
- position:relative;
- z-index:1;
- margin:3px;
- overflow:hidden;
- clip-path:polygon(
-  0 0,
-  100% 0,
-  100% 100%,
-  50% 88%,
-  0 100%
- );
- background:#542331;
-}
-
-.bookmark img{
- display:block;
- width:100%;
- height:auto;
- pointer-events:none;
-}
-
-.bookmark-fallback{
- height:300px;
- background:
-  linear-gradient(90deg,#521725,#873748 48%,#521725);
- clip-path:polygon(
-  0 0,
-  100% 0,
-  100% 100%,
-  50% 88%,
-  0 100%
- );
-}
-
-.bookmark-tools{
- position:absolute;
- right:0;
- top:-32px;
- white-space:nowrap;
- z-index:3;
-}
-.bookmark-tools{position:absolute;right:0;top:-32px;white-space:nowrap}
+.bookmark{position:absolute;z-index:20;top:95px;right:2px;width:72px;cursor:grab;touch-action:none;user-select:none;filter:drop-shadow(3px 6px 5px #0008)}
+.bookmark:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#e5c98d,#94703c,#d9b878,#8d6737);clip-path:polygon(0 0,100% 0,100% 100%,50% 88%,0 100%)}
+#bookmarkContent{position:relative;z-index:1;margin:3px;overflow:hidden;clip-path:polygon(0 0,100% 0,100% 100%,50% 88%,0 100%);background:#542331}
+.bookmark img{display:block;width:100%;height:auto;pointer-events:none}
+.bookmark-fallback{height:300px;background:linear-gradient(90deg,#521725,#873748 48%,#521725);clip-path:polygon(0 0,100% 0,100% 100%,50% 88%,0 100%)}
+.bookmark-tools{position:absolute;right:0;top:-32px;white-space:nowrap;z-index:3}
 .panel{max-width:850px;margin:15px auto 0;padding:15px 18px;border:1px solid #b8945577;border-radius:12px;background:#29141bcc;color:#f1e2ca}
 .panel h3{font:600 23px 'Cormorant Garamond',serif;margin:0 0 10px;color:#e4c991}
 .panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
@@ -174,8 +92,7 @@ button{cursor:pointer}
 .toast.show{opacity:1}
 .welcome{position:fixed;inset:0;z-index:99;background:#1d0e14ef;display:grid;place-items:center;color:#f5e8ce;text-align:center;animation:fade .4s}
 .welcome div{font:italic clamp(30px,6vw,56px) 'Great Vibes',cursive;animation:pop .8s}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-@keyframes pop{from{transform:scale(.75);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes pop{from{transform:scale(.75);opacity:0}to{transform:scale(1);opacity:1}}
 @media(max-width:650px){
 #app{padding:12px 7px 28px}.topbar{align-items:flex-start;flex-direction:column;padding:0 6px}
 .book-stage{padding:8px 7px 25px}.book{grid-template-columns:19px 1fr;min-height:570px;padding:8px 9px 8px 0}
@@ -188,9 +105,9 @@ button{cursor:pointer}
 .navbtn{padding:9px 12px}.day-grid{gap:3px}.day{font-size:14px}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-
 <section id="login" class="screen">
  <div class="login-wrap">
   <div class="eyebrow">BİR KİTAP, BİRİKTİRİLMİŞ BİR ÖMÜR</div>
@@ -203,7 +120,6 @@ button{cursor:pointer}
   <div class="login-note">Bu küçük dünyanın kapısı iki kişiye açılıyor.</div>
  </div>
 </section>
-
 <div id="app">
  <header class="topbar">
   <div class="brand">Kendinizi Okulla Konumlandırın</div>
@@ -213,7 +129,6 @@ button{cursor:pointer}
    <button class="toolbtn" onclick="logout()">Çıkış</button>
   </div>
  </header>
-
  <main class="book-stage" id="stage">
   <div class="book" id="book">
    <div class="spine"></div>
@@ -230,13 +145,11 @@ button{cursor:pointer}
    <div class="bookmark-tools hidden" id="bookmarkTools"><label class="file-label">Ayraç yükle<input type="file" accept="image/*" onchange="uploadBookmark(event)"></label></div>
   </div>
  </main>
-
  <div class="nav-row">
   <button class="navbtn" onclick="changePage(-1)">← Önceki</button>
   <div class="nav-label" id="navLabel">Kapak</div>
   <button class="navbtn" onclick="changePage(1)">Sonraki →</button>
  </div>
-
  <section class="panel hidden" id="adminPanel">
   <h3>Kitabın düzenleme masası</h3>
   <div class="panel-grid">
@@ -244,7 +157,7 @@ button{cursor:pointer}
    <label class="file-label">Ayraç görseli yükle<input type="file" accept="image/*" onchange="uploadBookmark(event)"></label>
    <label class="file-label">Anı fotoğrafı ekle<input type="file" accept="image/*" multiple onchange="uploadPhotos(event)"></label>
   </div>
-  <p style="font-size:12px;color:#d9c5a7">Sayfa başlığına veya yazısına doğrudan tıklayıp düzenleyebilirsin. Değişiklikler bu cihazda otomatik kaydedilir.</p>
+  <p style="font-size:12px;color:#d9c5a7">Sayfa başlığına veya yazısına doğrudan tıklayıp düzenleyebilirsin. Değişiklikler ortak kitaba kaydedilir ve diğer cihazda da görünür.</p>
   <div id="attendanceEditor" class="hidden">
    <h3>Yoklama mesajı</h3>
    <div class="panel-grid"><input id="attendanceDate" type="date" min="2025-11-28" max="2026-11-19"><textarea id="attendanceText" placeholder="O güne ait mesaj..."></textarea></div>
@@ -257,13 +170,14 @@ button{cursor:pointer}
   </div>
  </section>
 </div>
-
 <div class="toast" id="toast">Kaydedildi</div>
-
 <script>
+const SUPABASE_URL='https://vojhnlzpuifhzssmpoex.supabase.co';
+const SUPABASE_KEY='sb_publishable_tVzIL_hCccsr04PFEGBpug_nxUvAa_H';
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const DB_NAME='kitaplik_ogretmenler_gunu_v1',STORE='content';
 let db,role='reader',current=0,panelOpen=false,attendanceMonth='2025-11',selectedDate='2025-11-28';
-
+let currentUser=null,cloudReady=false,saveTimer=null;
 const defaults=[
  {type:'cover',title:'Kendinizi Okulla Konumlandırın',body:'Bazı insanlar bir konuyu öğretir; bazılarıysa insanın hayatında yepyeni bir sayfa açar.',label:'BİR ÖĞRETMENE, BİRİKTİRİLEN BÜTÜN CÜMLELERE'},
  {type:'attendance',title:'Yoklama',body:'Her günün kendine ait küçük bir hatırası var.'},
@@ -274,305 +188,141 @@ const defaults=[
  {type:'text',title:'Mezuniyet Yok',body:'Çünkü senden öğrendiklerimin biteceği bir son sayfa yok. Her yeni gün, başka bir şey öğrenmeye devam etmek demek.'},
  {type:'text',title:'Son Ders',body:'Bu kitabın son sayfasına gelmiş olabiliriz ama anlatacaklarımız bitmedi.\n\nİyi ki yollarımız kesişmiş. İyi ki bana bu kadar çok şey öğretmişsin.\n\nSevgiyle…'}
 ];
-
 let pages=JSON.parse(JSON.stringify(defaults)),attendance={},photos=[],coverData='',bookmarkData='',bookmarkPos={x:null,y:95};
-
-function openDB(){
- return new Promise((resolve,reject)=>{
-  let req=indexedDB.open(DB_NAME,1);
-  req.onupgradeneeded=()=>req.result.createObjectStore(STORE);
-  req.onsuccess=()=>{db=req.result;resolve()};
-  req.onerror=()=>reject(req.error);
- });
+let coverDisplay='',bookmarkDisplay='',photoDisplay=[];
+function openDB(){return new Promise((resolve,reject)=>{let req=indexedDB.open(DB_NAME,1);req.onupgradeneeded=()=>req.result.createObjectStore(STORE);req.onsuccess=()=>{db=req.result;resolve()};req.onerror=()=>reject(req.error)})}
+function getData(key){return new Promise(resolve=>{let r=db.transaction(STORE).objectStore(STORE).get(key);r.onsuccess=()=>resolve(r.result);r.onerror=()=>resolve(null)})}
+function putData(key,val){return new Promise(resolve=>{let t=db.transaction(STORE,'readwrite');t.objectStore(STORE).put(val,key);t.oncomplete=()=>resolve();t.onerror=()=>resolve()})}
+function toast(msg='Otomatik kaydedildi'){let t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+async function ensureUser(){
+ const {data:sd,error:se}=await supabaseClient.auth.getSession();if(se)throw se;
+ if(sd.session){currentUser=sd.session.user;return currentUser;}
+ const {data,error}=await supabaseClient.auth.signInAnonymously();if(error)throw error;currentUser=data.user;return currentUser;
 }
-function getData(key){
- return new Promise(resolve=>{
-  let r=db.transaction(STORE).objectStore(STORE).get(key);
-  r.onsuccess=()=>resolve(r.result);
-  r.onerror=()=>resolve(null);
- });
-}
-function putData(key,val){
- return new Promise(resolve=>{
-  let t=db.transaction(STORE,'readwrite');
-  t.objectStore(STORE).put(val,key);
-  t.oncomplete=()=>resolve();
-  t.onerror=()=>resolve();
- });
+async function claimRole(who){
+ await ensureUser();
+ if(who==='admin'){
+  const code=prompt('Yönetici şifresini gir:');if(code===null)return false;
+  const {data,error}=await supabaseClient.rpc('claim_admin',{access_code:code});if(error)throw error;
+  if(data!==true){alert('Şifre yanlış. Tekrar deneyebilirsin.');return false;}
+ }else{
+  const {error}=await supabaseClient.rpc('register_reader');if(error)throw error;
+ }
+ const {data:member,error}=await supabaseClient.from('book_members').select('role').eq('user_id',currentUser.id).maybeSingle();
+ if(error)throw error;if(!member||member.role!==who)throw new Error('Bu hesap için gerekli erişim bulunamadı.');
+ return true;
 }
 async function init(){
  try{
   await openDB();
-
-  pages=await getData('pages')||pages;
-  attendance=await getData('attendance')||{};
-  photos=await getData('photos')||[];
-  coverData=await getData('cover')||'';
-  bookmarkData=await getData('bookmark')||'';
-  bookmarkPos=await getData('bookmarkPos')||bookmarkPos;
-
-  const start=new Date(2025,10,28);
-  const end=new Date(2026,10,19);
-
-  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
-   const key=[
-    d.getFullYear(),
-    String(d.getMonth()+1).padStart(2,'0'),
-    String(d.getDate()).padStart(2,'0')
-   ].join('-');
-
-   if(!(key in attendance)){
-    attendance[key]=key==='2025-11-28'
-     ?'Kevser ilk kez geldi'
-     :'Kevser geldi';
-   }
-  }
-
+  pages=await getData('pages')||pages;attendance=await getData('attendance')||{};photos=await getData('photos')||[];coverData=await getData('cover')||'';bookmarkData=await getData('bookmark')||'';bookmarkPos=await getData('bookmarkPos')||bookmarkPos;
+  const start=new Date(2025,10,28),end=new Date(2026,10,19);
+  for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){const key=[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');if(!(key in attendance))attendance[key]=key==='2025-11-28'?'Kevser ilk kez geldi':'Kevser geldi';}
   await putData('attendance',attendance);
-
- }catch(e){
-  toast('Tarayıcı depolaması açılamadı.');
- }
- renderBookmark();
+  await refreshMedia();renderBookmark();
+ }catch(e){toast('Başlangıç verileri yüklenemedi: '+e.message)}
 }
-function toast(msg='Otomatik kaydedildi'){
- let t=document.getElementById('toast');
- t.textContent=msg;t.classList.add('show');
- setTimeout(()=>t.classList.remove('show'),1500);
+async function enter(who){
+ try{
+  const ok=await claimRole(who);if(!ok)return;
+  role=who;
+  const {data:row,error}=await supabaseClient.from('book_data').select('content').eq('id','main').maybeSingle();if(error)throw error;
+  if(row&&row.content){const c=row.content;pages=c.pages||pages;attendance=c.attendance||attendance;photos=c.photos||[];coverData=c.cover||'';bookmarkData=c.bookmark||'';bookmarkPos=c.bookmarkPos||bookmarkPos;}
+  await migrateMedia();
+  if(!row&&who==='admin'){await cloudSave();}
+  await putData('pages',pages);await putData('attendance',attendance);await putData('photos',photos);await putData('cover',coverData);await putData('bookmark',bookmarkData);await putData('bookmarkPos',bookmarkPos);
+  await refreshMedia();
+  document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';
+  document.getElementById('bookmarkTools').classList.toggle('hidden',role!=='admin');document.getElementById('adminPanel').classList.add('hidden');panelOpen=false;renderPage();
+  if(who==='reader'){let w=document.createElement('div');w.className='welcome';w.innerHTML='<div>Hoş geldin sevgilimmmm!</div>';document.body.appendChild(w);setTimeout(()=>w.remove(),1900)}
+ }catch(e){alert('Giriş yapılamadı: '+e.message)}
+}
+async function cloudSave(){
+ if(role!=='admin'||!currentUser)return;
+ const content={pages,attendance,photos,cover:coverData,bookmark:bookmarkData,bookmarkPos};
+ const {error}=await supabaseClient.from('book_data').upsert({id:'main',content,updated_at:new Date().toISOString(),updated_by:currentUser.id},{onConflict:'id'});
+ if(error)throw error;
 }
 function saveAll(){
- if(!db)return;
- putData('pages',pages);putData('attendance',attendance);
- putData('photos',photos);putData('cover',coverData);
- putData('bookmark',bookmarkData);putData('bookmarkPos',bookmarkPos);
- toast();
+ if(db){putData('pages',pages);putData('attendance',attendance);putData('photos',photos);putData('cover',coverData);putData('bookmark',bookmarkData);putData('bookmarkPos',bookmarkPos);}
+ if(role==='admin'&&currentUser){clearTimeout(saveTimer);saveTimer=setTimeout(async()=>{try{await cloudSave();toast('Ortak kitaba kaydedildi')}catch(e){toast('Buluta kaydedilemedi: '+e.message)}},500)}else toast();
 }
-function enter(who){
- role=who;
- document.getElementById('login').style.display='none';
- document.getElementById('app').style.display='block';
- document.getElementById('bookmarkTools').classList.toggle('hidden',role!=='admin');
- document.getElementById('adminPanel').classList.add('hidden');
- panelOpen=false;renderPage();
- if(who==='reader'){
-  let w=document.createElement('div');w.className='welcome';
-  w.innerHTML='<div>Hoş geldin sevgilimmmm!</div>';
-  document.body.appendChild(w);setTimeout(()=>w.remove(),1900);
+async function migrateMedia(){
+ async function migrateOne(value,kind){
+  if(typeof value!=='string'||!value.startsWith('data:'))return value;
+  const response=await fetch(value),blob=await response.blob();
+  const file=new File([blob],kind+'.'+((blob.type.split('/')[1]||'jpg').split(';')[0]),{type:blob.type||'image/jpeg'});
+  return await uploadFile(file,kind);
  }
+ if(coverData)coverData=await migrateOne(coverData,'cover');
+ if(bookmarkData)bookmarkData=await migrateOne(bookmarkData,'bookmark');
+ const converted=[];for(let i=0;i<photos.length;i++)converted.push(await migrateOne(photos[i],'photo'));
+ photos=converted;
 }
-function logout(){
- document.getElementById('app').style.display='none';
- document.getElementById('login').style.display='grid';role='reader';
+async function uploadFile(file,kind){
+ if(!file)return null;if(!file.type.startsWith('image/'))throw new Error('Lütfen görsel dosyası seç.');
+ const ext=(file.name.split('.').pop()||'jpg').replace(/[^a-z0-9]/gi,'').toLowerCase()||'jpg';
+ const path=`${currentUser.id}/${kind}-${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+ const {error}=await supabaseClient.storage.from('book-files').upload(path,file,{upsert:false,contentType:file.type});if(error)throw error;return path;
 }
-function togglePanel(){
- if(role!=='admin'){toast('Düzenleme alanı yalnızca yazar görünümünde açık.');return}
- panelOpen=!panelOpen;
- document.getElementById('adminPanel').classList.toggle('hidden',!panelOpen);
- document.getElementById('bookmarkTools').classList.toggle('hidden',!panelOpen);
- syncEditor();
-}
-function toggleFullscreen(){
- if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();
- else document.exitFullscreen?.();
-}
+async function signed(path){if(!path)return '';const {data,error}=await supabaseClient.storage.from('book-files').createSignedUrl(path,3600);if(error){console.warn(error);return ''}return data.signedUrl}
+async function refreshMedia(){coverDisplay=await signed(coverData);bookmarkDisplay=await signed(bookmarkData);photoDisplay=await Promise.all(photos.map(signed))}
+function logout(){document.getElementById('app').style.display='none';document.getElementById('login').style.display='grid';role='reader'}
+function togglePanel(){if(role!=='admin'){toast('Düzenleme alanı yalnızca yazar görünümünde açık.');return}panelOpen=!panelOpen;document.getElementById('adminPanel').classList.toggle('hidden',!panelOpen);document.getElementById('bookmarkTools').classList.toggle('hidden',!panelOpen);syncEditor()}
+function toggleFullscreen(){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}
 function renderPage(){
  let p=pages[current],inner=document.getElementById('pageInner');
  document.getElementById('navLabel').textContent=(current+1)+' / '+pages.length+' · '+p.title;
  document.getElementById('attendanceEditor').classList.toggle('hidden',p.type!=='attendance');
-document.getElementById('pageEditor').classList.toggle('hidden',false);
- syncEditor();
-
+ document.getElementById('pageEditor').classList.toggle('hidden',false);syncEditor();
  if(p.type==='cover'){
-  inner.innerHTML=`<div class="cover-page ${coverData?'has-image':''}" style="${coverData?`background-image:url('${coverData}')`:''}">
-   <div class="cover-copy">
-    <div class="cover-small" contenteditable="${role==='admin'}" data-field="label">${esc(p.label)}</div>
-    <div class="cover-ornament">✦　❦　✦</div>
-    <h1 class="cover-title" contenteditable="${role==='admin'}" data-field="title">${esc(p.title)}</h1>
-    <div class="cover-sub" contenteditable="${role==='admin'}" data-field="body">${esc(p.body)}</div>
-    <div class="cover-ornament">— ❧ —</div>
-   </div>
-   ${role==='admin'?'<label class="file-label cover-upload">Kapak görselini değiştir<input type="file" accept="image/*" onchange="uploadCover(event)"></label>':''}
-  </div>`;
+  inner.innerHTML=`<div class="cover-page ${coverDisplay?'has-image':''}" style="${coverDisplay?`background-image:url('${coverDisplay}')`:''}"><div class="cover-copy"><div class="cover-small" contenteditable="${role==='admin'}" data-field="label">${esc(p.label)}</div><div class="cover-ornament">✦　❦　✦</div><h1 class="cover-title" contenteditable="${role==='admin'}" data-field="title">${esc(p.title)}</h1><div class="cover-sub" contenteditable="${role==='admin'}" data-field="body">${esc(p.body)}</div><div class="cover-ornament">— ❧ —</div></div>${role==='admin'?'<label class="file-label cover-upload">Kapak görselini değiştir<input type="file" accept="image/*" onchange="uploadCover(event)"></label>':''}</div>`;
  }else if(p.type==='attendance'){
-  inner.innerHTML=`<div class="page-kicker">GÜNLÜK KÜÇÜK BİR HATIRA</div>
-   <h1 class="page-title">${esc(p.title)}</h1>
-   <div id="calendarArea"></div>
-   <div class="page-footer"><span>Her tarihte başka bir cümle…</span><span class="page-num">${current+1}</span></div>`;
-  renderCalendar();
+  inner.innerHTML=`<div class="page-kicker">GÜNLÜK KÜÇÜK BİR HATIRA</div><h1 class="page-title">${esc(p.title)}</h1><div id="calendarArea"></div><div class="page-footer"><span>Her tarihte başka bir cümle…</span><span class="page-num">${current+1}</span></div>`;renderCalendar();
  }else if(p.type==='gallery'){
-  inner.innerHTML=`<div class="page-kicker">BİRİKTİRDİĞİMİZ GÜZEL ŞEYLER</div>
-   <h1 class="page-title">${esc(p.title)}</h1>
-   <div class="page-body" style="text-align:center;min-height:auto">${esc(p.body)}</div>
-   ${role==='admin'?'<p style="text-align:center"><label class="file-label">Fotoğraf ekle<input type="file" accept="image/*" multiple onchange="uploadPhotos(event)"></label></p>':''}
-   <div class="gallery" id="gallery"></div>
-   <div class="page-footer"><span>Hatıralar, sayfalardan taşar.</span><span class="page-num">${current+1}</span></div>`;
-  renderGallery();
+  inner.innerHTML=`<div class="page-kicker">BİRİKTİRDİĞİMİZ GÜZEL ŞEYLER</div><h1 class="page-title">${esc(p.title)}</h1><div class="page-body" style="text-align:center;min-height:auto">${esc(p.body)}</div>${role==='admin'?'<p style="text-align:center"><label class="file-label">Fotoğraf ekle<input type="file" accept="image/*" multiple onchange="uploadPhotos(event)"></label></p>':''}<div class="gallery" id="gallery"></div><div class="page-footer"><span>Hatıralar, sayfalardan taşar.</span><span class="page-num">${current+1}</span></div>`;renderGallery();
  }else{
-  inner.innerHTML=`<div class="page-kicker">KENDİ KİTABIMIZDAN BİR BÖLÜM</div>
-   <h1 class="page-title" ${role==='admin'?'contenteditable="true" data-field="title"':''}>${esc(p.title)}</h1>
-   <div class="page-body" ${role==='admin'?'contenteditable="true" data-field="body"':''}>${esc(p.body)}</div>
-   <div class="page-footer"><span>Sevgiyle yazılmıştır</span><span class="page-num">${current+1}</span></div>`;
+  inner.innerHTML=`<div class="page-kicker">KENDİ KİTABIMIZDAN BİR BÖLÜM</div><h1 class="page-title" ${role==='admin'?'contenteditable="true" data-field="title"':''}>${esc(p.title)}</h1><div class="page-body" ${role==='admin'?'contenteditable="true" data-field="body"':''}>${esc(p.body)}</div><div class="page-footer"><span>Sevgiyle yazılmıştır</span><span class="page-num">${current+1}</span></div>`;
  }
- inner.querySelectorAll('[contenteditable=true]').forEach(el=>{
-  el.addEventListener('input',()=>{
-   pages[current][el.dataset.field]=el.innerText;saveAll();
-  });
- });
+ inner.querySelectorAll('[contenteditable=true]').forEach(el=>el.addEventListener('input',()=>{pages[current][el.dataset.field]=el.innerText;saveAll()}));
 }
-function esc(s){
- return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function changePage(d){
- current=Math.max(0,Math.min(pages.length-1,current+d));
- renderPage();
- document.getElementById('page').animate(
-  [{transform:'rotateY('+(d>0?'-2':'2')+'deg)',opacity:.7},{transform:'rotateY(0)',opacity:1}],
-  {duration:330,easing:'ease-out'}
- );
-}
-function syncEditor(){
- let p=pages[current];
- document.getElementById('editTitle').value=p.title||'';
- document.getElementById('editBody').value=p.body||'';
- document.getElementById('attendanceDate').value=selectedDate;
- document.getElementById('attendanceText').value=attendance[selectedDate]||'';
-}
-function saveCurrentPage(){
- pages[current].title=document.getElementById('editTitle').value;
- pages[current].body=document.getElementById('editBody').value;
- saveAll();renderPage();
-}
-function resetCurrentPage(){
- if(!confirm('Bu sayfanın başlangıç metnine dönmesini istiyor musun?'))return;
- pages[current]=JSON.parse(JSON.stringify(defaults[current]));
- saveAll();renderPage();
-}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function changePage(d){current=Math.max(0,Math.min(pages.length-1,current+d));renderPage();document.getElementById('page').animate([{transform:'rotateY('+(d>0?'-2':'2')+'deg)',opacity:.7},{transform:'rotateY(0)',opacity:1}],{duration:330,easing:'ease-out'})}
+function syncEditor(){let p=pages[current];document.getElementById('editTitle').value=p.title||'';document.getElementById('editBody').value=p.body||'';document.getElementById('attendanceDate').value=selectedDate;document.getElementById('attendanceText').value=attendance[selectedDate]||''}
+function saveCurrentPage(){pages[current].title=document.getElementById('editTitle').value;pages[current].body=document.getElementById('editBody').value;saveAll();renderPage()}
+function resetCurrentPage(){if(!confirm('Bu sayfanın başlangıç metnine dönmesini istiyor musun?'))return;pages[current]=JSON.parse(JSON.stringify(defaults[current]));saveAll();renderPage()}
 function renderCalendar(){
  let area=document.getElementById('calendarArea');if(!area)return;
- let months=[];
- for(let y=2025,m=11;y<2027;y++){
-  let limit=y===2025?11:(y===2026?11:0);
-  let start=y===2025?11:1;
-  for(let mo=start;mo<=limit;mo++)months.push(`${y}-${String(mo).padStart(2,'0')}`);
- }
+ let months=[];for(let y=2025;y<2027;y++){let start=y===2025?11:1,limit=y===2025?12:11;for(let mo=start;mo<=limit;mo++)months.push(`${y}-${String(mo).padStart(2,'0')}`)}
  let monthNames=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
- if(!attendanceMonth){
-  area.innerHTML='<div class="month-list">'+months.map(m=>`<button class="month-btn" onclick="toggleMonth('${m}')">${monthNames[+m.slice(5)-1]} ${m.slice(0,4)}</button>`).join('')+'</div>';
-  return;
- }
- let [y,mo]=attendanceMonth.split('-').map(Number);
- let first=new Date(y,mo-1,1),days=new Date(y,mo,0).getDate(),offset=(first.getDay()+6)%7;
- let min='2025-11-28',max='2026-11-19';
- let cells=Array(offset).fill('<span></span>');
- for(let d=1;d<=days;d++){
-  let key=`${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-  let disabled=key<min||key>max;
-  cells.push(disabled?'<span></span>':`<button class="day ${attendance[key]?'has-message':''} ${selectedDate===key?'selected':''}" onclick="selectDate('${key}')">${d}</button>`);
- }
- area.innerHTML=`<div class="calendar-head">
-  <button class="small-btn" onclick="attendanceMonth='';renderCalendar()">← Aylar</button>
-  <strong style="font:600 21px 'Cormorant Garamond',serif">${monthNames[mo-1]} ${y}</strong><span></span>
- </div>
- <div class="day-grid">${['P','S','Ç','P','C','C','P'].map(x=>`<span style="text-align:center;color:#947b5d;font-size:12px">${x}</span>`).join('')}${cells.join('')}</div>
- <div class="message-card" id="dayMessage">${esc(attendance[selectedDate]||'Bu gün için henüz bir not bırakılmamış.')}</div>`;
+ if(!attendanceMonth){area.innerHTML='<div class="month-list">'+months.map(m=>`<button class="month-btn" onclick="toggleMonth('${m}')">${monthNames[+m.slice(5)-1]} ${m.slice(0,4)}</button>`).join('')+'</div>';return}
+ let [y,mo]=attendanceMonth.split('-').map(Number),first=new Date(y,mo-1,1),days=new Date(y,mo,0).getDate(),offset=(first.getDay()+6)%7,min='2025-11-28',max='2026-11-19',cells=Array(offset).fill('<span></span>');
+ for(let d=1;d<=days;d++){let key=`${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`,disabled=key<min||key>max;cells.push(disabled?'<span></span>':`<button class="day ${attendance[key]?'has-message':''} ${selectedDate===key?'selected':''}" onclick="selectDate('${key}')">${d}</button>`)}
+ area.innerHTML=`<div class="calendar-head"><button class="small-btn" onclick="attendanceMonth='';renderCalendar()">← Aylar</button><strong style="font:600 21px 'Cormorant Garamond',serif">${monthNames[mo-1]} ${y}</strong><span></span></div><div class="day-grid">${['P','S','Ç','P','C','C','P'].map(x=>`<span style="text-align:center;color:#947b5d;font-size:12px">${x}</span>`).join('')}${cells.join('')}</div><div class="message-card" id="dayMessage">${esc(attendance[selectedDate]||'Bu gün için henüz bir not bırakılmamış.')}</div>`;
  syncEditor();
 }
 function toggleMonth(m){attendanceMonth=m;renderCalendar()}
 function selectDate(d){selectedDate=d;renderCalendar();syncEditor()}
-function saveAttendance(){
- let d=document.getElementById('attendanceDate').value;if(!d)return;
- selectedDate=d;
- let v=document.getElementById('attendanceText').value;
- if(v.trim())attendance[d]=v;else delete attendance[d];
- attendanceMonth=d.slice(0,7);saveAll();renderCalendar();
-}
-function deleteAttendance(){
- let d=document.getElementById('attendanceDate').value;
- delete attendance[d];selectedDate=d;saveAll();renderCalendar();syncEditor();
-}
-function uploadCover(e){
- let f=e.target.files[0];if(!f)return;
- let r=new FileReader();
- r.onload=()=>{coverData=r.result;saveAll();renderPage()};
- r.readAsDataURL(f);e.target.value='';
-}
-function uploadBookmark(e){
- let f=e.target.files[0];if(!f)return;
- let r=new FileReader();
- r.onload=()=>{bookmarkData=r.result;saveAll();renderBookmark()};
- r.readAsDataURL(f);e.target.value='';
-}
-function renderBookmark(){
- let c=document.getElementById('bookmarkContent');
- if(bookmarkData){c.className='';c.innerHTML=`<img src="${bookmarkData}" alt="Yüklenen ayraç">`}
- else{c.className='bookmark-fallback';c.innerHTML=''}
- let b=document.getElementById('bookmark');
- if(bookmarkPos.x!==null){
-  b.style.left=bookmarkPos.x+'px';b.style.top=bookmarkPos.y+'px';b.style.right='auto';
- }
-}
-function uploadPhotos(e){
- let files=[...e.target.files],done=0;
- files.forEach(f=>{
-  let r=new FileReader();
-  r.onload=()=>{
-   photos.push(r.result);done++;
-   if(done===files.length){saveAll();renderGallery()}
-  };
-  r.readAsDataURL(f);
- });
- e.target.value='';
-}
-function renderGallery(){
- let g=document.getElementById('gallery');if(!g)return;
- g.innerHTML=photos.length?photos.map((src,i)=>`<div class="photo">
-  <img src="${src}" alt="Anı fotoğrafı">
-  ${role==='admin'?`<button onclick="deletePhoto(${i})">×</button>`:''}
- </div>`).join(''):'<div class="empty">Bu sayfada henüz bir fotoğraf yok.</div>';
-}
-function deletePhoto(i){photos.splice(i,1);saveAll();renderGallery()}
-
+function saveAttendance(){let d=document.getElementById('attendanceDate').value;if(!d)return;selectedDate=d;let v=document.getElementById('attendanceText').value;if(v.trim())attendance[d]=v;else delete attendance[d];attendanceMonth=d.slice(0,7);saveAll();renderCalendar()}
+function deleteAttendance(){let d=document.getElementById('attendanceDate').value;delete attendance[d];selectedDate=d;saveAll();renderCalendar();syncEditor()}
+async function uploadCover(e){let f=e.target.files[0];if(!f)return;try{coverData=await uploadFile(f,'cover');await refreshMedia();saveAll();renderPage()}catch(err){alert('Kapak yüklenemedi: '+err.message)}e.target.value=''}
+async function uploadBookmark(e){let f=e.target.files[0];if(!f)return;try{bookmarkData=await uploadFile(f,'bookmark');await refreshMedia();saveAll();renderBookmark()}catch(err){alert('Ayraç yüklenemedi: '+err.message)}e.target.value=''}
+function renderBookmark(){let c=document.getElementById('bookmarkContent');if(bookmarkDisplay){c.className='';c.innerHTML=`<img src="${bookmarkDisplay}" alt="Yüklenen ayraç">`}else{c.className='bookmark-fallback';c.innerHTML=''}let b=document.getElementById('bookmark');if(bookmarkPos.x!==null){b.style.left=bookmarkPos.x+'px';b.style.top=bookmarkPos.y+'px';b.style.right='auto'}}
+async function uploadPhotos(e){let files=[...e.target.files];try{for(const f of files)photos.push(await uploadFile(f,'photo'));await refreshMedia();saveAll();renderGallery()}catch(err){alert('Fotoğraf yüklenemedi: '+err.message)}e.target.value=''}
+function renderGallery(){let g=document.getElementById('gallery');if(!g)return;g.innerHTML=photoDisplay.length?photoDisplay.map((src,i)=>`<div class="photo"><img src="${src}" alt="Anı fotoğrafı">${role==='admin'?`<button onclick="deletePhoto(${i})">×</button>`:''}</div>`).join(''):'<div class="empty">Bu sayfada henüz bir fotoğraf yok.</div>'}
+async function deletePhoto(i){const path=photos[i];photos.splice(i,1);photoDisplay.splice(i,1);if(path)await supabaseClient.storage.from('book-files').remove([path]);saveAll();renderGallery()}
 let drag=null;
 const bm=document.getElementById('bookmark');
-bm.addEventListener('pointerdown',e=>{
- if(e.target.closest('label'))return;
- drag={x:e.clientX,y:e.clientY,left:bm.offsetLeft,top:bm.offsetTop};
- bm.setPointerCapture(e.pointerId);bm.style.cursor='grabbing';
-});
-bm.addEventListener('pointermove',e=>{
- if(!drag)return;
- let x=drag.left+e.clientX-drag.x,y=drag.top+e.clientY-drag.y;
- bm.style.left=x+'px';bm.style.top=y+'px';bm.style.right='auto';
- bookmarkPos={x,y};
-});
-bm.addEventListener('pointerup',()=>{
- if(drag){drag=null;bm.style.cursor='grab';saveAll()}
-});
-
+bm.addEventListener('pointerdown',e=>{if(e.target.closest('label'))return;drag={x:e.clientX,y:e.clientY,left:bm.offsetLeft,top:bm.offsetTop};bm.setPointerCapture(e.pointerId);bm.style.cursor='grabbing'});
+bm.addEventListener('pointermove',e=>{if(!drag)return;let x=drag.left+e.clientX-drag.x,y=drag.top+e.clientY-drag.y;bm.style.left=x+'px';bm.style.top=y+'px';bm.style.right='auto';bookmarkPos={x,y}});
+bm.addEventListener('pointerup',()=>{if(drag){drag=null;bm.style.cursor='grab';saveAll()}});
 let touchX=null;
-document.getElementById('page').addEventListener('touchstart',e=>{
- touchX=e.changedTouches[0].clientX;
-},{passive:true});
-document.getElementById('page').addEventListener('touchend',e=>{
- if(touchX===null)return;
- let dx=e.changedTouches[0].clientX-touchX;
- if(Math.abs(dx)>65)changePage(dx<0?1:-1);
- touchX=null;
-},{passive:true});
-
+document.getElementById('page').addEventListener('touchstart',e=>{touchX=e.changedTouches[0].clientX},{passive:true});
+document.getElementById('page').addEventListener('touchend',e=>{if(touchX===null)return;let dx=e.changedTouches[0].clientX-touchX;if(Math.abs(dx)>65)changePage(dx<0?1:-1);touchX=null},{passive:true});
 let mouseX=null;
 document.getElementById('page').addEventListener('mousedown',e=>{mouseX=e.clientX});
-document.addEventListener('mouseup',e=>{
- if(mouseX===null)return;
- let dx=e.clientX-mouseX;
- if(Math.abs(dx)>100)changePage(dx<0?1:-1);
- mouseX=null;
-});
-
-document.getElementById('attendanceDate').addEventListener('change',e=>{
- selectedDate=e.target.value;
- document.getElementById('attendanceText').value=attendance[selectedDate]||'';
-});
+document.addEventListener('mouseup',e=>{if(mouseX===null)return;let dx=e.clientX-mouseX;if(Math.abs(dx)>100)changePage(dx<0?1:-1);mouseX=null});
+document.getElementById('attendanceDate').addEventListener('change',e=>{selectedDate=e.target.value;document.getElementById('attendanceText').value=attendance[selectedDate]||''});
 init();
 </script>
 </body>
