@@ -297,7 +297,22 @@ async function uploadFile(file,kind){
 }
 async function signed(path){if(!path)return '';const {data,error}=await supabaseClient.storage.from('book-files').createSignedUrl(path,3600);if(error){console.warn(error);return ''}return data.signedUrl}
 async function refreshMedia(){coverDisplay=await signed(coverData);bookmarkDisplay=await signed(bookmarkData);photoDisplay=await Promise.all(photos.map(signed))}
-function logout(){document.getElementById('app').style.display='none';document.getElementById('login').style.display='grid';role='reader';decorDrawerOpen=false;selectedDecoration=null}
+async function logout(){
+  try {
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) throw error;
+
+    currentUser = null;
+    role = 'reader';
+    decorDrawerOpen = false;
+    selectedDecoration = null;
+
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('login').style.display = 'grid';
+  } catch (e) {
+    alert('Çıkış yapılamadı: ' + e.message);
+  }
+}
 function togglePanel(){if(role!=='admin'){toast('Düzenleme alanı yalnızca yazar görünümünde açık.');return}panelOpen=!panelOpen;document.getElementById('adminPanel').classList.toggle('hidden',!panelOpen);document.getElementById('bookmarkTools').classList.toggle('hidden',!panelOpen);syncEditor()}
 function toggleFullscreen(){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}
 function renderPage(){
