@@ -636,6 +636,7 @@ async function claimRole(who){
  return true;
 }
  async function enter(who){
+ alert('Buton çalıştı: ' + who);
  try{
   const ok=await claimRole(who);
   if(!ok)return;
