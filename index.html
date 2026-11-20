@@ -117,11 +117,11 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 .decor-choice{min-height:76px;border:1px solid #d2bd98;border-radius:8px;background:linear-gradient(#fffaf0,#e9dcc5);color:#56313a;padding:6px 3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;touch-action:manipulation}
 .decor-choice svg{width:43px;height:43px;overflow:visible}
 .decor-choice:active{transform:scale(.96)}
-.decor-layer{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden}
+.decor-layer{position:absolute;inset:0;z-index:13;pointer-events:none;overflow:visible}
 .decor-item{position:absolute;display:grid;place-items:center;pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;filter:drop-shadow(1px 3px 3px #49352a44);transform-origin:center}
 .decor-item svg{width:100%;height:100%;display:block;overflow:visible;pointer-events:none}
 .decor-item.selected{outline:1px dashed #a57a43;outline-offset:4px}
-.decor-tools{position:absolute;z-index:18;display:flex;gap:5px;transform:translate(-50%,-115%);pointer-events:auto}
+.decor-tools{position:absolute;z-index:30;display:flex;gap:5px;transform:translate(-50%,-115%);pointer-events:auto;white-space:nowrap;background:#f4ead8;padding:4px;border:1px solid #b89455;border-radius:24px;box-shadow:0 4px 12px #25101855}
 .decor-tools button{min-width:38px;height:38px;border:1px solid #b89455;border-radius:50%;background:#4b1724;color:#fff0d7;font-size:17px;box-shadow:0 3px 8px #0003;touch-action:manipulation}
 .decor-tools button:active{transform:scale(.92)}
 @media(max-width:650px){
@@ -163,9 +163,9 @@ button,input,textarea{font:inherit}button{cursor:pointer}
     <svg class="corner bl" viewBox="0 0 50 50"><path d="M3 3H29L47 21V47H21L3 29Z" fill="#b18a4e" stroke="#6c4b2b" stroke-width="2"/><path d="M8 8H27L42 23V42H23L8 27Z" fill="none" stroke="#f0d59a" stroke-width="2"/><path d="M9 9L25 25L41 41M25 9L9 25M41 25L25 41" stroke="#76552f" stroke-width="1.5" fill="none"/></svg>
     <svg class="corner br" viewBox="0 0 50 50"><path d="M3 3H29L47 21V47H21L3 29Z" fill="#b18a4e" stroke="#6c4b2b" stroke-width="2"/><path d="M8 8H27L42 23V42H23L8 27Z" fill="none" stroke="#f0d59a" stroke-width="2"/><path d="M9 9L25 25L41 41M25 9L9 25M41 25L25 41" stroke="#76552f" stroke-width="1.5" fill="none"/></svg>
     <div class="page-inner" id="pageInner"></div>
-    <button class="decor-trigger hidden" id="decorTrigger" aria-label="Sayfa süslerini aç" onclick="toggleDecorDrawer()">✧</button>
-    <section class="decor-drawer hidden" id="decorDrawer" aria-label="Sayfa süsleri"></section>
-    <div class="decor-layer" id="decorLayer"></div>
+     <button class="decor-trigger hidden" id="decorTrigger" aria-label="Sayfa süslerini aç" onclick="toggleDecorDrawer()">✧</button>
+     <section class="decor-drawer hidden" id="decorDrawer" aria-label="Sayfa süsleri"></section>
+     <div class="decor-layer" id="decorLayer"></div>
    </article>
   </div>
   <div class="bookmark" id="bookmark" title="Ayıracı sürükleyerek istediğin yere bırak">
@@ -339,56 +339,25 @@ function deleteAttendance(){let d=document.getElementById('attendanceDate').valu
 async function uploadCover(e){let f=e.target.files[0];if(!f)return;try{coverData=await uploadFile(f,'cover');await refreshMedia();saveAll();renderPage()}catch(err){alert('Kapak yüklenemedi: '+err.message)}e.target.value=''}
 async function uploadBookmark(e){let f=e.target.files[0];if(!f)return;try{bookmarkData=await uploadFile(f,'bookmark');await refreshMedia();saveAll();renderBookmark()}catch(err){alert('Ayraç yüklenemedi: '+err.message)}e.target.value=''}
 function renderBookmark(){let c=document.getElementById('bookmarkContent');if(bookmarkDisplay){c.className='';c.innerHTML=`<img src="${bookmarkDisplay}" alt="Yüklenen ayraç">`}else{c.className='bookmark-fallback';c.innerHTML=''}let b=document.getElementById('bookmark');if(bookmarkPos.x!==null){b.style.left=bookmarkPos.x+'px';b.style.top=bookmarkPos.y+'px';b.style.right='auto'}}
-async function uploadPhotos(e){let files=[...e.target.files];try{for(const f of files)photos.push(await uploadFile(f,'photo'));await refreshMedia();saveAll();renderGallery()}catch(err){alert('Fotoğraf yüklenemedi: '+err.message)}e.target.value=''}
+async function uploadPhotos(e){let files=[...e.target.files];if(role!=='admin'){alert('Fotoğraf ekleme yetkisi yalnızca yazarda.');e.target.value='';return}try{for(const f of files)photos.push(await uploadFile(f,'photo'));await putData('photos',photos);await refreshMedia();clearTimeout(saveTimer);await cloudSave();toast('Fotoğraflar ortak kitaba kaydedildi');renderGallery()}catch(err){alert('Fotoğraf yüklenemedi veya ortak kitaba kaydedilemedi: '+err.message)}e.target.value=''}
 function renderGallery(){let g=document.getElementById('gallery');if(!g)return;g.innerHTML=photoDisplay.length?photoDisplay.map((src,i)=>`<div class="photo"><img src="${src}" alt="Anı fotoğrafı">${role==='admin'?`<button onclick="deletePhoto(${i})">×</button>`:''}</div>`).join(''):'<div class="empty">Bu sayfada henüz bir fotoğraf yok.</div>'}
 async function deletePhoto(i){const path=photos[i];photos.splice(i,1);photoDisplay.splice(i,1);if(path)await supabaseClient.storage.from('book-files').remove([path]);saveAll();renderGallery()}
 
-async function loadDecorations(){
- const {data,error}=await supabaseClient.from('book_decorations').select('content').eq('id','main').maybeSingle();
- if(error)throw error;
- decorations=Array.isArray(data?.content)?data.content:[];
-}
-async function saveDecorations(){
- if(role!=='reader'||!currentUser)return;
- const {error}=await supabaseClient.from('book_decorations').upsert({
-  id:'main',
-  content:decorations,
-  updated_at:new Date().toISOString(),
-  updated_by:currentUser.id
- },{onConflict:'id'});
- if(error)throw error;
-}
-function queueDecorationSave(){
- clearTimeout(decorSaveTimer);
- decorSaveTimer=setTimeout(async()=>{
-  try{await saveDecorations();toast('Süsler ortak kitaba kaydedildi')}
-  catch(e){toast('Süsler kaydedilemedi: '+e.message)}
- },350);
-}
+async function loadDecorations(){const {data,error}=await supabaseClient.from('book_decorations').select('content').eq('id','main').maybeSingle();if(error)throw error;decorations=Array.isArray(data?.content)?data.content:[]}
+async function saveDecorations(){if(role!=='reader'||!currentUser)return;const {error}=await supabaseClient.from('book_decorations').upsert({id:'main',content:decorations,updated_at:new Date().toISOString(),updated_by:currentUser.id},{onConflict:'id'});if(error)throw error}
+function queueDecorationSave(){clearTimeout(decorSaveTimer);decorSaveTimer=setTimeout(async()=>{try{await saveDecorations();toast('Süsler ortak kitaba kaydedildi')}catch(e){toast('Süsler kaydedilemedi: '+e.message)}},350)}
 const decorationCatalog=[
-{id:'daisy',name:'Papatya',category:'Çiçekler'},
-{id:'daisy-sprig',name:'Papatya dalı',category:'Çiçekler'},
-{id:'daisy-bunch',name:'Papatya demeti',category:'Çiçekler'},
-{id:'rose',name:'Beyaz gül',category:'Çiçekler'},
-{id:'rose-bud',name:'Gül tomurcuğu',category:'Çiçekler'},
-{id:'rose-sprig',name:'Gül dalı',category:'Çiçekler'},
-{id:'leaf',name:'Kuru yaprak',category:'Botanik'},
-{id:'branch',name:'Kuru dal',category:'Botanik'},
-{id:'ribbon',name:'Kurdele',category:'Detaylar'},
-{id:'lace',name:'Dantel',category:'Detaylar'},
-{id:'pearls',name:'İnci dizisi',category:'Detaylar'},
-{id:'star',name:'Yıldız',category:'Detaylar'},
-{id:'label',name:'Vintage etiket',category:'Kâğıt parçaları'},
-{id:'stamp',name:'Pul',category:'Kâğıt parçaları'},
-{id:'tape',name:'Kâğıt bant',category:'Kâğıt parçaları'},
-{id:'seal',name:'Mühür',category:'Kâğıt parçaları'}
-];
+{id:'daisy',name:'Papatya',category:'Çiçekler'},{id:'daisy-sprig',name:'Papatya dalı',category:'Çiçekler'},{id:'daisy-bunch',name:'Papatya demeti',category:'Çiçekler'},
+{id:'rose',name:'Beyaz gül',category:'Çiçekler'},{id:'rose-bud',name:'Gül tomurcuğu',category:'Çiçekler'},{id:'rose-sprig',name:'Gül dalı',category:'Çiçekler'},
+{id:'leaf',name:'Kuru yaprak',category:'Botanik'},{id:'branch',name:'Kuru dal',category:'Botanik'},
+{id:'ribbon',name:'Kurdele',category:'Detaylar'},{id:'lace',name:'Dantel',category:'Detaylar'},{id:'pearls',name:'İnci dizisi',category:'Detaylar'},{id:'star',name:'Yıldız',category:'Detaylar'},
+{id:'label',name:'Vintage etiket',category:'Kâğıt parçaları'},{id:'stamp',name:'Pul',category:'Kâğıt parçaları'},{id:'tape',name:'Kâğıt bant',category:'Kâğıt parçaları'},{id:'seal',name:'Mühür',category:'Kâğıt parçaları'}];
 function decorationSvg(type){
  const petal=(n)=>Array.from({length:n},(_,i)=>`<ellipse cx="50" cy="28" rx="7" ry="19" transform="rotate(${i*360/n} 50 50)" fill="#fffdf6" stroke="#d6cbbb" stroke-width="1"/>`).join('');
  const daisy=`${petal(12)}<circle cx="50" cy="50" r="11" fill="#e2bd61"/><circle cx="50" cy="50" r="6" fill="#f5dc91"/>`;
  const rose=`<path d="M50 83Q12 66 25 35Q35 8 58 19Q88 25 76 57Q68 78 50 83Z" fill="#fffdf6" stroke="#d4c8b7" stroke-width="2"/><path d="M50 70Q25 60 38 37Q49 20 65 35Q78 52 58 65Q47 71 50 70Z" fill="#eee9df" stroke="#cfc2b1" stroke-width="2"/><path d="M48 55Q39 44 50 36Q63 31 65 45Q65 57 53 60Z" fill="#fff" stroke="#d1c5b4"/>`;
  let a='';
- if(type.startsWith('daisy'))a=type==='daisy'?daisy:type==='daisy-sprig'?`<path d="M50 95L50 20" stroke="#79845e" stroke-width="3"/>${daisy}<g transform="translate(-22 24) scale(.65)">${daisy}</g><path d="M50 70Q20 48 16 66Q35 83 50 70M50 52Q77 31 82 50Q65 65 50 52" fill="#89946e" stroke="#68734f"/>`:`<path d="M50 95L27 40M50 95L50 25M50 95L75 40" stroke="#79845e" stroke-width="3"/><g transform="translate(-23 -18) scale(.65)">${daisy}</g><g transform="translate(23 -15) scale(.65)">${daisy}</g>${daisy}`;
+ if(type.startsWith('daisy'))a= type==='daisy'?daisy:type==='daisy-sprig'?`<path d="M50 95L50 20" stroke="#79845e" stroke-width="3"/>${daisy}<g transform="translate(-22 24) scale(.65)">${daisy}</g><path d="M50 70Q20 48 16 66Q35 83 50 70M50 52Q77 31 82 50Q65 65 50 52" fill="#89946e" stroke="#68734f"/>`:`<path d="M50 95L27 40M50 95L50 25M50 95L75 40" stroke="#79845e" stroke-width="3"/><g transform="translate(-23 -18) scale(.65)">${daisy}</g><g transform="translate(23 -15) scale(.65)">${daisy}</g>${daisy}`;
  else if(type.startsWith('rose'))a=type==='rose'?rose:type==='rose-bud'?`<path d="M50 94V38" stroke="#78845d" stroke-width="3"/><path d="M50 55Q20 44 29 28Q43 25 50 55M50 65Q80 51 69 35Q56 34 50 65" fill="#89936b"/><path d="M50 47Q27 31 43 12Q58 0 66 20Q70 38 50 47Z" fill="#fffdf6" stroke="#d5c9b7" stroke-width="2"/>`:`<path d="M18 90Q50 50 80 12" stroke="#78845d" stroke-width="3"/>${rose}<g transform="translate(-23 26) scale(.58)">${rose}</g><path d="M37 70Q12 51 12 69Q27 82 37 70M59 40Q82 22 85 40Q72 55 59 40" fill="#89936b"/>`;
  else if(type==='leaf'||type==='branch')a=`<path d="M15 88Q48 50 85 12M42 60L23 35M59 42L79 52" fill="none" stroke="#827455" stroke-width="3"/><path d="M23 35Q5 20 9 43Q18 51 23 35M79 52Q96 39 89 63Q80 68 79 52M42 60Q15 47 18 69Q32 77 42 60" fill="#9da07b" stroke="#727b59" stroke-width="1.5"/>`;
  else if(type==='ribbon')a=`<path d="M50 40Q16 4 12 32Q24 53 50 40Q76 53 88 32Q84 4 50 40Z" fill="#b85c68" stroke="#783743" stroke-width="2"/><path d="M43 43L27 91L49 73L53 44M57 43L78 90L57 74L50 44" fill="#d28a8a" stroke="#783743" stroke-width="2"/><circle cx="50" cy="40" r="8" fill="#e3c58d"/>`;
@@ -402,128 +371,37 @@ function decorationSvg(type){
  return `<svg viewBox="0 0 100 100" aria-hidden="true">${a}</svg>`;
 }
 function toggleDecorDrawer(){if(role!=='reader')return;decorDrawerOpen=!decorDrawerOpen;renderDecorationUI()}
+function closeDecorDrawer(){if(!decorDrawerOpen)return;decorDrawerOpen=false;renderDecorationUI()}
 function renderDecorationUI(){
- const layer=document.getElementById('decorLayer'),trigger=document.getElementById('decorTrigger'),drawer=document.getElementById('decorDrawer');
- if(!layer||!trigger||!drawer)return;
- trigger.classList.toggle('hidden',role!=='reader');
- drawer.classList.toggle('hidden',role!=='reader'||!decorDrawerOpen);
- layer.innerHTML='';
- decorations.filter(d=>d.page===current).forEach(d=>{
-  const el=document.createElement('div');
-  el.className='decor-item'+(selectedDecoration===d.id&&role==='reader'?' selected':'');
-  el.dataset.id=d.id;
-  el.style.cssText=`left:${d.x}%;top:${d.y}%;width:${d.size}px;height:${d.size}px;transform:translate(-50%,-50%) rotate(${d.rotation||0}deg)`;
-  el.innerHTML=decorationSvg(d.type);
-  if(role==='reader'){
-   el.addEventListener('pointerdown',e=>startDecorationDrag(e,d.id));
-   el.addEventListener('click',e=>{e.stopPropagation();selectedDecoration=d.id;renderDecorationUI()});
-  }else el.style.pointerEvents='none';
-  layer.appendChild(el);
- });
- if(role==='reader'&&selectedDecoration){
-  const d=decorations.find(x=>x.id===selectedDecoration&&x.page===current);
-  if(d){
-   const t=document.createElement('div');
-   t.className='decor-tools';
-   t.style.left=d.x+'%';
-   t.style.top=d.y+'%';
-   t.innerHTML='<button onclick="adjustDecoration(-8)">−</button><button onclick="adjustDecoration(8)">＋</button><button onclick="rotateDecoration()">↻</button><button onclick="removeDecoration()">×</button>';
-   layer.appendChild(t);
-  }
- }
- if(role==='reader'){
-  const groups=[...new Set(decorationCatalog.map(x=>x.category))];
-  drawer.innerHTML=`<div class="decor-drawer-head"><span>Sayfa süsleri</span><button class="decor-close" onclick="toggleDecorDrawer()">×</button></div><p class="decor-hint">Bir süse dokun; sayfaya eklensin. Sonra tutup istediğin yere sürükle.</p>`+groups.map(g=>`<div class="decor-category">${g}</div><div class="decor-items">${decorationCatalog.filter(x=>x.category===g).map(x=>`<button class="decor-choice" onclick="addDecoration('${x.id}')">${decorationSvg(x.id)}<span>${x.name}</span></button>`).join('')}</div>`).join('');
- }
+ const layer=document.getElementById('decorLayer'),trigger=document.getElementById('decorTrigger'),drawer=document.getElementById('decorDrawer');if(!layer||!trigger||!drawer)return;
+ trigger.classList.toggle('hidden',role!=='reader');drawer.classList.toggle('hidden',role!=='reader'||!decorDrawerOpen);layer.innerHTML='';
+ decorations.filter(d=>d.page===current).forEach(d=>{const el=document.createElement('div');el.className='decor-item'+(selectedDecoration===d.id&&role==='reader'?' selected':'');el.dataset.id=d.id;el.style.cssText=`left:${d.x}%;top:${d.y}%;width:${d.size}px;height:${d.size}px;transform:translate(-50%,-50%) rotate(${d.rotation||0}deg)`;el.innerHTML=decorationSvg(d.type);if(role==='reader'){el.addEventListener('pointerdown',e=>startDecorationDrag(e,d.id));el.addEventListener('click',e=>{e.stopPropagation();if(!decorDrag){selectedDecoration=d.id;renderDecorationUI()}})}else el.style.pointerEvents='none';layer.appendChild(el)});
+ if(role==='reader'&&selectedDecoration){const d=decorations.find(x=>x.id===selectedDecoration&&x.page===current);if(d){const t=document.createElement('div');t.className='decor-tools';t.style.left=Math.max(12,Math.min(88,d.x))+'%';t.style.top=Math.max(12,Math.min(88,d.y))+'%';t.innerHTML='<button title="Küçült" onclick="adjustDecoration(-8)">−</button><button title="Büyüt" onclick="adjustDecoration(8)">＋</button><button title="Döndür" onclick="rotateDecoration()">↻</button><button title="Sil" onclick="removeDecoration()">×</button>';layer.appendChild(t)}}
+ if(role==='reader'){const groups=[...new Set(decorationCatalog.map(x=>x.category))];drawer.innerHTML=`<div class="decor-drawer-head"><span>Sayfa süsleri</span><button class="decor-close" onclick="toggleDecorDrawer()">×</button></div><p class="decor-hint">Bir süse dokun; sayfaya eklensin. Sonra tutup istediğin yere sürükle. Seçtiğin süsün altında boyut ve döndürme araçları çıkar.</p>`+groups.map(g=>`<div class="decor-category">${g}</div><div class="decor-items">${decorationCatalog.filter(x=>x.category===g).map(x=>`<button class="decor-choice" onclick="addDecoration('${x.id}')">${decorationSvg(x.id)}<span>${x.name}</span></button>`).join('')}</div>`).join('')}
 }
-function addDecoration(type){
- if(role!=='reader')return;
- const d={id:'dec-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),type,page:current,x:50,y:53,size:type.includes('bunch')||type.includes('sprig')?100:76,rotation:0};
- decorations.push(d);
- selectedDecoration=d.id;
- renderDecorationUI();
- queueDecorationSave();
-}
-function startDecorationDrag(e,id){
- if(role!=='reader'||e.button!==0)return;
- e.preventDefault();
- e.stopPropagation();
- selectedDecoration=id;
- decorDrag={id,pointerId:e.pointerId};
- e.currentTarget.classList.add('selected');
- e.currentTarget.setPointerCapture?.(e.pointerId);
-}
-document.addEventListener('pointermove',e=>{
- if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;
- const d=decorations.find(x=>x.id===decorDrag.id);
- if(!d)return;
- const r=document.getElementById('page').getBoundingClientRect();
- d.x=Math.max(3,Math.min(97,(e.clientX-r.left)/r.width*100));
- d.y=Math.max(4,Math.min(96,(e.clientY-r.top)/r.height*100));
- const el=document.querySelector(`.decor-item[data-id="${d.id}"]`);
- if(el){el.style.left=d.x+'%';el.style.top=d.y+'%'}
- const t=document.querySelector('.decor-tools');
- if(t){t.style.left=d.x+'%';t.style.top=d.y+'%'}
-},{passive:false});
-document.addEventListener('pointerup',e=>{
- if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;
- decorDrag=null;
- renderDecorationUI();
- queueDecorationSave();
-});
-function adjustDecoration(n){
- const d=decorations.find(x=>x.id===selectedDecoration);
- if(!d||role!=='reader')return;
- d.size=Math.max(28,Math.min(190,d.size+n));
- renderDecorationUI();
- queueDecorationSave();
-}
-function rotateDecoration(){
- const d=decorations.find(x=>x.id===selectedDecoration);
- if(!d||role!=='reader')return;
- d.rotation=((d.rotation||0)+15)%360;
- renderDecorationUI();
- queueDecorationSave();
-}
-function removeDecoration(){
- if(role!=='reader')return;
- decorations=decorations.filter(d=>d.id!==selectedDecoration);
- selectedDecoration=null;
- renderDecorationUI();
- queueDecorationSave();
-}
+function addDecoration(type){if(role!=='reader')return;const d={id:'dec-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),type,page:current,x:50,y:53,size:type.includes('bunch')||type.includes('sprig')?100:76,rotation:0};decorations.push(d);selectedDecoration=d.id;renderDecorationUI();queueDecorationSave()}
+function startDecorationDrag(e,id){if(role!=='reader'||(e.pointerType==='mouse'&&e.button!==0))return;e.preventDefault();e.stopPropagation();selectedDecoration=id;decorDrag={id,pointerId:e.pointerId,moved:false};try{e.currentTarget.setPointerCapture(e.pointerId)}catch(_){}e.currentTarget.classList.add('selected')}
+document.addEventListener('pointermove',e=>{if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;const d=decorations.find(x=>x.id===decorDrag.id);if(!d)return;decorDrag.moved=true;const r=document.getElementById('page').getBoundingClientRect();d.x=Math.max(3,Math.min(97,(e.clientX-r.left)/r.width*100));d.y=Math.max(4,Math.min(96,(e.clientY-r.top)/r.height*100));const el=document.querySelector(`.decor-item[data-id="${d.id}"]`);if(el){el.style.left=d.x+'%';el.style.top=d.y+'%'}const t=document.querySelector('.decor-tools');if(t){t.style.left=Math.max(12,Math.min(88,d.x))+'%';t.style.top=Math.max(12,Math.min(88,d.y))+'%'}},{passive:false});
+document.addEventListener('pointerup',e=>{if(!decorDrag||e.pointerId!==decorDrag.pointerId)return;const moved=decorDrag.moved;decorDrag=null;renderDecorationUI();if(moved)queueDecorationSave()});
+// Menü dışına tıklanınca kapat; sayfanın boş alanına tıklanınca seçimi kaldır.
+document.addEventListener('click',e=>{const drawer=document.getElementById('decorDrawer'),trigger=document.getElementById('decorTrigger'),layer=document.getElementById('decorLayer');if(decorDrawerOpen&&drawer&&!drawer.contains(e.target)&&trigger&&!trigger.contains(e.target))closeDecorDrawer();if(role==='reader'&&layer&&e.target===layer){selectedDecoration=null;renderDecorationUI()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&decorDrawerOpen)closeDecorDrawer()});
+function adjustDecoration(n){const d=decorations.find(x=>x.id===selectedDecoration);if(!d||role!=='reader')return;d.size=Math.max(28,Math.min(190,d.size+n));renderDecorationUI();queueDecorationSave()}
+function rotateDecoration(){const d=decorations.find(x=>x.id===selectedDecoration);if(!d||role!=='reader')return;d.rotation=((d.rotation||0)+15)%360;renderDecorationUI();queueDecorationSave()}
+function removeDecoration(){if(role!=='reader')return;decorations=decorations.filter(d=>d.id!==selectedDecoration);selectedDecoration=null;renderDecorationUI();queueDecorationSave()}
+
 let drag=null;
 const bm=document.getElementById('bookmark');
 bm.addEventListener('pointerdown',e=>{if(e.target.closest('label'))return;drag={x:e.clientX,y:e.clientY,left:bm.offsetLeft,top:bm.offsetTop};bm.setPointerCapture(e.pointerId);bm.style.cursor='grabbing'});
 bm.addEventListener('pointermove',e=>{if(!drag)return;let x=drag.left+e.clientX-drag.x,y=drag.top+e.clientY-drag.y;bm.style.left=x+'px';bm.style.top=y+'px';bm.style.right='auto';bookmarkPos={x,y}});
 bm.addEventListener('pointerup',()=>{if(drag){drag=null;bm.style.cursor='grab';saveAll()}});
 let touchX=null;
-document.getElementById('page').addEventListener('touchstart',e=>{
- if(e.target.closest('.decor-layer,.decor-drawer,.decor-trigger,.decor-tools')){touchX=null;return}
- touchX=e.changedTouches[0].clientX;
-},{passive:true});
-document.getElementById('page').addEventListener('touchend',e=>{
- if(touchX===null)return;
- if(e.target.closest('.decor-layer,.decor-drawer,.decor-trigger,.decor-tools')){touchX=null;return}
- let dx=e.changedTouches[0].clientX-touchX;
- if(Math.abs(dx)>65)changePage(dx<0?1:-1);
- touchX=null;
-},{passive:true});
+document.getElementById('page').addEventListener('touchstart',e=>{if(e.target.closest('.decor-layer,.decor-drawer,.decor-trigger,.decor-tools')){touchX=null;return}touchX=e.changedTouches[0].clientX},{passive:true});
+document.getElementById('page').addEventListener('touchend',e=>{if(touchX===null)return;if(e.target.closest('.decor-layer,.decor-drawer,.decor-trigger,.decor-tools')){touchX=null;return}let dx=e.changedTouches[0].clientX-touchX;if(Math.abs(dx)>65)changePage(dx<0?1:-1);touchX=null},{passive:true});
 let mouseX=null;
-document.getElementById('page').addEventListener('mousedown',e=>{
- if(e.target.closest('.decor-layer,.decor-drawer,.decor-trigger,.decor-tools')){mouseX=null;return}
- mouseX=e.clientX;
-});
-document.addEventListener('mouseup',e=>{
- if(mouseX===null)return;
- let dx=e.clientX-mouseX;
- if(Math.abs(dx)>100)changePage(dx<0?1:-1);
- mouseX=null;
-});
-document.getElementById('attendanceDate').addEventListener('change',e=>{
- selectedDate=e.target.value;
- document.getElementById('attendanceText').value=attendance[selectedDate]||'';
-});
+document.getElementById('page').addEventListener('mousedown',e=>{if(e.target.closest('.decor-layer,.decor-drawer,.decor-trigger,.decor-tools')){mouseX=null;return}mouseX=e.clientX});
+document.addEventListener('mouseup',e=>{if(mouseX===null)return;let dx=e.clientX-mouseX;if(Math.abs(dx)>100)changePage(dx<0?1:-1);mouseX=null});
+document.getElementById('attendanceDate').addEventListener('change',e=>{selectedDate=e.target.value;document.getElementById('attendanceText').value=attendance[selectedDate]||''});
 init();
 </script>
 </body>
