@@ -224,9 +224,21 @@ function getData(key){return new Promise(resolve=>{let r=db.transaction(STORE).o
 function putData(key,val){return new Promise(resolve=>{let t=db.transaction(STORE,'readwrite');t.objectStore(STORE).put(val,key);t.oncomplete=()=>resolve();t.onerror=()=>resolve()})}
 function toast(msg='Otomatik kaydedildi'){let t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
 async function ensureUser(){
- const {data:sd,error:se}=await supabaseClient.auth.getSession();if(se)throw se;
- if(sd.session){currentUser=sd.session.user;return currentUser;}
- const {data,error}=await supabaseClient.auth.signInAnonymously();if(error)throw error;currentUser=data.user;return currentUser;
+  const { data: sd, error: se } = await supabaseClient.auth.getSession();
+  if (se) throw se;
+
+  if (sd.session) {
+    currentUser = sd.session.user;
+    console.log("Mevcut kullanıcı:", currentUser.id);
+    return currentUser;
+  }
+
+  const { data, error } = await supabaseClient.auth.signInAnonymously();
+  if (error) throw error;
+
+  currentUser = data.user;
+  console.log("Yeni anonim kullanıcı:", currentUser.id);
+  return currentUser;
 }
 async function claimRole(who){
  await ensureUser();
