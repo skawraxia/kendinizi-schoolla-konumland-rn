@@ -645,8 +645,10 @@ async function init(){
   await refreshMedia();renderBookmark();
  }catch(e){toast('Başlangıç verileri yüklenemedi: '+e.message)}
 }
-async function enter(who){
+function logout(){
  try{
+  await supabaseClient.auth.signOut();
+currentUser = null;
   const ok=await claimRole(who);if(!ok)return;
   role=who;
   const {data:row,error}=await supabaseClient.from('book_data').select('content').eq('id','main').maybeSingle();if(error)throw error;
