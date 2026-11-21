@@ -1374,12 +1374,16 @@ renderPage=function(){
 };
  aids.forEach((b,i)=>{
   b.onclick=()=>{
-   const on=!sel.has(i);
-   if(on)sel.add(i);else sel.delete(i);
-   b.classList.toggle('used',on);
-   draw(on?i:-1);
+    sel.clear();
+    sel.add(i);
+
+    aids.forEach((other,j)=>{
+      other.classList.toggle('used',j===i);
+    });
+
+    draw(i);
   };
- });
+});
  const h=document.getElementById('xHint');
  if(h)h.textContent='Her satır bir yara bandının notu: 1. satır soldaki, 2. satır ortadaki, 3. satır alttaki bant. Numara yazarsan dokununca arar.';
 };
