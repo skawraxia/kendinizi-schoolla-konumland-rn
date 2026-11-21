@@ -1335,5 +1335,53 @@ const _lo2=logout;
 logout=function(){prev=-1;clearTimeout(tm);document.querySelector('.x-wax-wrap')?.remove();_lo2()};
 })();
 </script>
+ <style>
+.xi-aid{transition:transform .5s,opacity .5s,filter .5s}
+.xi-aid.used{transform:rotate(14deg) translateX(24px);opacity:.38;filter:grayscale(.75) saturate(.6)}
+.xi-note{margin:0 0 12px}
+.xi-note.xi-fresh{animation:xiNote .6s}
+@keyframes xiNote{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+<script>
+(function(){
+const _r=renderPage;
+renderPage=function(){
+ _r();
+ const p=pages[current];
+ if(!p||p.variant!=='bandaid')return;
+ const box=document.querySelector('#pageInner .xi');if(!box)return;
+ const lines=(p.body||'').split('\n').map(s=>s.trim()).filter(Boolean);
+ const m=box.querySelector('.xi-msg'),aids=[...box.querySelectorAll('.xi-aid')],sel=new Set();
+ const hint=box.querySelector('.xi-hint');if(hint)hint.textContent='İstediğin yara bantlarını al, hepsini alabilirsin';
+ const fill=(el,t)=>{
+  const x=/\+?\d[\d\s()-]{7,}\d/.exec(t);
+  if(x){
+   el.append(t.slice(0,x.index));
+   const a=document.createElement('a');a.href='tel:'+x[0].replace(/[^\d+]/g,'');a.textContent=x[0];a.style.cssText='color:inherit;text-decoration:underline';
+   el.append(a,t.slice(x.index+x[0].length));
+  }else el.textContent=t;
+ };
+ const draw=fresh=>{
+  m.replaceChildren();m.classList.remove('xi-in');
+  [0,1,2].forEach(i=>{
+   if(!sel.has(i)||!lines[i])return;
+   const d=document.createElement('div');
+   d.className='xi-note'+(i===fresh?' xi-fresh':'');
+   fill(d,lines[i]);m.append(d);
+  });
+ };
+ aids.forEach((b,i)=>{
+  b.onclick=()=>{
+   const on=!sel.has(i);
+   if(on)sel.add(i);else sel.delete(i);
+   b.classList.toggle('used',on);
+   draw(on?i:-1);
+  };
+ });
+ const h=document.getElementById('xHint');
+ if(h)h.textContent='Her satır bir yara bandının notu: 1. satır soldaki, 2. satır ortadaki, 3. satır alttaki bant. Numara yazarsan dokununca arar.';
+};
+})();
+</script>
 </body>
 </html>
