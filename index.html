@@ -140,21 +140,284 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 @keyframes turn-forward{0%{transform:rotateY(0);filter:brightness(1);box-shadow:0 0 0 #0000}35%{filter:brightness(.88);box-shadow:-22px 0 28px #0005}100%{transform:rotateY(-180deg);filter:brightness(.72);box-shadow:-18px 0 25px #0003}}
 @keyframes turn-back{0%{transform:rotateY(0);filter:brightness(1)}35%{filter:brightness(.88);box-shadow:22px 0 28px #0005}100%{transform:rotateY(180deg);filter:brightness(.72);box-shadow:18px 0 25px #0003}}
 @media(prefers-reduced-motion:reduce){.page-turn-sheet.forward,.page-turn-sheet.backward{animation-duration:.15s}}
+/* ANİMASYONLU GİRİŞ EKRANI */
+#login{
+ position:relative;
+ isolation:isolate;
+ overflow:hidden;
+ min-height:100vh;
+ background:radial-gradient(ellipse at 50% 42%,#70414a 0%,#3b2028 48%,#170d12 100%)
+}
 
+.login-wrap{display:none}
+
+.login-frame{
+ position:relative;
+ z-index:2;
+ width:min(790px,calc(100% - 34px));
+ padding:clamp(34px,6vw,68px) clamp(18px,5vw,58px) 30px;
+ text-align:center;
+ color:#f5e8d0;
+ background:linear-gradient(145deg,#3a1923ef,#241018f2 72%);
+ border:1px solid #c6a365;
+ box-shadow:0 0 0 7px #2b121b,0 0 0 8px #a9854d,0 24px 70px #0009,inset 0 0 55px #b18a4e12;
+ animation:frameAppear 1.2s cubic-bezier(.2,.8,.2,1) both
+}
+
+.login-frame:before,.login-frame:after{
+ content:"";
+ position:absolute;
+ inset:13px;
+ border:1px solid #b8945577;
+ pointer-events:none
+}
+
+.login-frame:after{
+ inset:20px;
+ border-color:#b8945533
+}
+
+.frame-corner{
+ position:absolute;
+ width:62px;
+ height:62px;
+ border-color:#e1c486;
+ border-style:solid;
+ z-index:2;
+ filter:drop-shadow(0 0 7px #d5ad60aa);
+ animation:frameGlow 4s ease-in-out infinite
+}
+
+.frame-corner.top-left{top:-5px;left:-5px;border-width:2px 0 0 2px}
+.frame-corner.top-right{top:-5px;right:-5px;border-width:2px 2px 0 0}
+.frame-corner.bottom-left{bottom:-5px;left:-5px;border-width:0 0 2px 2px}
+.frame-corner.bottom-right{bottom:-5px;right:-5px;border-width:0 2px 2px 0}
+
+.login-ornament,.login-bottom-ornament{
+ color:#e2c98e;
+ font:26px 'Cormorant Garamond',serif;
+ letter-spacing:5px;
+ text-shadow:0 0 12px #d5ad60;
+ animation:starGlow 3s ease-in-out infinite
+}
+
+.login-ornament{margin-bottom:15px}
+.login-bottom-ornament{margin-top:18px;font-size:20px}
+
+.login-frame .eyebrow{font-size:15px;letter-spacing:3px}
+.login-frame .main-title{font-size:clamp(39px,7vw,68px);margin:18px 0 12px}
+.login-frame .login-sub{font-size:20px;margin-bottom:20px}
+
+.seal-ring{
+ width:76px;
+ height:76px;
+ margin:15px auto 25px;
+ border:1px solid #cba96d;
+ border-radius:50%;
+ display:grid;
+ place-items:center;
+ color:#e6cb91;
+ font:42px 'Cormorant Garamond',serif;
+ box-shadow:0 0 0 5px #b8945520,inset 0 0 18px #d0aa6333,0 0 22px #d0aa6344;
+ animation:sealRotate 18s linear infinite,sealUnlock 1.5s .3s both
+}
+
+.identity-cards{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:22px;
+ width:min(590px,100%);
+ margin:0 auto
+}
+
+.identity-card{
+ min-height:175px;
+ position:relative;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:8px;
+ padding:18px 12px;
+ color:#f8edda;
+ border:1px solid #d5b77b;
+ border-radius:5px;
+ background:linear-gradient(145deg,#78404a,#431b27 58%,#2b1119);
+ box-shadow:inset 0 2px 1px #fff4,inset 0 -7px 13px #16070b88,0 8px 0 #241016,0 17px 28px #0008;
+ transition:transform .25s,box-shadow .25s;
+ animation:sealUnlock .9s both
+}
+
+.identity-card:nth-child(2){animation-delay:.18s}
+
+.identity-card:before{
+ content:"";
+ position:absolute;
+ inset:7px;
+ border:1px solid #cba76b77;
+ pointer-events:none
+}
+
+.identity-card:hover{
+ transform:translateY(-6px);
+ box-shadow:inset 0 2px 1px #fff4,0 12px 0 #241016,0 22px 35px #0009
+}
+
+.identity-card:active{
+ transform:translateY(5px);
+ box-shadow:inset 0 3px 10px #16070b88,0 3px 0 #241016
+}
+
+.identity-symbol{font-size:49px;filter:drop-shadow(0 5px 4px #0008)}
+.identity-card strong{font:600 26px 'Cormorant Garamond',serif;letter-spacing:1px}
+.identity-card small{color:#dfc89f;letter-spacing:2px;font-size:10px;text-transform:uppercase}
+.identity-line{width:45px;height:1px;background:linear-gradient(90deg,transparent,#d8b976,transparent);margin-top:3px}
+
+.login-frame .login-note{
+ margin-top:27px;
+ font:italic 14px 'Cormorant Garamond',serif;
+ color:#d6c09d
+}
+
+.login-particles{
+ position:absolute;
+ inset:0;
+ overflow:hidden;
+ pointer-events:none;
+ z-index:1
+}
+
+.login-particles i{
+ position:absolute;
+ left:var(--x);
+ top:var(--y);
+ width:3px;
+ height:3px;
+ border-radius:50%;
+ background:#f0d69b;
+ box-shadow:0 0 9px 2px #d7ad61aa;
+ opacity:0;
+ animation:goldDust calc(5s + var(--n)*.45s) calc(var(--n)*-.7s) ease-in-out infinite
+}
+
+@keyframes goldDust{
+ 0%,100%{transform:translate3d(0,18px,0) scale(.5);opacity:0}
+ 25%{opacity:.8}
+ 55%{transform:translate3d(12px,-35px,0) scale(1.25);opacity:.65}
+ 80%{opacity:.15}
+}
+
+@keyframes frameGlow{
+ 0%,100%{filter:drop-shadow(0 0 3px #d5ad6055)}
+ 50%{filter:drop-shadow(0 0 12px #f0d69bcc)}
+}
+
+@keyframes starGlow{
+ 0%,100%{opacity:.7;text-shadow:0 0 5px #d5ad60}
+ 50%{opacity:1;text-shadow:0 0 18px #f5d995,0 0 30px #d5ad60}
+}
+
+@keyframes sealRotate{
+ from{transform:rotate(0)}
+ to{transform:rotate(360deg)}
+}
+
+@keyframes frameAppear{
+ from{opacity:0;transform:translateY(24px) scale(.96);filter:blur(5px)}
+ to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+}
+
+@keyframes sealUnlock{
+ 0%{opacity:0;transform:scale(.65) rotate(-18deg)}
+ 70%{opacity:1;transform:scale(1.07) rotate(4deg)}
+ 100%{opacity:1;transform:scale(1) rotate(0)}
+}
+
+@media(max-width:650px){
+ .login-frame{padding:34px 18px 22px}
+ .frame-corner{width:43px;height:43px}
+ .identity-cards{gap:12px}
+ .identity-card{min-height:150px;padding:12px 5px}
+ .identity-symbol{font-size:40px}
+ .identity-card strong{font-size:21px}
+ .identity-card small{font-size:9px;letter-spacing:1px}
+ .login-frame .main-title{font-size:clamp(35px,9vw,48px)}
+ .seal-ring{width:62px;height:62px;font-size:34px;margin:12px auto 20px}
+}
+
+@media(prefers-reduced-motion:reduce){
+ .login-frame,.frame-corner,.login-ornament,.login-bottom-ornament,.seal-ring,.identity-card,.login-particles i{
+  animation:none!important
+ }
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <section id="login" class="screen">
- <div class="login-wrap">
+
+ <div class="login-particles" aria-hidden="true">
+  <i style="--n:1;--x:91%;--y:37%"></i>
+  <i style="--n:2;--x:82%;--y:74%"></i>
+  <i style="--n:3;--x:73%;--y:11%"></i>
+  <i style="--n:4;--x:64%;--y:48%"></i>
+  <i style="--n:5;--x:55%;--y:85%"></i>
+  <i style="--n:6;--x:46%;--y:22%"></i>
+  <i style="--n:7;--x:37%;--y:59%"></i>
+  <i style="--n:8;--x:28%;--y:96%"></i>
+  <i style="--n:9;--x:19%;--y:33%"></i>
+  <i style="--n:10;--x:10%;--y:70%"></i>
+  <i style="--n:11;--x:1%;--y:7%"></i>
+  <i style="--n:12;--x:92%;--y:44%"></i>
+ </div>
+
+ <div class="login-frame">
+
+  <span class="frame-corner top-left"></span>
+  <span class="frame-corner top-right"></span>
+  <span class="frame-corner bottom-left"></span>
+  <span class="frame-corner bottom-right"></span>
+
+  <div class="login-ornament">✦ &nbsp; ❦ &nbsp; ✦</div>
+
   <div class="eyebrow">BİR KİTAP, BİRİKTİRİLMİŞ BİR ÖMÜR</div>
-  <h1 class="main-title">Kendinizi Okulla<br>Konumlandırın</h1>
-  <div class="login-sub">Sayfalarımızın arasında kendinize bir yer seçin.</div>
-  <div class="roles">
-   <button class="role" onclick="enter('admin')"><span class="animal">🦎</span><strong>skawraxia</strong><small>Kitabın yazarı</small></button>
-   <button class="role" onclick="enter('reader')"><span class="animal">🐻</span><strong>skawrax</strong><small>Kitabın okuyucusu</small></button>
+
+  <h1 class="main-title">
+   Kendinizi Okulla<br>Konumlandırın
+  </h1>
+
+  <div class="login-sub">
+   Sayfalarımızın arasında kendinize bir yer seçin.
   </div>
-  <div class="login-note">Bu küçük dünyanın kapısı iki kişiye açılıyor.</div>
+
+  <div class="seal-ring" aria-hidden="true">
+   <span>❦</span>
+  </div>
+
+  <div class="identity-cards">
+
+   <button class="identity-card" onclick="enter('admin')">
+    <span class="identity-symbol">🦎</span>
+    <strong>skawraxia</strong>
+    <small>Kitabın yazarı</small>
+    <span class="identity-line"></span>
+   </button>
+
+   <button class="identity-card" onclick="enter('reader')">
+    <span class="identity-symbol">🐻</span>
+    <strong>skawrax</strong>
+    <small>Kitabın okuyucusu</small>
+    <span class="identity-line"></span>
+   </button>
+
+  </div>
+
+  <div class="login-note">
+   Bu küçük dünyanın kapısı iki kişiye açılıyor.
+  </div>
+
+  <div class="login-bottom-ornament">— ❧ —</div>
+
  </div>
 </section>
 <div id="app">
