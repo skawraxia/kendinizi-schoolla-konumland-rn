@@ -1383,5 +1383,97 @@ renderPage=function(){
 };
 })();
 </script>
+ 
+<style>
+.xi-editor-fields {
+  display: grid;
+  gap: 12px;
+  margin: 14px 0;
+}
+.xi-editor-fields label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.xi-editor-fields textarea,
+.xi-editor-fields input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px;
+  border: 1px solid #c9a7a0;
+  border-radius: 9px;
+  background: #fffaf5;
+  color: #4b1724;
+  font: inherit;
+}
+.xi-editor-fields textarea {
+  min-height: 75px;
+  resize: vertical;
+}
+.xi-editor-fields .xi-field {
+  padding: 12px;
+  background: #f8ece9;
+  border-radius: 12px;
+}
+</style>
+
+<script>
+(function () {
+  const oldRender = window.renderPage;
+
+  function addBandageEditor() {
+    const p = window.pages?.[window.current];
+
+    if (!p || p.variant !== 'bandaid') return;
+
+    const editor = document.querySelector(
+      '#pageEditor, .page-editor, #editPanel, .edit-panel'
+    );
+
+    if (!editor || editor.querySelector('.xi-editor-fields')) return;
+
+    const fields = document.createElement('div');
+    fields.className = 'xi-editor-fields';
+
+    const lines = (p.body || '').split('\n');
+
+    fields.innerHTML = `
+      <div class="xi-field">
+        <label>🩹 1. Yara bandı notu</label>
+        <textarea data-xi="0" placeholder="İlk mesajını yaz..."></textarea>
+      </div>
+      <div class="xi-field">
+        <label>🩹 2. Yara bandı notu</label>
+        <textarea data-xi="1" placeholder="İkinci mesajını yaz..."></textarea>
+      </div>
+      <div class="xi-field">
+        <label>📞 3. Yara bandı telefon numarası</label>
+        <input data-xi="2" type="tel" placeholder="05XX XXX XX XX">
+      </div>
+    `;
+
+    fields.querySelectorAll('[data-xi]').forEach(input => {
+      input.value = lines[Number(input.dataset.xi)] || '';
+
+      input.addEventListener('input', () => {
+        const values = [...fields.querySelectorAll('[data-xi]')]
+          .map(el => el.value.trim());
+
+        p.body = values.join('\n');
+      });
+    });
+
+    editor.appendChild(fields);
+  }
+
+  if (typeof oldRender === 'function') {
+    window.renderPage = function () {
+      oldRender.apply(this, arguments);
+      setTimeout(addBandageEditor, 100);
+    };
+  }
+})();
+</script>
+
 </body>
 </html>
