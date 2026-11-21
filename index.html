@@ -503,18 +503,7 @@ async function ensureUser(){
  if(sd.session){currentUser=sd.session.user;return currentUser;}
  const {data,error}=await supabaseClient.auth.signInAnonymously();if(error)throw error;currentUser=data.user;return currentUser;
 }
-async function claimRole(who){
- await ensureUser();
- if(who==='admin'){
-  const code=prompt('Yönetici şifresini gir:');if(code===null)return false;
-  const {data,error}=await supabaseClient.rpc('claim_admin',{access_code:code});if(error)throw error;if(data===false){alert('Şifre yanlış. Tekrar deneyebilirsin.');return false;}
- }else{
-  const {error}=await supabaseClient.rpc('register_reader');if(error)throw error;
- }
- const {data:member,error}=await supabaseClient.from('book_members').select('role').eq('user_id',currentUser.id).maybeSingle();
- if(error)throw error;if(!member||member.role!==who)throw new Error('Bu hesap için gerekli erişim bulunamadı.');
- return true;
-}
+
 async function init(){
  try{
   await openDB();
@@ -527,18 +516,74 @@ async function init(){
 }
 async function enter(who){
  try{
-  const ok=await claimRole(who);if(!ok)return;
+  // Kullanıcı oturumunu aç
+  await ensureUser();
+
+  // Seçilen karta göre görünüm
   role=who;
-  const {data:row,error}=await supabaseClient.from('book_data').select('content').eq('id','main').maybeSingle();if(error)throw error;
-  if(row&&row.content){const c=row.content;pages=c.pages||pages;attendance=c.attendance||attendance;photos=c.photos||[];coverData=c.cover||'';bookmarkData=c.bookmark||'';bookmarkPos=c.bookmarkPos||bookmarkPos;}
+
+  // Ortak kitap verilerini yükle
+  const {data:row,error}=await supabaseClient
+   .from('book_data')
+   .select('content')
+   .eq('id','main')
+   .maybeSingle();
+
+  if(error)throw error;
+
+  if(row&&row.content){
+   const c=row.content;
+   pages=c.pages||pages;
+   attendance=c.attendance||attendance;
+   photos=c.photos||[];
+   coverData=c.cover||'';
+   bookmarkData=c.bookmark||'';
+   bookmarkPos=c.bookmarkPos||bookmarkPos;
+  }
+
+  // Sayfa süslerini yükle
   await loadDecorations();
-  if(!row&&who==='admin'){await cloudSave();}
-  await putData('pages',pages);await putData('attendance',attendance);await putData('photos',photos);await putData('cover',coverData);await putData('bookmark',bookmarkData);await putData('bookmarkPos',bookmarkPos);
+
+  // İlk girişte mevcut kitabı oluştur
+  if(!row&&who==='admin'){
+   await cloudSave();
+  }
+
+  // Yerel kayıtları güncelle
+  await putData('pages',pages);
+  await putData('attendance',attendance);
+  await putData('photos',photos);
+  await putData('cover',coverData);
+  await putData('bookmark',bookmarkData);
+  await putData('bookmarkPos',bookmarkPos);
+
+  // Görselleri hazırla
   await refreshMedia();
-  document.getElementById('login').style.display='none';document.getElementById('app').style.display='block';
-  document.getElementById('bookmarkTools').classList.toggle('hidden',role!=='admin');document.getElementById('adminPanel').classList.add('hidden');panelOpen=false;renderPage();
-  if(who==='reader'){let w=document.createElement('div');w.className='welcome';w.innerHTML='<div>Hoş geldin sevgilimmmm!</div>';document.body.appendChild(w);setTimeout(()=>w.remove(),1900)}
- }catch(e){alert('Giriş yapılamadı: '+e.message)}
+
+  // Kitabı aç
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+
+  document.getElementById('bookmarkTools')
+   .classList.toggle('hidden',role!=='admin');
+
+  document.getElementById('adminPanel').classList.add('hidden');
+  panelOpen=false;
+
+  renderPage();
+
+  // Okuyucu giriş animasyonu
+  if(who==='reader'){
+   let w=document.createElement('div');
+   w.className='welcome';
+   w.innerHTML='<div>Hoş geldin sevgilimmmm!</div>';
+   document.body.appendChild(w);
+   setTimeout(()=>w.remove(),1900);
+  }
+
+ }catch(e){
+  alert('Giriş yapılamadı: '+e.message);
+ }
 }
 async function cloudSave(){
  if(role!=='admin'||!currentUser)return;
