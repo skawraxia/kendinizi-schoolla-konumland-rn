@@ -950,6 +950,7 @@ enter=async function(who){
 };
 })();
  <style>
+ <style>
 .x-wax-wrap{position:absolute;inset:0;z-index:25;pointer-events:none}
 .x-band{position:absolute;top:calc(50% - 22px);height:44px;width:50%;background:linear-gradient(#7a3041,#4b1724 55%,#34101a);box-shadow:0 4px 8px #0007,inset 0 1px 0 #ffffff26,inset 0 -1px 0 #0008}
 .x-band:before,.x-band:after{content:"";position:absolute;left:0;right:0;border-top:1px dashed #d1ae6fa0}
@@ -1046,6 +1047,67 @@ enter=async function(who){
  await _prev(who);
  if(document.getElementById('app').style.display!=='block')return;
  waxSeal(who);
+};
+})();
+</script>
+ <style>
+#pageInner .page-num{padding:12px 16px;margin:-12px -16px}
+.x-note{position:absolute;right:24px;bottom:24px;z-index:16;width:min(300px,calc(100% - 48px));max-height:62%;overflow:auto;padding:18px 18px 16px;background:linear-gradient(135deg,#f6ebd0,#ead9b5);border:1px solid #b99a6b;border-radius:3px;box-shadow:0 10px 22px #2b141a55;color:#46352e;transform-origin:bottom right;animation:xNoteIn .75s cubic-bezier(.2,.9,.3,1.2) both;cursor:pointer}
+.x-note:before{content:"";position:absolute;top:0;right:0;width:24px;height:24px;background:linear-gradient(225deg,transparent 50%,#cdb68a 50%)}
+.x-note small{display:block;margin-bottom:6px;font:600 12px Manrope,sans-serif;color:#8a6542}
+.x-note.x-out{animation:xNoteOut .35s ease-in forwards}
+@keyframes xNoteIn{0%{opacity:0;transform:translate(30%,70%) scale(.2) rotate(18deg)}60%{opacity:1;transform:translate(0,-6px) scale(1.04) rotate(-2deg)}100%{opacity:1;transform:none}}
+@keyframes xNoteOut{to{opacity:0;transform:translate(30%,70%) scale(.2) rotate(18deg)}}
+@media(prefers-reduced-motion:reduce){.x-note,.x-note.x-out{animation-duration:.01s}}
+</style>
+<script>
+(function(){
+let ac;
+function rustle(){
+ try{if(localStorage.getItem('kitap_mute')==='1')return}catch(e){}
+ try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();
+  const n=Math.floor(ac.sampleRate*.35),b=ac.createBuffer(1,n,ac.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+  const s=ac.createBufferSource();s.buffer=b;
+  const f=ac.createBiquadFilter();f.type='bandpass';f.frequency.value=3400;f.Q.value=.8;
+  const g=ac.createGain(),t=ac.currentTime;
+  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.4,t+.08);g.gain.exponentialRampToValueAtTime(.0001,t+.35);
+  s.connect(f);f.connect(g);g.connect(ac.destination);s.start();
+ }catch(e){}
+}
+function closeNote(){
+ const n=document.querySelector('.x-note');if(!n)return;
+ n.classList.add('x-out');setTimeout(()=>n.remove(),360);
+}
+function showNote(text){
+ document.querySelector('.x-note')?.remove();
+ const n=document.createElement('div');n.className='x-note';
+ const s=document.createElement('small');s.textContent='Sana bir not bıraktım ✦';
+ const p=document.createElement('div');
+ p.style.cssText="font:italic 21px/1.5 'Cormorant Garamond',serif;white-space:pre-wrap";
+ p.textContent=text;
+ n.append(s,p);n.onclick=closeNote;
+ document.getElementById('page').appendChild(n);rustle();
+}
+const _r=renderPage;
+renderPage=function(){
+ document.querySelector('.x-note')?.remove();
+ _r();
+ const p=pages[current],inner=document.getElementById('pageInner');
+ const t=inner.querySelector('.page-num')||inner.querySelector('.cover-ornament');
+ if(t&&p.secretMsg)t.onclick=e=>{e.stopPropagation();showNote(p.secretMsg)};
+ const ta=document.getElementById('xSecretText');if(ta)ta.value=p.secretMsg||'';
+};
+document.getElementById('pageEditor').insertAdjacentHTML('beforebegin','<div id="xSecretBox"><h3>Gizli mesaj</h3><p style="font-size:12px;color:#d9c5a7;margin:0 0 8px">Bu sayfanın sağ altındaki sayfa numarasına dokunan kişi bu notu görür (kapakta ortadaki ✦ ❦ ✦ süsü). Boş bırakıp kaydedersen gizli mesaj silinir.</p><textarea id="xSecretText" placeholder="Bu sayfaya saklı mesaj..."></textarea><button onclick="xSaveSecret()">Gizli mesajı kaydet</button><button onclick="xTestSecret()">Dene</button></div>');
+window.xSaveSecret=function(){
+ if(role!=='admin')return;
+ const v=document.getElementById('xSecretText').value.trim();
+ if(v)pages[current].secretMsg=v;else delete pages[current].secretMsg;
+ saveAll();renderPage();
+};
+window.xTestSecret=function(){
+ const v=document.getElementById('xSecretText').value.trim();
+ if(v)showNote(v);
 };
 })();
 </script>
