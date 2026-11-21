@@ -1362,14 +1362,16 @@ renderPage=function(){
   }else el.textContent=t;
  };
  const draw=fresh=>{
-  m.replaceChildren();m.classList.remove('xi-in');
-  [0,1,2].forEach(i=>{
-   if(!sel.has(i)||!lines[i])return;
+   m.replaceChildren();
+   m.classList.remove('xi-in');
+
+   if(fresh < 0 || !lines[fresh]) return;
+
    const d=document.createElement('div');
-   d.className='xi-note'+(i===fresh?' xi-fresh':'');
-   fill(d,lines[i]);m.append(d);
-  });
- };
+   d.className='xi-note xi-fresh';
+   fill(d,lines[fresh]);
+   m.append(d);
+};
  aids.forEach((b,i)=>{
   b.onclick=()=>{
    const on=!sel.has(i);
