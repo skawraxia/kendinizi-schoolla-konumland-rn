@@ -729,5 +729,226 @@ document.addEventListener('mouseup',e=>{if(mouseX===null)return;let dx=e.clientX
 document.getElementById('attendanceDate').addEventListener('change',e=>{selectedDate=e.target.value;document.getElementById('attendanceText').value=attendance[selectedDate]||''});
 init();
 </script>
+ <style>
+.panel select{width:100%;border:1px solid #a9895c;background:#f4ead5;color:#382a25;border-radius:6px;padding:9px}
+#page .corner.br{cursor:pointer;touch-action:manipulation}
+.x-scroll{max-height:370px;overflow:auto;padding-right:8px}
+.x-why{text-align:center}
+.x-why-card{min-height:150px;display:grid;place-items:center;padding:22px;margin:6px 0 16px;background:#eee1c8;border:1px solid #c6ae87;border-left:3px solid #a77c43;font:italic 26px/1.45 'Cormorant Garamond',serif;color:#542331;cursor:pointer}
+.x-why-card.x-in{animation:xIn .5s}
+@keyframes xIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+.x-btn{border:1px solid #c7a76e;background:#5a2634;color:#fff0d7;border-radius:6px;padding:10px 16px;font:600 14px Manrope,sans-serif}
+.x-count{margin-top:12px;font:italic 14px 'IM Fell English',serif;color:#8e765c}
+.x-song{display:flex;gap:14px;align-items:center;padding:11px 4px;border-bottom:1px dashed #c6ae87}
+.x-disc{flex:none;width:52px;height:52px;border-radius:50%;background:radial-gradient(circle,#e2c98e 0 9%,#2b1119 10% 34%,#4a2430 35% 38%,#2b1119 39%);box-shadow:0 3px 8px #0004;animation:xSpin 8s linear infinite}
+@keyframes xSpin{to{transform:rotate(360deg)}}
+.x-song b{font:600 22px 'Cormorant Garamond',serif;color:#542331}
+.x-song small{display:block;color:#8a6542;font:600 12px Manrope,sans-serif}
+.x-song em{display:block;font:italic 17px/1.4 'Cormorant Garamond',serif}
+.x-song a{margin-left:auto;flex:none;color:#fff0d7;background:#5a2634;border-radius:20px;padding:6px 12px;font:12px Manrope,sans-serif;text-decoration:none}
+.x-tl{margin-left:8px;padding-left:24px;border-left:2px solid #b89455}
+.x-tl-item{position:relative;padding:0 0 20px}
+.x-tl-item:before{content:"";position:absolute;left:-32px;top:6px;width:12px;height:12px;border-radius:50%;background:#e2c98e;border:2px solid #542331}
+.x-tl-item small{font:600 12px Manrope,sans-serif;letter-spacing:1px;color:#8a6542}
+.x-tl-item b{display:block;font:600 23px 'Cormorant Garamond',serif;color:#542331}
+.x-tl-item p{margin:2px 0 0;font:18px/1.5 'Cormorant Garamond',serif}
+.x-toc{position:fixed;inset:0;z-index:97;background:#1d0e14ee;display:grid;place-items:center;padding:16px;animation:fade .3s}
+.x-toc-box{position:relative;width:min(480px,100%);max-height:86vh;overflow:auto;padding:28px 24px;background:repeating-linear-gradient(90deg,#e8dcc4 0,#f6ecd8 3px,#f2e7d2 7px);border:1px solid #b89455;border-radius:6px}
+.x-toc-box h2{text-align:center;margin:0 0 16px;font:600 34px 'Cormorant Garamond',serif;color:#542331}
+.x-toc-row{display:flex;align-items:baseline;gap:8px;width:100%;border:0;background:none;padding:8px 2px;color:#46352e;font:600 20px 'Cormorant Garamond',serif;text-align:left}
+.x-toc-row i{flex:1;border-bottom:2px dotted #b99a6b}
+.x-toc-row:hover,.x-toc-row.on{color:#8d3545}
+.x-x{position:absolute;top:8px;right:10px;border:0;background:#5a2634;color:#fff0d7;width:32px;height:32px;border-radius:50%;font-size:20px}
+.x-seal-ov{position:fixed;inset:0;z-index:98;background:#1d0e14f5;display:grid;place-items:center;text-align:center;transition:opacity .7s}
+.x-seal-ov.x-out{opacity:0}
+.x-seal-hint{font:italic 20px 'IM Fell English',serif;margin-bottom:26px;color:#e3c995}
+.x-seal{width:130px;height:130px;border-radius:50%;border:0;color:#e9cf98;font:60px 'Cormorant Garamond',serif;background:radial-gradient(circle at 35% 30%,#b04558,#7a2434 55%,#4b1220);box-shadow:inset 0 0 0 7px #8d3545,inset 0 0 0 9px #5e1827aa,0 10px 28px #000a}
+.x-seal.x-broke{animation:xCrack .8s forwards}
+@keyframes xCrack{0%{transform:scale(1)}20%{transform:scale(1.08) rotate(-6deg)}40%{transform:scale(1.12) rotate(6deg)}100%{transform:scale(1.9) rotate(20deg);opacity:0;filter:blur(4px)}}
+.x-resume{position:fixed;left:50%;bottom:72px;transform:translateX(-50%);z-index:96;display:flex;gap:8px;align-items:center;background:#251018;border:1px solid #b89455;border-radius:30px;padding:6px 6px 6px 16px;color:#f4e5c8;font-size:13px;animation:fade .4s;white-space:nowrap}
+.x-resume button{border:0;background:#5a2634;color:#fff0d7;border-radius:20px;padding:8px 13px}
+@media(prefers-reduced-motion:reduce){.x-disc,.x-why-card.x-in,.x-seal.x-broke{animation:none}}
+</style>
+<script>
+(function(){
+const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const TYPES=['why','playlist','timeline'];
+const TPL={
+ text:{type:'text',title:'Yeni Sayfa',body:'Buraya yazını yaz…'},
+ why:{type:'why',title:'Neden İyi Ki Varsın',body:'Sabırla dinlediğin için\nBir cümlenle günümü değiştirdiğin için\nBana yeni bir bakış öğrettiğin için'},
+ playlist:{type:'playlist',title:'Ortak Playlist',body:'Şarkı adı | Sanatçı | Bu şarkı neden bizim? | https://open.spotify.com/'},
+ timeline:{type:'timeline',title:'Zaman Çizelgesi',body:'28 Kasım 2025 | İlk gün | Her şey burada başladı'},
+ secret:{type:'text',title:'Gizli Sayfa',body:'Burayı bulabilen tek kişi sensin…',hidden:true}
+};
+const HINT={why:'Her satır bir sebep.',playlist:'Her satır: Şarkı | Sanatçı | Not | Dinleme linki (link isteğe bağlı)',timeline:'Her satır: Tarih | Başlık | Açıklama'};
+const KICK={why:'İYİ Kİ VARSIN DİYE',playlist:'BİZİM ŞARKILARIMIZ',timeline:'BİZİM ZAMAN ÇİZELGEMİZ'};
+let secret=ls.get('kitap_secret')==='1';
+const visible=i=>!pages[i].hidden||role==='admin'||secret;
+const rows=b=>String(b||'').split('\n').map(s=>s.trim()).filter(Boolean).map(s=>s.split('|').map(x=>x.trim()));
+
+let ac;
+function noise(ms,f,vol,q){
+ if(ls.get('kitap_mute')==='1')return;
+ try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();
+  const n=Math.floor(ac.sampleRate*ms/1000),b=ac.createBuffer(1,n,ac.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+  const s=ac.createBufferSource();s.buffer=b;
+  const fl=ac.createBiquadFilter();fl.type='bandpass';fl.frequency.value=f;fl.Q.value=q;
+  const g=ac.createGain(),t=ac.currentTime;
+  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(vol,t+ms/2000);g.gain.exponentialRampToValueAtTime(.0001,t+ms/1000);
+  s.connect(fl);fl.connect(g);g.connect(ac.destination);s.start();
+ }catch(e){}
+}
+const sound=()=>noise(520,3200,.5,.7);
+
+const _change=changePage;
+function remember(){ls.set('kitap_last_'+role,String(current))}
+changePage=function(d){
+ if(pageTurning||!d)return;
+ let t=current,step=d>0?1:-1,n=Math.abs(d);
+ while(n>0){let k=t+step;while(k>=0&&k<pages.length&&!visible(k))k+=step;if(k<0||k>=pages.length)break;t=k;n--}
+ if(t===current)return;
+ sound();_change(t-current);remember();
+};
+function go(i){
+ if(i===current){renderPage();return}
+ sound();_change(i-current);remember();
+}
+
+function buildWhy(box,list){
+ if(!list.length){box.innerHTML='<div class="empty">Henüz sebep yazılmamış.</div>';return}
+ box.className='x-why';
+ box.innerHTML='<div class="x-why-card" role="button" tabindex="0">Dokun, bir sebep açılsın ✦</div><button class="x-btn">Bir sebep daha</button><div class="x-count"></div>';
+ let bag=[],seen=0;
+ const card=box.querySelector('.x-why-card'),cnt=box.querySelector('.x-count');
+ const next=()=>{
+  if(!bag.length)bag=list.map((_,i)=>i).sort(()=>Math.random()-.5);
+  card.textContent=list[bag.pop()];seen=Math.min(seen+1,list.length);
+  card.classList.remove('x-in');void card.offsetWidth;card.classList.add('x-in');
+  cnt.textContent=seen+' / '+list.length+' sebep';noise(80,1800,.5,2);
+ };
+ card.onclick=next;box.querySelector('button').onclick=next;
+}
+function buildList(box,body){
+ const r=rows(body);box.className='x-scroll';
+ box.innerHTML=r.length?r.map(c=>{const u=/^https?:\/\//i.test(c[3]||'')?c[3]:'';
+  return `<div class="x-song"><div class="x-disc"></div><div><b>${esc(c[0])}</b><small>${esc(c[1]||'')}</small>${c[2]?`<em>${esc(c[2])}</em>`:''}</div>${u?`<a href="${esc(u)}" target="_blank" rel="noopener">Dinle ↗</a>`:''}</div>`}).join(''):'<div class="empty">Henüz şarkı eklenmemiş.</div>';
+}
+function buildTl(box,body){
+ const r=rows(body);box.className='x-scroll';
+ box.innerHTML=r.length?'<div class="x-tl">'+r.map(c=>`<div class="x-tl-item"><small>${esc(c[0])}</small><b>${esc(c[1]||'')}</b>${c[2]?`<p>${esc(c[2])}</p>`:''}</div>`).join('')+'</div>':'<div class="empty">Henüz bir an eklenmemiş.</div>';
+}
+
+const _render=renderPage;
+renderPage=function(){
+ const p=pages[current],real=p.type,custom=TYPES.includes(real);
+ if(custom)p.type='text';
+ try{_render()}finally{p.type=real}
+ const inner=document.getElementById('pageInner');
+ const k=inner.querySelector('.page-kicker');if(k&&KICK[real])k.textContent=KICK[real];
+ if(custom){
+  const body=inner.querySelector('.page-body'),box=document.createElement('div');
+  if(real==='why')buildWhy(box,rows(p.body).map(r=>r[0]));
+  else if(real==='playlist')buildList(box,p.body);
+  else buildTl(box,p.body);
+  body.replaceWith(box);
+ }
+ const vis=pages.map((_,i)=>i).filter(visible),ord=vis.indexOf(current)+1;
+ const pn=inner.querySelector('.page-num');if(pn)pn.textContent=ord;
+ document.getElementById('navLabel').textContent=ord+' / '+vis.length+' · '+p.title+(p.hidden?' ✦':'');
+ const h=document.getElementById('xHint');if(h)h.textContent=HINT[real]||'';
+ const hc=document.getElementById('xHidden');if(hc){hc.checked=!!p.hidden;hc.disabled=real==='cover'}
+};
+
+const _reset=resetCurrentPage;
+resetCurrentPage=function(){
+ const d=defaults[current],p=pages[current];
+ if(!d||p.xNew||d.type!==p.type){toast('Bu sayfanın başlangıç metni yok.');return}
+ _reset();
+};
+
+window.xToc=function(){
+ document.querySelector('.x-toc')?.remove();
+ const vis=pages.map((_,i)=>i).filter(visible),o=document.createElement('div');o.className='x-toc';
+ o.innerHTML='<div class="x-toc-box"><button class="x-x" aria-label="Kapat">×</button><h2>İçindekiler</h2>'+vis.map((i,n)=>`<button class="x-toc-row ${i===current?'on':''}" data-i="${i}"><span>${esc(pages[i].title)}${pages[i].hidden?' ✦':''}</span><i></i><b>${n+1}</b></button>`).join('')+'</div>';
+ o.addEventListener('click',e=>{const r=e.target.closest('.x-toc-row');if(r){go(+r.dataset.i);o.remove();return}if(e.target===o||e.target.closest('.x-x'))o.remove()});
+ document.body.appendChild(o);
+};
+
+function remap(fn){
+ const nd=decorations.map(d=>({...d,page:fn(d.page)})).filter(d=>d.page!==null);
+ if(JSON.stringify(nd)===JSON.stringify(decorations))return;
+ decorations=nd;selectedDecoration=null;
+ if(!currentUser)return;
+ supabaseClient.from('book_decorations').upsert({id:'main',content:decorations,updated_at:new Date().toISOString(),updated_by:currentUser.id},{onConflict:'id'}).then(({error})=>{if(error)toast('Süsler güncellenemedi: '+error.message)});
+}
+window.xAdd=function(after){
+ if(role!=='admin')return;
+ const kind=document.getElementById('xType').value,t=document.getElementById('xTitle').value.trim();
+ const pg=JSON.parse(JSON.stringify(TPL[kind]));if(t)pg.title=t;pg.xNew=true;
+ const at=after?current+1:pages.length;
+ pages.splice(at,0,pg);remap(p=>p>=at?p+1:p);
+ document.getElementById('xTitle').value='';
+ saveAll();go(at);
+};
+window.xDelete=function(){
+ if(role!=='admin')return;const i=current;
+ if(pages[i].type==='cover'){toast('Kapak silinemez.');return}
+ if(!confirm('"'+pages[i].title+'" sayfası silinsin mi?'))return;
+ pages.splice(i,1);remap(p=>p===i?null:p>i?p-1:p);
+ current=Math.min(i,pages.length-1);saveAll();renderPage();
+};
+window.xMove=function(d){
+ if(role!=='admin')return;const i=current,j=i+d;
+ if(i<1||j<1||j>=pages.length){toast('Kapak ilk sayfada kalır.');return}
+ [pages[i],pages[j]]=[pages[j],pages[i]];remap(p=>p===i?j:p===j?i:p);
+ current=j;saveAll();renderPage();
+};
+window.xHide=function(v){
+ if(role!=='admin'||pages[current].type==='cover')return;
+ if(v)pages[current].hidden=true;else delete pages[current].hidden;
+ saveAll();renderPage();
+};
+
+document.querySelector('.toolbar').insertAdjacentHTML('afterbegin','<button class="toolbtn" onclick="xToc()">İçindekiler</button><button class="toolbtn" id="xMute"></button>');
+const mb=document.getElementById('xMute'),upd=()=>mb.textContent=ls.get('kitap_mute')==='1'?'🔇 Sessiz':'🔊 Ses';
+mb.onclick=()=>{ls.set('kitap_mute',ls.get('kitap_mute')==='1'?'0':'1');upd()};upd();
+document.getElementById('pageEditor').insertAdjacentHTML('beforebegin','<div id="xTools"><h3>Sayfa yönetimi</h3><div class="panel-grid"><select id="xType"><option value="text">Yazı sayfası</option><option value="why">Neden iyi ki varsın</option><option value="playlist">Ortak playlist</option><option value="timeline">Zaman çizelgesi</option><option value="secret">Gizli sayfa</option></select><input id="xTitle" type="text" placeholder="Yeni sayfa başlığı (isteğe bağlı)"></div><button onclick="xAdd(false)">Sona ekle</button><button onclick="xAdd(true)">Bu sayfadan sonra ekle</button><button onclick="xMove(-1)">↑ Öne al</button><button onclick="xMove(1)">↓ Arkaya al</button><button onclick="xDelete()">Bu sayfayı sil</button><label style="font-size:12px;margin-left:8px"><input type="checkbox" id="xHidden" onchange="xHide(this.checked)"> Gizli sayfa (sağ alt köşeye 3 kez dokununca açılır)</label></div>');
+document.querySelector('#pageEditor h3').insertAdjacentHTML('afterend','<p id="xHint" style="font-size:12px;color:#d9c5a7;margin:0 0 8px"></p>');
+
+let taps=[];
+document.querySelector('#page .corner.br').addEventListener('click',()=>{
+ const n=Date.now();taps=taps.filter(t=>n-t<1200);taps.push(n);
+ if(taps.length<3)return;taps=[];
+ const i=pages.findIndex(p=>p.hidden);if(i<0)return;
+ secret=true;ls.set('kitap_secret','1');toast('Gizli bir sayfa buldun ✦');go(i);
+});
+
+function seal(who,done){
+ const key='kitap_seal_'+who;if(ls.get(key)==='1'){done();return}
+ const o=document.createElement('div');o.className='x-seal-ov';
+ o.innerHTML='<div><div class="x-seal-hint">Kitabı açmak için mührü kır</div><button class="x-seal" aria-label="Mührü kır">❦</button></div>';
+ const b=o.querySelector('.x-seal');
+ b.onclick=()=>{b.onclick=null;ls.set(key,'1');b.classList.add('x-broke');noise(120,900,1,1.5);
+  setTimeout(()=>{noise(500,3000,.4,.7);o.classList.add('x-out')},650);
+  setTimeout(()=>{o.remove();done()},1350)};
+ document.body.appendChild(o);
+}
+function resume(who){
+ const i=+ls.get('kitap_last_'+who);
+ if(!(i>0&&i<pages.length&&i!==current&&visible(i)))return;
+ const b=document.createElement('div');b.className='x-resume';
+ b.innerHTML=`<span>Kaldığın yer: ${esc(pages[i].title)}</span><button>Devam et</button><button aria-label="Kapat">×</button>`;
+ const [c,x]=b.querySelectorAll('button');c.onclick=()=>{go(i);b.remove()};x.onclick=()=>b.remove();
+ document.body.appendChild(b);setTimeout(()=>b.remove(),10000);
+}
+const _enter=enter;
+enter=async function(who){
+ await _enter(who);
+ if(document.getElementById('app').style.display!=='block')return;
+ setTimeout(()=>seal(who,()=>resume(who)),who==='reader'?1900:0);
+};
+})();
+</script>
 </body>
 </html>
